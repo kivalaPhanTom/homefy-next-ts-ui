@@ -1,0 +1,103 @@
+$main-color1: #fbf6ee;
+$main-color2: #f79451ad;
+$main-color3: #ecf9fc00;
+$main-color4: white;
+$main-color5: #2a4f58;
+$main-color6: #fffdf8;
+$main-color7: #b7b7b7; //disable border color
+$main-color8: #080f340f;
+$main-color9: #14142b1c;
+$main-color10: #f6f6f6;
+$main-color11: #3b6163ad;
+$main-color12: #ffffff1f;
+$main-color13: #d47536;
+$main-color14:#ececed; //gray recommned
+$main-color15:#e9e9e9;
+$main-color16:#f7a268;
+$main-color17:#D9D9D9;
+$main-color18: #F6F5F7; //disable background color
+$main-color19:#137044;
+$main-color20:#A8420D;
+$main-color21:#00639E;
+$main-color22:#726e75;
+$main-color23:#fafafa;
+
+$text-color1: #172b2f;
+$text-color2: #e9e7e7;
+$text-color3: #616066;
+$text-color4: #f9f9f9;
+$text-color5:#57808a;
+$text-color6:#4d4a4b;
+$text-color7:#333;
+$errorColor:#ff4d4f;
+
+
+$font10px: 10px;
+$font12px: 12px;
+$font14px: 14px;
+$font15px: 15px;
+$font16px: 16px;
+$font18px: 18px;
+$font20px: 20px;
+$font23px: 23px;
+$font32px: 32px;
+
+$widthPercentageMb: 95%;
+$widthPercentageTablet: 80%; //768
+$widthPercentageMedium: 97%; //991
+$widthPercentageLarge: 87%; //1500
+
+@font-face {
+    font-family: 'Theseasons Regular';
+    src: url('../fonts/fonnts.com-Classica-Pro-.otf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Mark simonson proxima nova';
+    src: url('../fonts/Fontspring-DEMO-proximanovacond-lightit.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Thicccboi';
+    src: url('../fonts/THICCCBOI-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+@mixin TheseasonsFont{
+    font-family: 'Theseasons Regular', sans-serif;
+}
+@mixin MarkFont{
+    font-family: 'Mark simonson proxima nova', sans-serif;
+}
+@mixin ThicccboiFont{
+    font-family: 'Thicccboi', sans-serif;
+}
+@mixin HindMysuruFont{
+    font-family: "Hind Mysuru", sans-serif;
+}
+
+@mixin centerItem {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@mixin centerLeftRight {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@mixin centerSpaceBetweenItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+@mixin centerFlexEndItem {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
