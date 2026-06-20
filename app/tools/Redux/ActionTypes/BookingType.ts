@@ -1,0 +1,1 @@
+export const CREATE_BOOKING: string = 'CREATE_BOOKING'

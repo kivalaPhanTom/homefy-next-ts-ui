@@ -1,0 +1,3 @@
+export const GET_PERSONAL_DETAIL: string = 'GET_PERSONAL_DETAIL' //sẽ xóa
+export const ADD_PERSONAL_DETAIL: string = 'ADD_PERSONAL_DETAIL'
+export const UPDATE_PERSONAL_DETAIL: string = 'UPDATE_PERSONAL_DETAIL'

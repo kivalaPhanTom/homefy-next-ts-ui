@@ -1,0 +1,2 @@
+export const GET_EMERGENCY_CONTACT: string = 'GET_EMERGENCY_CONTACT' //sẽ xóa
+export const UPDATE_EMERGENCY_CONTACT: string = 'ADD_EMERGENCY_CONTACT'

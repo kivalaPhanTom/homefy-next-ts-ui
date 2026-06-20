@@ -1,0 +1,2 @@
+export const GET_APPLICATION: string  = 'GET_APPLICATION'
+export const CREATE_APPLICATION : string = 'CREATE_APPLICATION'

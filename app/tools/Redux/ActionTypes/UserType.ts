@@ -1,0 +1,6 @@
+export const SIGUP_ACCOUNT: string = 'SIGUP_ACCOUNT'
+export const FORGOT_PASSWORD: string = 'FORGOT_PASSWORD'
+export const LOGIN_ACCOUNT: string = 'LOGIN_ACCOUNT'
+export const USER_LIKE: string = 'USER_LIKE'
+export const USER_REMOVE_LIKE: string = 'USER_REMOVE_LIKE'
+export const LOGOUT: string = 'LOGOUT'
