@@ -5,18 +5,18 @@ import { MONTH_FORMAT, DATE_FORMAT } from '../ParamsCommon/ParamsCommon'
 // import { useSearchParams } from 'react-router-dom'
 import { parsePhoneNumberFromString } from 'libphonenumber-js'
 
-import { Notification } from '../FunctionCommon/Notification'
+import { Notification } from './Notification'
 // import { useSearchParams } from 'next/navigation'
 import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
 import { Service as UserService } from '@/Services/UserServices'
 import { authenNextServer } from '@/Services/NextAuthenServer'
 import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 
-export function vhToPixels(vh) {
+export function vhToPixels(vh:number): number {
     return Math.round(window.innerHeight / (100 / vh))
 }
 
-export function isValidEmail(email:string) {
+export function isValidEmail(email: string) {
     return /\S+@\S+\.\S+/.test(email)
 }
 
@@ -24,7 +24,7 @@ export function convertTimeRawValueToTimeStamp(rawValue) {
     const d = new Date(rawValue)
     return d.getTime()
 }
-export function renderTextMonthValue(timestamp, langObject) {
+export function renderTextMonthValue(timestamp:string, langObject):string {
     const d = new Date(timestamp)
     let month = d.getMonth() + 1
     let monthTxt = ''
@@ -143,7 +143,7 @@ export function renderTextDayMonthValue(timestamp, langObject) {
     }
     return `${day} ${monthTxt} ${year}`
 }
-export function converTimeStampToDayJsMonth(timestamp) {
+export function converTimeStampToDayJsMonth(timestamp: number) {
     const d = new Date(timestamp)
     let month = d.getMonth() + 1
     if (month < 9) {
@@ -152,7 +152,7 @@ export function converTimeStampToDayJsMonth(timestamp) {
     const year = d.getFullYear()
     return dayjs(`${month}/${year}`, MONTH_FORMAT)
 }
-export function converTimeStampToDayJsDate(timestamp) {
+export function converTimeStampToDayJsDate(timestamp: number) {
     const d = new Date(timestamp)
 
     let day = d.getDate()
@@ -175,12 +175,13 @@ export function converTimeStampToDayJsDate(timestamp) {
 
 // }
 
-export function formatNumber(numberValue) {
-    let result = 0
+export function formatNumber(numberValue: number): string {
+    let result = '0'
     if (numberValue) result = numberValue.toLocaleString('en-US')
     return result
 }
-export function getCountryCodeFromPhoneNumber(value) {
+
+export function getCountryCodeFromPhoneNumber(value:string): string {
     let result = '0'
     const phoneNumberObj = parsePhoneNumberFromString(value)
     if (phoneNumberObj) {
@@ -189,7 +190,7 @@ export function getCountryCodeFromPhoneNumber(value) {
     }
     return result
 }
-export function getPhoneNumberFromPhoneNumber(value) {
+export function getPhoneNumberFromPhoneNumber(value: string): string {
     let result = '0'
     const phoneNumberObj = parsePhoneNumberFromString(value)
     if (phoneNumberObj) {
@@ -208,7 +209,7 @@ export function getPhoneNumberFromPhoneNumber(value) {
 // }
 
 //save to local storage
-export function saveLocalStorage(name:string, value:any) {
+export function saveLocalStorage(name: string, value: any): void {
     localStorage.setItem(name, JSON.stringify(value))
 }
 
@@ -222,7 +223,7 @@ export function saveLocalStorage(name:string, value:any) {
 //     }
 //     return result
 // }
-export function handleError(error, lang) {
+export function handleError(error, lang):boolean {
     let isErrorAuthen = false;
     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
     if (error.response && error.response.status === 401 && expired_time) {
@@ -251,7 +252,7 @@ export function handleError(error, lang) {
 //     }
 //     return isCallRefreshToken
 // }
-export function removeVietnameseTones(str:string) {
+export function removeVietnameseTones(str: string):string {
     str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a")
     str = str.replace(/è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ/g, "e")
     str = str.replace(/ì|í|ị|ỉ|ĩ/g, "i")
@@ -276,10 +277,10 @@ export function removeVietnameseTones(str:string) {
 }
 
 
-export function clearLocalStorageByKey(key:string) {
+export function clearLocalStorageByKey(key: string) {
     localStorage.removeItem(key)
 }
-export async function handleErrorRTKQuery(data, error, refetch, isShowError, lang) {
+export async function handleErrorRTKQuery(data, error, refetch, isShowError:boolean, lang) {
     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
     if (error) {
         if (error.response && error.response.status === 401 && expired_time) {
@@ -306,7 +307,7 @@ export async function handleErrorRTKQuery(data, error, refetch, isShowError, lan
         }
     }
 }
-export function checkExpiredToken(timestamp) {
+export function checkExpiredToken(timestamp: number) {
     let result = false;
     const currentTimestamp = Math.floor(Date.now() / 1000);
     if (currentTimestamp > timestamp) {

@@ -19,7 +19,16 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@/components/*": ["./app/tools/components/*"],
+      "@/assets/*": ["./app/tools/assets/*"],
+      "@/common/*": ["./app/tools/common/*"],
+      "@/lib/*": ["./app/tools/lib/*"],
+      "@/apiNextServerInternal/*": ["./app/tools/apiNextServerInternal/*"],
+      "@/Redux/*": ["./app/tools/Redux/*"],
+      "@/RTK_Query/*": ["./app/tools/RTK_Query/*"],
+      "@/Services/*": ["./app/tools/Services/*"],
+      "@/utils/*": ["./app/tools/utils/*"],
     }
   },
   "include": [
