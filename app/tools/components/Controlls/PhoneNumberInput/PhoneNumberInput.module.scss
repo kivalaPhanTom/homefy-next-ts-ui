@@ -1,0 +1,47 @@
+@use "../../../common/commonStyles.scss" as common;
+
+@mixin hideBlueBorderInputAntd {
+    outline: none !important;
+    border-color: #a2a2a2 !important;
+    box-shadow: none !important;
+}
+
+.inputControl {
+    padding: 0.5rem;
+    width: -webkit-fill-available;
+    border: 1px solid #00000047;
+    border-radius: 5px;
+    border-color: #a2a2a2 !important;
+    background-color: common.$main-color4;
+    border:1px solid common.$main-color17 !important; 
+    cursor: pointer;
+    
+    >input {
+        border: none;
+        font-size: common.$font14px;
+        @include common.TheseasonsFont;
+        &:focus {
+            @include hideBlueBorderInputAntd;
+        }
+
+        &:hover {
+            @include hideBlueBorderInputAntd;
+        }
+    }
+}
+.error{
+    border: 1px solid common.$errorColor !important;
+}
+.errTxt{
+    color: common.$errorColor;
+    margin-top: 0.8%;
+    margin-bottom:0.5%;
+    font-size: common.$font14px;
+}
+// @media only screen and (min-width: 768px) {
+//     .inputControl {
+//         >input {   
+//             font-size: common.$fontNormalMobileText;    
+//         }
+//     }
+// }

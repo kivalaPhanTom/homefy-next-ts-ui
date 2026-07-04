@@ -1,0 +1,230 @@
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+.back {
+  margin-bottom: 24px;
+  cursor: pointer;
+}
+
+.stepWrapper {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.subTitle {
+  color: #666;
+  margin-bottom: 32px;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+}
+
+.card,
+.summary {
+  border-radius: 16px;
+}
+
+.left {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.right {
+  position: sticky;
+  top: 24px;
+  height: fit-content;
+}
+
+.secureText {
+  color: #888;
+  margin-bottom: 20px;
+}
+
+.paymentMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin-bottom: 24px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.pci {
+  background: #f7f3ff;
+  padding: 12px;
+  border-radius: 10px;
+  color: #6b46ff;
+  font-size: 13px;
+}
+
+.checkbox {
+  margin-top: 4px;
+}
+
+.checkbox span {
+  color: #6b46ff;
+}
+
+.payButton {
+  height: 56px !important;
+  border-radius: 12px !important;
+  background: #6b46ff !important;
+}
+
+.roomInfo {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+
+  img {
+    width: 120px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+
+  h4 {
+    margin-bottom: 6px;
+  }
+
+  span {
+    color: #666;
+  }
+}
+
+.bookingInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  margin-bottom: 20px;
+
+  div {
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+
+  margin-top: 20px;
+  padding-top: 20px;
+
+  border-top: 1px solid #eee;
+
+  strong {
+    color: #6b46ff;
+    font-size: 28px;
+  }
+}
+
+.freeCancel {
+  margin-top: 20px;
+  background: #ecfff2;
+  padding: 14px;
+  border-radius: 12px;
+}
+
+.benefits {
+  margin-top: 20px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  color: #555;
+}
+
+.mobileBar {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .content {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .right {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 16px;
+    padding-bottom: 100px;
+  }
+
+  .title {
+    font-size: 32px;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+
+  .mobileBar {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    background: white;
+    border-top: 1px solid #eee;
+
+    padding: 12px 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    z-index: 999;
+
+    strong {
+      display: block;
+      color: #6b46ff;
+      font-size: 20px;
+    }
+
+    button {
+      height: 48px;
+      border-radius: 10px;
+      background: #6b46ff;
+    }
+  }
+
+  .payButton {
+    display: none;
+  }
+}

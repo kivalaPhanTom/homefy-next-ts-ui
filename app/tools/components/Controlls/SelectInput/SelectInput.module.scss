@@ -1,0 +1,22 @@
+@use "../../../common/commonStyles.scss" as common;
+
+.selectInput {
+    width: 100%;
+    height: -webkit-fill-available;
+    @include common.TheseasonsFont;
+    font-size: common.$font14px;
+}
+.div_selectInput {
+    height: 2.5rem !important;
+}
+.searchAddress{
+    height: 2.5rem !important;
+}
+.addressForm{
+    margin-bottom: 0 !important;
+}
+// @media only screen and (min-width: 768px) {
+//     .selectInput{
+//         font-size: common.$fontNormalMobileText;
+//     }  
+// }

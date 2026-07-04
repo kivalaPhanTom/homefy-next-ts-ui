@@ -1,0 +1,246 @@
+.container {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 24px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.wrapper {
+  width: 100%;
+  max-width: 760px;
+  border-radius: 20px !important;
+
+  .ant-card-body {
+    padding: 32px;
+  }
+}
+
+.successSection {
+  text-align: center;
+}
+
+.successIcon {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 16px;
+
+  border-radius: 50%;
+  background: #52c41a;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: white;
+  font-size: 30px;
+}
+
+.title {
+  margin-bottom: 8px !important;
+}
+
+.description {
+  display: block;
+  color: #6b7280;
+  line-height: 22px;
+}
+
+.email {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+}
+
+.bookingCode {
+  margin-top: 24px;
+  padding: 20px;
+  border-radius: 12px;
+  background: #f6fbf6;
+  text-align: center;
+}
+
+.codeLabel {
+  display: block;
+  color: #6b7280;
+  margin-bottom: 10px;
+}
+
+.codeValue {
+  font-size: 28px;
+  font-weight: 700;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+}
+
+.copyIcon {
+  cursor: pointer;
+  color: #6b7280;
+}
+
+.bookingCard {
+  margin-top: 24px;
+  border: 1px solid #ececec;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.roomSection {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+}
+
+.roomImage {
+  width: 200px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.roomContent {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.date {
+  margin-top: 12px;
+
+  display: flex;
+  gap: 10px;
+
+  font-weight: 600;
+}
+
+.totalRow {
+  padding: 0 16px;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.price {
+  font-size: 32px;
+  font-weight: 700;
+  color: #4f46e5;
+}
+
+.infoGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.infoItem {
+  padding: 20px 16px;
+
+  display: flex;
+  gap: 12px;
+
+  &:first-child {
+    border-right: 1px solid #ececec;
+  }
+
+  .anticon {
+    font-size: 20px;
+    margin-top: 2px;
+  }
+}
+
+.infoTitle {
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.infoDesc {
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.infoValue {
+  color: #374151;
+}
+
+.actionGroup {
+  display: flex;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.homeBtn,
+.detailBtn {
+  flex: 1;
+  height: 52px !important;
+  border-radius: 10px !important;
+}
+
+.detailBtn {
+  background: #5b4ce6 !important;
+}
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 12px;
+  }
+
+  .wrapper {
+    .ant-card-body {
+      padding: 20px;
+    }
+  }
+
+  .title {
+    font-size: 24px !important;
+  }
+
+  .codeValue {
+    font-size: 22px;
+  }
+
+  .roomSection {
+    flex-direction: column;
+  }
+
+  .roomImage {
+    width: 100%;
+    height: 160px;
+  }
+
+  .totalRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .price {
+    font-size: 28px;
+  }
+
+  .infoGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .infoItem:first-child {
+    border-right: none;
+    border-bottom: 1px solid #ececec;
+  }
+
+  .actionGroup {
+    flex-direction: column-reverse;
+  }
+
+  .homeBtn,
+  .detailBtn {
+    width: 100%;
+  }
+}

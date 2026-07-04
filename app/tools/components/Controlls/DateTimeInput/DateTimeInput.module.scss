@@ -1,0 +1,24 @@
+@use "../../../common/commonStyles.scss" as common;
+
+.inputControl {
+    padding-top: 0.6rem;
+    padding-bottom: 0.6rem;
+    width: 100%;
+    font-size: common.$font14px;
+    @include common.TheseasonsFont;
+    >div{
+        >input{
+            font-size: common.$font14px;
+        }
+    }
+}
+// @media only screen and (min-width: 768px) {
+//     .inputControl {
+//         font-size: common.$font16px;
+//         >div{
+//             >input{
+//                 font-size: common.$font16px;
+//             }
+//         }
+//     }
+// }
