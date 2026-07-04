@@ -1,26 +1,33 @@
-@import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+.react-responsive-modal-modal{
+  border-radius: 10px !important;
+  width: 75%;
+ }
+.ck-editor__editable{
+  min-height: 12rem;
 }
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.ant-input-number-handler-wrap{
+  display: none !important;
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.picky-date-time__close{
+  display: none;
 }
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@media only screen and (min-width: 575px) {
+  .react-responsive-modal-modal{
+    width: 55%;
+   }
+}
+@media only screen and (min-width: 768px) {
+  .react-responsive-modal-modal{
+    width: 35%;
+   }
+}
+@media only screen and (min-width: 1024px) {
+  .react-responsive-modal-modal{
+    width: 30%;
+   }
+}
+@media only screen and (min-width: 1280px) {
+  .react-responsive-modal-modal{
+    width: 20%;
+   }
 }

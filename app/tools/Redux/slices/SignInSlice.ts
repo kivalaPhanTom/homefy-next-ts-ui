@@ -5,8 +5,8 @@ import { USER_NAME_IN_LOCALSTORAGE, TOKEN_IN_LOCALSTORAGE } from '@/common/Param
 const initialState = {
     isOpenPop: false,
     isLogin: false,
-    usernameLogin: getLocalStorage(USER_NAME_IN_LOCALSTORAGE) || null,
-    tokenUserLogin: getLocalStorage(TOKEN_IN_LOCALSTORAGE) || null
+    usernameLogin: getLocalStorage(USER_NAME_IN_LOCALSTORAGE) || "",
+    tokenUserLogin: getLocalStorage(TOKEN_IN_LOCALSTORAGE) || ""
 }
 const signInSlice = createSlice({
     name: 'signIn',

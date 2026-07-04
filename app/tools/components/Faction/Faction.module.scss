@@ -1,0 +1,107 @@
+@use "../../common/commonStyles.scss" as common;
+
+.container {
+    width: common.$widthPercentageMb;
+    @include common.centerLeftRight;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.left {
+    align-self: center;
+    width: 100%;
+}
+
+.modelImg {
+    object-fit: fill;
+    border-radius: 0 0 100px;
+}
+.factorContent {
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    opacity: 1;
+    transform-style: preserve-3d;
+    width: 80%;
+}
+
+.factorContentAnimation {
+    animation: factorContentAnimate 1.5s ease;
+}
+
+.titleFactor {
+    color: common.$text-color1;
+    font-family: 'Theseasons Regular', sans-serif;
+}
+
+.titleDes {
+    color: common.$text-color1;
+    margin-bottom: 4rem;
+    font-size: common.$font16px;
+    margin-top: 4rem;
+    font-family: 'Mark simonson proxima nova', sans-serif;
+}
+
+@keyframes factorContentAnimate {
+    0% {
+        -webkit-transform: translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        -moz-transform: translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        -ms-transform: translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        transform: translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+.right{
+    width: 100%;
+}
+.modelImg{
+    width: 80%;
+    height: auto;
+    object-fit: cover;
+}
+@media only screen and (min-width: 600px) {
+    .modelImg{
+        width: 65%;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .container {
+        width: common.$widthPercentageTablet;
+    }
+    .modelImg{
+        width: 70%;
+    }
+}
+@media only screen and (min-width: 991px) {
+    .container {
+        width: common.$widthPercentageMedium;
+        justify-content: space-between;
+        align-items: flex-start;
+        display: flex;
+    } 
+    .modelImg{
+        width: 100%;
+    }
+    .titleFactor{
+        font-size: common.$font32px;
+    }
+}
+
+@media only screen and (min-width: 1500px) {
+    .container {
+        width:common.$widthPercentageLarge;
+    }
+    .right{
+        display: flex;
+        justify-content: flex-end;
+    }
+    .modelImg {
+        width: 55%;
+        margin-left: auto;
+    }
+    .factorContent{
+        width: 60%;
+    }
+}

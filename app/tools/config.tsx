@@ -1,5 +1,9 @@
 import axios, { type AxiosRequestConfig } from "axios";
 
+export const VITE_API_URL: string = process.env.NEXT_PUBLIC_API_URL ?? ""
+export const VITE_TIMEOUT: number = Number(process.env.VITE_TIMEOUT ?? process.env.NEXT_PUBLIC_TIMEOUT ?? 5000)
+export const VITE_API_KEY_GG_MAP: string = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? ""
+
 export interface ApiConfig {
   apiUrl: string;
   timeoutMs: number;

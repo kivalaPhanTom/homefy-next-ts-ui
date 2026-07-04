@@ -1,0 +1,46 @@
+@use "../../common/commonStyles.scss" as common;
+@mixin hideBlueBorderInputAntd {
+    outline: none !important;
+    border-color: #a2a2a2 !important;
+    box-shadow: none !important;
+}
+
+.titleSection {
+    font-size: common.$font14px;
+    font-weight: 480;
+    margin-bottom: 1%;
+    @include common.TheseasonsFont;
+}
+.inputControl {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    width: 100%;
+    font-size: common.$font14px;
+    @include common.TheseasonsFont;
+    &:focus {
+        @include hideBlueBorderInputAntd;
+    }
+
+    &:hover {
+        @include hideBlueBorderInputAntd;
+    }
+    >div{
+        >input{
+            font-size: common.$font14px;
+        }
+    }
+}
+
+// @media only screen and (min-width: 768px) {
+//     .titleSection {
+//         font-size: common.$font16px;
+//     }
+//     .inputControl {
+//         font-size: common.$font16px;
+//         >div{
+//             >input{
+//                 font-size: common.$font16px;
+//             }
+//         }
+//     }
+// }

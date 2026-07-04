@@ -1,0 +1,111 @@
+@use "../../common/commonStyles.scss" as common;
+
+@mixin hideBlueBorderInputAntd {
+    outline: none !important;
+    border-color: #a2a2a2 !important;
+    box-shadow: none !important;
+}
+
+.loginPopup {
+    width: 100%;
+}
+
+.modalLogin {
+    border-radius: 5px !important;
+}
+
+.loginPopupContainer {
+    width: 100%;
+    @include common.centerLeftRight;
+}
+
+.loginBtn {
+    @include common.centerItem;
+    margin: 1rem 0;
+
+    >* {
+        border: none !important;
+        @include common.centerItem;
+        padding: 1.5rem !important;
+        width: 100%;
+        border-radius: 5px;
+        background-color: common.$text-color1;
+        color: common.$main-color4;
+        cursor: pointer;
+        font-size: common.$font18px;
+        @include common.TheseasonsFont;
+        transition: 0.4s;
+        &:hover {
+            background-color: common.$main-color2 !important;
+            transition: 0.4s;
+        }
+    }  
+}
+
+.inputItem {
+    margin: 1.5rem 0;
+}
+
+.textNoAccount,
+.textResetPassword {
+    text-align: center;
+}
+
+.textNoAccount {
+    @include common.TheseasonsFont;
+    >span {
+        font-weight: 600;
+        cursor: pointer;
+    }
+}
+
+.orTxt {
+    text-align: center;
+}
+
+.logo {
+
+    @include common.centerItem;
+}
+
+.logoContainer {
+    height: 10%;
+    width: 54%;
+
+    >img {
+        height: 100%;
+        width: 100%;
+    }
+}
+
+.headerPopup {
+    >p {
+        text-align: center;
+        margin-bottom: 0;
+    }
+}
+
+.headerTitle {
+    font-size: common.$font20px;
+    font-weight: 600;
+    margin-top: 0;
+    @include common.TheseasonsFont;
+}
+
+.headerDescription {
+    margin-top: 1%;
+    @include common.TheseasonsFont;
+}
+
+.passwordInput {
+    >div {
+        margin-bottom: 0;
+    }
+}
+
+
+.iconInputControl{
+    color: common.$main-color17;
+    font-size: common.$font16px;
+    @include common.TheseasonsFont;
+}

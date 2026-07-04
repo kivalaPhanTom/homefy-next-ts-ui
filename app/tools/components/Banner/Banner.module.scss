@@ -1,0 +1,282 @@
+@use "../../common/commonStyles.scss" as common;
+
+.container {
+    // width: 87%;
+    width: 100%;
+    @include common.centerLeftRight;
+}
+
+
+.positionArea {
+    width: 100%;
+    position: relative;
+    max-height: 100vh;
+  
+    min-height: 60vh;
+}
+
+.backdrop {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 2;
+
+
+
+    object-fit: cover;
+    z-index: -100;
+    background-position: 50%;
+    background-size: cover;
+}
+
+.backdropOverLay {
+    background-color: #00000059;
+    object-fit: cover;
+    z-index: -100;
+    background-position: 50%;
+    background-size: cover;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+}
+
+.content {
+    position: absolute;
+    z-index: 3;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 88%;
+}
+
+.imgBackdrop {
+    width: 100%;
+    height: 100%;
+}
+
+.title {
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    opacity: 1;
+    transform-style: preserve-3d;
+    color: common.$text-color2;
+    text-align: center;
+    animation-delay:1;
+    animation: titleAnimation 0.7s ease;
+    font-size: common.$font18px;
+    font-family: 'Theseasons Regular', sans-serif;
+}
+@keyframes titleAnimation{
+    0% { 
+        -webkit-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        opacity: 0;
+    }
+    100% { 
+        opacity: 1;
+     }
+}
+
+.subTitle {
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    opacity: 1;
+    transform-style: preserve-3d;
+    color: common.$text-color2;
+    animation-delay: 1;
+    animation: subTitleAnimation 1s ease;
+    text-align: center;
+    font-size: common.$font15px;
+    font-family: "Hind Mysuru", sans-serif;
+}
+@keyframes subTitleAnimation{
+    0% { 
+        -webkit-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        opacity:0;
+    }
+    100% { 
+        opacity: 1;
+     }
+}
+.action {
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 70px;
+    margin-bottom: 40px;
+    display: flex;
+    background-color: common.$main-color12;
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    opacity: 1;
+    transform-style: preserve-3d;
+    animation: actionAnimation 0.4s ease;;
+}
+@keyframes actionAnimation{
+    0% { 
+        -webkit-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        opacity:0;
+    }
+    100% { 
+        opacity: 1;
+     }
+}
+.filterLeft {
+    align-self: center;
+    align-items: center;
+    margin-right: -20px;
+    display: flex;
+    width: 60%;
+
+    >div {
+        color: common.$text-color2;
+        margin-right: 5px;
+    }
+}
+
+.sizeFilter {
+    margin-left: 0rem;
+}
+
+.filterRight {
+    width: 35%;
+
+    >div {
+        width: 100%;
+    }
+}
+
+.allPropertiesBtnLink {
+    text-decoration: none;
+    color: common.$text-color4;
+    font-size: common.$font14px;
+    font-family: "Hind Mysuru", sans-serif;
+}
+
+.allPropertiesBtn {
+    width: 74%;
+    transition: 0.4s;
+    cursor: pointer;
+    padding: 20px 0px;
+    border-radius: 0 0 20px;
+    @include common.centerItem;
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    opacity: 1;
+    transform-style: preserve-3d;
+    animation: allPropertiesBtnAnimation 1.5s ease;;
+}
+
+.allPropertiesBtn:hover {
+    background-color: common.$main-color13;
+    transition: 0.4s;
+}
+@keyframes allPropertiesBtnAnimation{
+    0% { 
+        -webkit-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        opacity:0;
+    }
+    100% { 
+        opacity: 1;
+     }
+}
+.locationFilter {
+    cursor: pointer;
+    margin-left: 0.5rem;
+    >div {
+        display: flex;
+        align-items: center;
+
+    }
+}
+
+.popverFilter {
+    transition: 1s;
+
+    &:hover * {
+        color: common.$main-color13 ;
+        transition: 1s;
+    }
+
+    // &:hover .iconArrow{
+    //    transform:rotate(-180deg);
+    //    transition:1s;
+    // }
+}
+
+.filterLabel {
+    margin: 0 5px;
+    font-family: "Hind Mysuru", sans-serif;
+    font-size: common.$font14px;
+}
+
+// .locationFilter{
+//     transition:1s;
+//     &:hover * {
+//         color:common.$main-color13 ;
+//         transition:1s;
+//     }
+//     &:hover .iconArrow{
+//        transform:rotate(-180deg);
+//        transition:1s;
+//     }
+// }
+.iconArrow {
+    transition: 1.5s;
+}
+
+.optionItem {
+    transition: 0.4s;
+    cursor: pointer;
+    >p{
+        font-family: "Hind Mysuru", sans-serif;
+        font-size: common.$font14px; 
+    }
+}
+
+.optionItem:hover {
+    transition: 0.4s;
+    color: common.$main-color13;
+}
+@media only screen and (min-width: 600px) {
+    .container {
+        width: common.$widthPercentageLarge;
+    }
+    .sizeFilter {
+        margin-left: 4rem;
+    }
+    
+}
+@media only screen and (min-width: 768px) {
+    .title{
+        font-size: common.$font18px;
+    }
+}
+@media only screen and (min-width: 868px) {
+    .content {
+        width: 68%;
+    }
+}
+@media only screen and (min-width: 991px) {
+    .positionArea{
+        min-height: 85vh;
+    }
+    .content {
+        width: 58%;
+    }
+    .divSubTitle{
+        width: 80%;
+        @include common.centerLeftRight;
+    }
+    .subTitle{
+        text-align: center;
+        font-size: common.$font15px;
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .content {
+        width: 38%;
+    }
+    .title{
+        font-size: common.$font32px;
+    }
+}

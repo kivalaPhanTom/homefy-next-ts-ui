@@ -1,0 +1,96 @@
+@use "../../common/commonStyles.scss" as common;
+.main{
+    background-color: common.$main-color6;
+    padding-top: 40px;
+    padding-bottom: 32px;
+    overflow: hidden;
+}
+.container {
+    // width: 87%;
+    width: common.$widthPercentageMb;
+    @include common.centerLeftRight;
+}
+
+.linkExpore{
+    text-decoration: none;
+    color:common.$text-color1;
+    text-align: center;
+    width: 100%;
+    font-family: 'Theseasons Regular', sans-serif;
+    font-size: common.$font14px;
+}
+.exploreBtn{
+    border: .5px solid common.$main-color7;
+    padding: 10px 40px;
+    line-height: 1.111em;
+    transition: box-shadow .3s, transform .3s, color .3s, background-color .3s;
+    transform: scale3d(1, 1, 1.01);
+    background-color: common.$main-color4;
+    >p{
+        margin:0;
+    }
+
+}
+.roomList{
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+.roomItem{
+    // width: 25%;
+    width: 100%;
+    margin-bottom: 1.3rem;
+    >div{
+        transition: 0.4s;
+        &:hover{
+            margin-top: -15px;
+            transition: 0.4s;
+        }
+    }
+}
+.exploreAll{
+    display: flex;
+    justify-content: flex-end;
+    transform: translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
+    opacity: 1;
+    transform-style: preserve-3d;
+}
+.exploreAllAnimation{
+    animation: exploreAllAnimate 0.5s ease;
+}
+
+@keyframes exploreAllAnimate{
+    0% { 
+        -webkit-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 60px, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);
+        opacity:0;
+    }
+    100% { 
+        opacity: 1;
+     }
+}
+
+@media only screen and (min-width: 768px) {
+    .container {
+        width: common.$widthPercentageTablet;
+    }
+    .roomItem{
+        width: 50%;
+    }
+    .linkExpore{
+        width: auto;
+    }
+}
+@media only screen and (min-width: 991px) {
+    .roomItem{
+        width: 25%;
+    }
+    .container {
+        width: common.$widthPercentageMedium;
+    } 
+}
+@media only screen and (min-width: 1500px) {
+    .container {
+        width:common.$widthPercentageLarge;
+    }
+}

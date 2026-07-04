@@ -1,0 +1,276 @@
+@use "../../common/commonStyles.scss" as common;
+
+.main {
+    background-color: common.$main-color1;
+    padding-top: 40px;
+    padding-bottom: 32px;
+    overflow: hidden;
+}
+
+.container {
+    width: 87%;
+    @include common.centerLeftRight;
+    //    justify-content: space-between;
+    //     align-items: flex-start;
+    //     margin-top: 40px;
+    //     margin-bottom: 40px;
+    //     display: flex;
+}
+
+.linkMenu {
+    display: flex;
+    justify-content: center;
+}
+
+.content {
+    // @include common.centerSpaceBetweenItem;
+}
+
+.contentAnimation {
+    animation: contentAnimate 1.5s ease-in-out;
+}
+
+@keyframes contentAnimate {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.logoImg {
+    width: 13rem;
+    height: auto;
+}
+
+.logo {
+    width: 100%;
+    height: 100%;
+}
+
+.contactTxt {
+    color: common.$text-color1;
+    font-family: 'Theseasons Regular', sans-serif;
+    font-size: common.$font14px;
+    font-weight: 700;
+}
+
+.text {
+    color: common.$text-color3;
+    font-size: common.$font12px;
+    font-family: "Hind Mysuru", sans-serif;
+    margin: 3px 0px;
+}
+
+
+.socialMediaList {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+
+    >div {
+        width: 2em;
+        height: 2em;
+        @include common.centerItem;
+        background-color: common.$text-color1;
+        // border:1px solid common.$text-color1;
+        margin-right: 1em;
+        border-radius: 50%;
+
+        >* {
+            width: 1.2em;
+            height: 1.2em;
+            color: common.$main-color1;
+            cursor: pointer;
+            transition: 0.4s;
+        }
+    }
+}
+
+.iconFB:hover,
+.iconInsta:hover,
+.iconTumblr:hover,
+.iconTwitter:hover {
+    transition: 0.4s;
+    background-color: common.$main-color2 !important;
+    // border:1px solid common.$main-color2;
+}
+
+// .iconFB:hover #iconFB,  .iconInsta:hover #iconInsta, .iconTumblr:hover #iconTumblr, .iconTwitter:hover #iconTwitter{
+//     transition: 0.4s;
+//     color: common.$main-color1;
+// }
+.connectText {
+    color: common.$text-color1;
+    margin-top: 20px;
+    margin-bottom: 0;
+    font-size: 16px;
+    font-family: "Hind Mysuru", sans-serif;
+
+    >p {
+        text-align: center;
+    }
+}
+
+.line {
+    background-color: common.$text-color1;
+    margin-top: 20px;
+    width: 100%;
+    min-height: 1px;
+    margin-bottom: 10px;
+}
+
+.right {
+    margin-top: 3rem;
+}
+
+.textCenter {
+    text-align: center;
+
+    >p {
+        font-family: 'Thicccboi', sans-serif;
+        font-size: common.$font18px;
+    }
+}
+
+.textCenterAnimation {
+    animation: textCenterAnimate 1.5s ease-in-out;
+    transition: 1.5s;
+}
+
+@keyframes textCenterAnimate {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+.subscribeTxt {
+    color: common.$text-color1;
+    font-family: 'Theseasons Regular', sans-serif;
+    font-size: common.$font14px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.emailInput {
+    background-color: common.$main-color3;
+    border: none;
+    margin: 10px 0;
+    font-size: common.$font12px;
+    font-family: "Hind Mysuru", sans-serif;
+}
+
+.emailInput:focus {
+    outline: none;
+}
+
+.emailForm {
+    border: 1px solid common.$main-color4;
+    padding: 10px 24px;
+    background-color: common.$main-color3;
+    border-radius: 9px;
+    @include common.centerItem;
+    margin-bottom: 12px;
+}
+
+.submitInput {
+    text-align: center;
+    cursor: pointer;
+    padding: 20px 40px;
+    font-weight: 400;
+    line-height: 1.111em;
+    background-color: common.$main-color5;
+    color: common.$main-color4;
+    border: .2px solid common.$main-color5;
+    border-radius: 0 0 20px;
+    font-family: 'Theseasons Regular', sans-serif;
+    font-size: common.$font14px;
+    width: 100%;
+    transition: 0.4s;
+}
+.submitInput:hover{
+    transform: scale3d(.95, .95, 1.01);
+    transition: 0.4s;
+}
+.mailIcon{
+    font-size: 25px;
+}
+@media only screen and (min-width: 600px) {
+    .listInfo {
+        width: 40%;
+        @include common.centerLeftRight;
+    }
+
+    .linkMenu {
+        justify-content: left;
+        margin-left: 8rem;
+    }
+
+    .socialMediaList {
+        width: 40%;
+        display: flex;
+        justify-content: left;
+        @include common.centerLeftRight;
+    }
+
+    .connectText {
+        width: 40%;
+        @include common.centerLeftRight;
+
+        >p {
+            text-align: left;
+        }
+    }
+    .submitInput{
+        width: auto;
+    }
+    .emailForm {
+        @include common.centerSpaceBetweenItem;
+    }
+    
+}
+@media only screen and (min-width: 768px) {
+    .container {
+      width: 70%;
+    }
+}
+@media only screen and (min-width: 991px) {
+    .content {
+        @include common.centerSpaceBetweenItem;
+    }
+    .linkMenu{
+        margin-left: 0;
+    }
+    .container {
+        width: common.$widthPercentageMedium;
+    }
+    .listInfo,.connectText,.socialMediaList {
+        width: 100%;
+    }
+    .right {
+        width: 40%;
+    }
+    .subscribeTxt{
+        text-align: left;
+    }
+    .textCenter{
+        >p{
+            font-size: common.$font14px;
+        }
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .container {
+        width:common.$widthPercentageLarge;
+    }
+    .right {
+        width: 30%;
+    }
+}

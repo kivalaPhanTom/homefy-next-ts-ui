@@ -47,4 +47,3 @@ export async function deleteApi<T>(url: string, config?: AxiosRequestConfig) {
   const response = await apiClient.delete<T>(url, config);
   return response.data;
 }
- 

@@ -1,0 +1,224 @@
+@use "../../common/commonStyles.scss" as common;
+
+.container {
+    width: 87%;
+    @include common.centerLeftRight;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    display: flex;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    position: relative;
+}
+
+.logo {
+    >img {
+        width: auto;
+        height: 60px;
+    }
+}
+
+.ul_menu {
+    >li {
+        list-style-type: none;
+        display: inline-block;
+        margin-right: 32px;
+        cursor: pointer;
+    }
+}
+
+.menuMb {
+    position: absolute;
+    top: 6rem;
+    left: 0;
+    z-index: 10;
+    width: 100%;
+    height: 0px;
+    background-color: common.$main-color4;
+    transition: 0.4s;
+
+    >div {
+        width: 90%;
+        @include common.centerLeftRight;
+        padding-top: 2rem;
+        padding-bottom: 1.5rem;
+        height: 100%;
+        display: none;
+        transition: 0.4s;
+    }
+}
+.menuMbOpen{
+    height: 340px;
+    animation: menuMbAnimation 0.4s;
+    >div {
+        display: block;
+        transition: 0.4s;
+    }
+}
+@keyframes menuMbAnimation {
+    0% {
+        height: 0%;
+    }
+
+    100% {
+        height: 300px;
+    }
+}
+
+.ul_menuMb {
+    width: 100%;
+
+
+    >div {
+        margin-bottom: 1rem;
+    }
+}
+
+.linkMenuMb {
+    text-decoration: none;
+    color: common.$text-color1;
+    font-size: common.$font23px;
+    @include common.TheseasonsFont;
+}
+
+.menu,
+.divLoginBtn {
+    display: none;
+}
+
+.linkMenu {
+    text-decoration: none;
+    color: common.$text-color1;
+    font-size: common.$font14px;
+    @include common.TheseasonsFont;
+}
+
+.loginBtn {
+    border: .2px solid common.$text-color1;
+    color: common.$text-color1;
+    text-align: right;
+    background-color: #0000;
+    border-radius: 0 0 20px;
+    padding: 10px 20px;
+    @include common.TheseasonsFont;
+    font-weight: 400;
+    cursor: pointer;
+
+    >p {
+        margin: 0 15px;
+        font-size: common.$font16px;
+        line-height: 1.125em;
+        @include common.TheseasonsFont;
+    }
+}
+
+.divLoginBtnMb {
+    width: 45px;
+    min-width: 45px;
+    min-height: 45px;
+    max-height: 45px;
+    background-color: common.$text-color1;
+    @include common.centerItem;
+    border-radius: 12px;
+    cursor: pointer;
+
+    >div {
+        width: 50%;
+        padding-top: 5px;
+        @include common.centerLeftRight;
+    }
+}
+
+.loginBtnMobile {
+    border: .2px solid common.$text-color1;
+    color: common.$text-color1;
+    text-align: right;
+    background-color: #0000;
+    border-radius: 0 0 20px;
+    padding: 16px 20px;
+    font-family: Theseasons reg, sans-serif;
+    font-weight: 400;
+    cursor: pointer;
+
+    >p {
+        margin: 0 15px;
+        font-size: common.$font16px;
+        line-height: 1.125em;
+        @include common.TheseasonsFont;
+        text-align: center;
+    }
+}
+
+.bar {
+    background-color: #fff;
+    width: 100%;
+    min-height: 2px;
+    max-height: 2px;
+    padding: 0;
+    margin-bottom: 5px;
+    transition: 0.4s;
+}
+
+.animationDiv1 {
+    transform: rotate(40deg) translate(4px, 5px);
+    transition: 0.4s;
+}
+
+.animationDiv3 {
+    transform: rotate(-40deg) translate(4px, -5px);
+    transition: 0.4s;
+}
+
+.animationDiv2 {
+    opacity: 0;
+    transition: 0.4s;
+    height: 0;
+}
+.accoutMenuPopup {
+    width: 12rem;
+}
+.menuAccItem {
+    display: flex;
+    align-items: center;
+    color: common.$text-color1 !important;
+    cursor: pointer;
+    margin-bottom: 0.3rem;
+    transition: 0.4s;
+    width: 100%;
+    border-radius: 5px;
+    padding: 0 1%;
+
+    >p {
+        margin-top: 2%;
+        margin-bottom: 2%;
+        font-size: common.$font14px;
+        @include common.TheseasonsFont;
+    }
+
+    &:hover {
+        transition: 0.4s;
+        background-color: common.$text-color5;
+    }
+}
+.accIcon {
+    margin-right: 0.5rem;
+    font-size: 20px;
+}
+.iconComputer {
+    margin-right: 0.5rem;
+    width: 1.2em;
+    height: 1.2em
+}
+@media only screen and (min-width: 1024px) {
+
+    .menu,
+    .divLoginBtn {
+        display: block;
+    }
+
+    .menuMb,
+    .divLoginBtnMb {
+        display: none;
+    }
+}

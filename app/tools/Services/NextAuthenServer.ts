@@ -1,12 +1,17 @@
-import http from '@/lib/http'
+import { getApi, postApi, putApi, deleteApi } from '@/lib/http'
 import { NEXT_URL } from '@/common/ParamsCommon/ParamsCommon'
 
 const servicePattern = {
     setAuthen: 'tools/apiNextServerInternal/auth',
-    getRefeshToken:'user/refresh_token',
+    getRefeshToken: 'user/refresh_token',
 }
-export function authenNextServer(payload) {
-    const {token, refreshToken, expired_time } = payload
+interface AuthenNextServerPayload {
+    token: string;
+    refreshToken: string;
+    expired_time: number;
+}
+export function authenNextServer(payload: AuthenNextServerPayload) {
+    const { token, refreshToken, expired_time } = payload
     const url = servicePattern.setAuthen
     const body = {
         sessionToken: token,
@@ -14,23 +19,23 @@ export function authenNextServer(payload) {
         expired_time
     }
     const options = {
-        baseUrl:NEXT_URL,
+        baseURL: NEXT_URL,
     }
-    return http.post(url, body, options)
+    return postApi(url, body, options)
 }
 export function logoutNextServer() {
     const url = servicePattern.setAuthen
     const options = {
-        baseUrl:NEXT_URL,
+        baseURL: NEXT_URL,
     }
-    return http.delete(url, options)
+    return deleteApi(url, options)
 }
 
-export async function getRefeshTokenByNextServer(data) {
-    const {refreshToken, sessionToken } = data
+export async function getRefeshTokenByNextServer(data: { refreshToken: string; sessionToken: string }) {
+    const { refreshToken, sessionToken } = data
     const url = servicePattern.getRefeshToken
     const body = {
-        refresh_token:refreshToken,
+        refresh_token: refreshToken,
     }
     const options = {
         next: {
@@ -41,5 +46,5 @@ export async function getRefeshTokenByNextServer(data) {
             Authorization: `Bearer ${sessionToken}`
         }
     }
-    return http.post(url, body, options)
+    return postApi(url, body, options)
 }
