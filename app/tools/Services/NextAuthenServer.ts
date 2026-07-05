@@ -3,7 +3,7 @@ import { NEXT_URL } from '@/common/ParamsCommon/ParamsCommon'
 
 const servicePattern = {
     setAuthen: 'tools/apiNextServerInternal/auth',
-    getRefeshToken: 'user/refresh_token',
+    getRefeshToken: 'users/refresh_token',
 }
 interface AuthenNextServerPayload {
     token: string;

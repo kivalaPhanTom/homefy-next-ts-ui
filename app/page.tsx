@@ -31,7 +31,7 @@ export default async function Home() {
   const newAccessToken = data?.data.options?.newTokenInfo?.access_token
   const newRefreshToken = data?.data.options?.newTokenInfo?.refresh_token
   const newExpiredTime = data?.data.options?.newTokenInfo?.expired_time
-  console.log('listDataTRRTTTT:', listData)
+
   return (
     <Suspense fallback={<Loading />}>
       <div>

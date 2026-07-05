@@ -307,12 +307,10 @@ export async function handleErrorRTKQuery(data, error, refetch, isShowError: boo
         }
     }
 }
-export function checkExpiredToken(timestamp: number) {
-    let result = false;
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    if (currentTimestamp > timestamp) {
-        result = true
-    }
-    return result
+export function checkExpiredToken(expiredTimestamp: number): boolean {
+    return Math.floor(Date.now() / 1000) >= expiredTimestamp;
 }
-
+export function calculateExpiredTime(expiresIn: number): number {
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    return currentTimestamp + expiresIn;
+}

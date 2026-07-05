@@ -4,7 +4,7 @@ import { loginAction } from '../Actions/LoginActions'
 import { setLoading } from '../slices/LoadingSlice'
 import { setOpenPopupSignIn, setIsLogin, setCurrentUserLogin } from '../slices/SignInSlice'
 import { Service } from '@/Services/UserServices'
-import { saveLocalStorage } from '@/common/FunctionCommon/FunctionCommon'
+import { saveLocalStorage, calculateExpiredTime } from '@/common/FunctionCommon/FunctionCommon'
 import { USER_NAME_IN_LOCALSTORAGE, TOKEN_IN_LOCALSTORAGE, REFRESH_TOKEN_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
 import { Notification } from '@/common/FunctionCommon/Notification'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
@@ -27,7 +27,7 @@ function* handleLoginApi(action:any):SagaIterator {
       yield call(authenNextServer, {
         token: access_token,
         refreshToken: refresh_token,
-        expired_time:expires_in
+        expired_time: calculateExpiredTime(expires_in)
       })
       router.refresh(); 
       yield put(setOpenPopupSignIn(false))

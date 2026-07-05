@@ -7,27 +7,28 @@ export const servicePattern = {
     getFavouriteProducts: 'user/favorite',
 }
 import { authenNextServer } from '@/Services/NextAuthenServer'
-import { checkExpiredToken } from '@/common/FunctionCommon/FunctionCommon'
+import { checkExpiredToken, calculateExpiredTime } from '@/common/FunctionCommon/FunctionCommon'
 import { getRefeshTokenByNextServer } from './NextAuthenServer'
 
 // interface RefreshTokenResponse {
-//   payload: {
 //     data: {
-//       access_token: string;
-//       refresh_token: string;
-//       expired_time: number;
+//         code: number,
+//         message: string,
+//         result: {
+//             access_token: string,
+//             refresh_token: string,
+//             expires_in: number
+//         }
 //     };
-//   };
 // }
 
 export async function getProductsApi(data: any) {
-    
+
     let token = data.sessionToken
     let refreshToken = null
     let expiredTime = null
     let isRefreshToken = false
-   
-    console.log('data.sessionToken:', data.sessionToken)
+
     if (token) { // need authen
         const isExpired = checkExpiredToken(data.expired_time)
         if (isExpired) {
@@ -36,12 +37,12 @@ export async function getProductsApi(data: any) {
                 sessionToken: data.sessionToken
             }
             try {
-                const res = await getRefeshTokenByNextServer(getRefreshTokenPayload)
-                const { access_token, refresh_token, expired_time } = res.payload.data
+                const res: any = await getRefeshTokenByNextServer(getRefreshTokenPayload)
+                const { access_token, refresh_token, expires_in } = res.data.result
                 isRefreshToken = true
                 token = access_token
                 refreshToken = refresh_token
-                expiredTime = expired_time
+                expiredTime = calculateExpiredTime(expires_in)
             } catch (e) {
                 console.log('errrrrr:', e)
             }
@@ -86,29 +87,37 @@ export async function getProductsApi(data: any) {
     return getApi(url, options)
 }
 
-export async function getDetailRoomApi(data) {
+export async function getDetailRoomApi(data: any) {
     const url = `${servicePattern.getDetailProduct}/${data.roomId}`
-    const isExpired = checkExpiredToken(data.expired_time)
     let token = data.sessionToken
     let refreshToken = null
     let expiredTime = null
     let isRefreshToken = false
-    if (isExpired && data.sessionToken) {
-        const getRefreshTokenPayload = {
-            refreshToken: data.refreshToken.value,
-            sessionToken: data.sessionToken
-        }
-        try {
-            const res = await getRefeshTokenByNextServer(getRefreshTokenPayload)
-            const { access_token, refresh_token, expired_time } = res.payload.data
-            isRefreshToken = true
-            token = access_token
-            refreshToken = refresh_token
-            expiredTime = expired_time
-        } catch (e) {
-            console.log('errrrrr:', e)
+
+    if (token) { // need authen
+        const isExpired = checkExpiredToken(data.expired_time)
+        if (isExpired) {
+            const getRefreshTokenPayload = {
+                refreshToken: data.refreshToken.value,
+                sessionToken: data.sessionToken
+            }
+            try {
+                const res: any = await getRefeshTokenByNextServer(getRefreshTokenPayload)
+                const { access_token, refresh_token, expires_in } = res.data.result
+                isRefreshToken = true
+                token = access_token
+                refreshToken = refresh_token
+                expiredTime = calculateExpiredTime(expires_in)
+            } catch (e) {
+                console.log('errrrrr:', e)
+            }
         }
     }
+    const headers: Record<string, string> = {}
+    if (token) {
+        headers.Authorization = `Bearer ${token}`
+    }
+
     const options = {
         // next: { tags: ['room-detail'] } //key để caching
         next: {
