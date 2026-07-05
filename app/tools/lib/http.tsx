@@ -27,7 +27,10 @@ function ensureBaseUrl() {
 export async function getApi<T>(url: string, config?: AxiosRequestConfig) {
   ensureBaseUrl();
   const response = await apiClient.get<T>(url, config);
-  return response.data;
+  return {
+    data: response.data,
+    options: response.config,
+  };
 }
 
 export async function postApi<T, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig) {
@@ -39,11 +42,17 @@ export async function postApi<T, B = unknown>(url: string, data?: B, config?: Ax
 export async function putApi<T, B = unknown>(url: string, data?: B, config?: AxiosRequestConfig) {
   ensureBaseUrl();
   const response = await apiClient.put<T>(url, data, config);
-  return response.data;
+  return {
+    data: response.data,
+    options: response.config,
+  };
 }
 
 export async function deleteApi<T>(url: string, config?: AxiosRequestConfig) {
   ensureBaseUrl();
   const response = await apiClient.delete<T>(url, config);
-  return response.data;
+   return {
+    data: response.data,
+    options: response.config,
+  };
 }

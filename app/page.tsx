@@ -16,23 +16,22 @@ export default async function Home() {
   const refreshToken = cookieStore.get(REFRESH_TOKEN_IN_LOCALSTORAGE)
   let isRefreshToken = false
   let listData = []
-  // const data = await getProductsApi({
-  //   limit: 12,
-  //   offset: 0,
-  //   sessionToken: sessionToken?.value || '',
-  //   expired_time: expired_time ? expired_time.value : null,
-  //   refreshToken: refreshToken || '',
-  // })
-  const data: any = null;
-  listData = data?.payload.result?.data || []
-  if (data?.options?.isRefreshToken) {
+  const data: any = await getProductsApi({
+    limit: 12,
+    offset: 0,
+    sessionToken: sessionToken?.value || '',
+    expired_time: expired_time ? expired_time.value : null,
+    refreshToken: refreshToken || '',
+  })
+  listData = data?.data?.result?.data || []
+  if (data?.data.options?.isRefreshToken) {
     isRefreshToken = true
   }
 
-  const newAccessToken = data?.options?.newTokenInfo?.access_token
-  const newRefreshToken = data?.options?.newTokenInfo?.refresh_token
-  const newExpiredTime = data?.options?.newTokenInfo?.expired_time
-
+  const newAccessToken = data?.data.options?.newTokenInfo?.access_token
+  const newRefreshToken = data?.data.options?.newTokenInfo?.refresh_token
+  const newExpiredTime = data?.data.options?.newTokenInfo?.expired_time
+  console.log('listDataTRRTTTT:', listData)
   return (
     <Suspense fallback={<Loading />}>
       <div>

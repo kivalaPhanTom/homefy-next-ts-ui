@@ -29,7 +29,7 @@ export function getLocalStorage(name_localstorage:string) {
         if (storedValue) {
             try {
                 result = JSON.parse(storedValue)
-            } catch {c
+            } catch {
                 result = storedValue
             }
         }

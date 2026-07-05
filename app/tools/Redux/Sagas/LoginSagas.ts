@@ -1,4 +1,5 @@
 import { all, takeLatest, put, call } from 'redux-saga/effects'
+import { SagaIterator } from "redux-saga";
 import { loginAction } from '../Actions/LoginActions'
 import { setLoading } from '../slices/LoadingSlice'
 import { setOpenPopupSignIn, setIsLogin, setCurrentUserLogin } from '../slices/SignInSlice'
@@ -9,7 +10,7 @@ import { Notification } from '@/common/FunctionCommon/Notification'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 import { authenNextServer } from '@/Services/NextAuthenServer'
 
-function* handleLoginApi(action) {
+function* handleLoginApi(action:any):SagaIterator {
   const { data, router } = action.payload
   yield put(setLoading(true))
   try {
@@ -54,7 +55,7 @@ function* handleLoginApi(action) {
 function* loginSaga() {
   yield takeLatest(loginAction, handleLoginApi)
 }
-function* handleEror(payloadError) {
+function* handleEror(payloadError:any) {
   const { error } = payloadError
   handleError(error)
   yield put(setLoading(false))

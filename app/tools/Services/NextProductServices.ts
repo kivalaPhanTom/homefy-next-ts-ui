@@ -1,4 +1,4 @@
-import http from '@/lib/http'
+import { getApi, postApi } from '@/lib/http'
 import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
 import { Service } from './UserServices'
 export const servicePattern = {
@@ -10,30 +10,44 @@ import { authenNextServer } from '@/Services/NextAuthenServer'
 import { checkExpiredToken } from '@/common/FunctionCommon/FunctionCommon'
 import { getRefeshTokenByNextServer } from './NextAuthenServer'
 
-export async function getProductsApi(data) {
-    const isExpired = checkExpiredToken(data.expired_time)
+// interface RefreshTokenResponse {
+//   payload: {
+//     data: {
+//       access_token: string;
+//       refresh_token: string;
+//       expired_time: number;
+//     };
+//   };
+// }
+
+export async function getProductsApi(data: any) {
+    
     let token = data.sessionToken
     let refreshToken = null
     let expiredTime = null
     let isRefreshToken = false
-    console.log('isExpired:', isExpired)
+   
     console.log('data.sessionToken:', data.sessionToken)
-    if (isExpired && data.sessionToken) {
-        const getRefreshTokenPayload = {
-            refreshToken: data.refreshToken.value,
-            sessionToken: data.sessionToken
-        }
-        try {
-            const res = await getRefeshTokenByNextServer(getRefreshTokenPayload)
-            const { access_token, refresh_token, expired_time } = res.payload.data
-            isRefreshToken = true
-            token = access_token
-            refreshToken = refresh_token
-            expiredTime = expired_time
-        } catch (e) {
-            console.log('errrrrr:', e)
+    if (token) { // need authen
+        const isExpired = checkExpiredToken(data.expired_time)
+        if (isExpired) {
+            const getRefreshTokenPayload = {
+                refreshToken: data.refreshToken.value,
+                sessionToken: data.sessionToken
+            }
+            try {
+                const res = await getRefeshTokenByNextServer(getRefreshTokenPayload)
+                const { access_token, refresh_token, expired_time } = res.payload.data
+                isRefreshToken = true
+                token = access_token
+                refreshToken = refresh_token
+                expiredTime = expired_time
+            } catch (e) {
+                console.log('errrrrr:', e)
+            }
         }
     }
+
     let result = `${servicePattern.getListProduct}?`
     if (data.limit !== null && data.limit !== undefined) {
         result = `${result}limit=${data.limit}&&`
@@ -54,21 +68,22 @@ export async function getProductsApi(data) {
         result = `${result}criteria=${data.criteria}&&`
     }
     const url = result
-    console.log('tokenTTT:', token)
+    const headers: Record<string, string> = {}
+    if (token) {
+        headers.Authorization = `Bearer ${token}`
+    }
+
     const options = {
         next: { tags: ['list-rooms'] }, //key để caching
-        headers: {
-            // Authorization: `Bearer ${token}`
-        },
-        isRefreshToken:isRefreshToken,
-        newTokenInfo:{
-            access_token:token,
-            refresh_token:refreshToken,
-            expired_time:expiredTime
+        headers,
+        isRefreshToken: isRefreshToken,
+        newTokenInfo: {
+            access_token: token,
+            refresh_token: refreshToken,
+            expired_time: expiredTime
         }
     }
-    console.log('urlGGG:', url)
-    return http.get(url, options)
+    return getApi(url, options)
 }
 
 export async function getDetailRoomApi(data) {
@@ -103,13 +118,13 @@ export async function getDetailRoomApi(data) {
         headers: {
             Authorization: `Bearer ${token}`
         },
-        isRefreshToken:isRefreshToken,
-        newTokenInfo:{
-            access_token:token,
-            refresh_token:refreshToken,
-            expired_time:expiredTime
+        isRefreshToken: isRefreshToken,
+        newTokenInfo: {
+            access_token: token,
+            refresh_token: refreshToken,
+            expired_time: expiredTime
         }
     }
-    return http.get(url, options)
+    return getApi(url, options)
 }
 

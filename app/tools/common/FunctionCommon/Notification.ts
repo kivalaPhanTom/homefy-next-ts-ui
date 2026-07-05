@@ -7,7 +7,7 @@ export const Notification = {
 
 function openNotificationSuccess(title:string) {
   notification.success({
-    message: title,
+    title: title,
     description: '',
     className: 'success-mess',
     duration: 4,
@@ -16,7 +16,7 @@ function openNotificationSuccess(title:string) {
 
 function openNotificationError(title:string) {
   notification.error({
-    message: title,
+    title: title,
     description: '',
     className: 'success-mess',
     duration: 4,
