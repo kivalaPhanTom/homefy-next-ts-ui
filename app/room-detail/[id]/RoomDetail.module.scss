@@ -1,0 +1,790 @@
+@use "../../tools/common//commonStyles.scss" as common;
+.frameArea { position: relative; }
+
+.linkMenu,
+.normalText,
+.photoText,
+.address,
+.des,
+.recommend {
+    font-size: common.$font12px;
+}
+
+.price,
+.applyBtn {
+    font-size: common.$font14px;
+}
+
+.thehouseText {
+    font-size: common.$font16px;
+}
+
+.imgFrameContainer {
+    position: relative;
+    // width: 80%;
+    width: 100%;
+    // height: 670px;
+    @include common.centerLeftRight;
+    height: 275px;
+}
+
+.imgFrame {
+    display: flex;
+    width: 100%;
+    @include common.centerLeftRight;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.photoGalleryArea {
+    width: 100%;
+    position: absolute;
+    top: 94%;
+    // left: 46%;
+    left: 0;
+    right: 0;
+    margin: auto;
+    z-index: 3;
+    display: flex;
+    justify-content: center;
+}
+
+.left {
+    // width: 60%;
+    height: 100%;
+    width: 100%;
+
+    >div {
+        // width: 98%;
+        width: 100%;
+        @include common.centerLeftRight;
+        height: 100%;
+    }
+}
+
+.right {
+    width: 40%;
+    height: 100%;
+    display: none;
+
+    >div {
+        width: 98%;
+        @include common.centerLeftRight;
+        height: 100%;
+    }
+}
+
+.roomimg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.topRight {
+    width: 100%;
+    height: 55%;
+}
+
+.bottomRight {
+    width: 100%;
+    height: 45%;
+
+    >div {
+        align-items: flex-end;
+        display: flex;
+        height: 100%;
+    }
+}
+
+.bottomRightImg {
+    height: 95%;
+}
+
+.fullHeight {
+    height: 100%;
+}
+
+.fullWidth {
+    width: 100%;
+}
+
+.photoGallery {
+    background-color: common.$text-color1 ;
+    // width: 9%;
+    width: 7rem;
+    border-radius: 1000px;
+}
+
+.photoText {
+    margin: 0;
+    padding: 10px 20px;
+    color: common.$text-color5;
+    text-align: center;
+    cursor: pointer;
+}
+
+.roomMoreInfo {
+    padding-top: 60px;
+    padding-bottom: 40px;
+    background-color: common.$main-color6;
+    @include common.centerLeftRight;
+}
+
+.roomMoreInfoContainer {
+    width: common.$widthPercentageMb;
+    @include common.centerLeftRight;
+    // background-color: common.$main-color4;
+}
+
+.mainGrid {
+    display: block;
+}
+
+.leftContent {
+    width: 100%;
+}
+
+.rightPanel {
+    display: block;
+    margin-top: 20px;
+}
+
+.bookingBox {
+    border: 1px solid common.$main-color15;
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(29,38,50,0.06);
+    position: sticky;
+    top: 96px;
+}
+
+.bookingRow {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+.bookingInput {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid common.$main-color15;
+    margin-top: 6px;
+}
+
+.dateBox {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    border: 1px solid common.$main-color15;
+    padding: 12px;
+    border-radius: 10px;
+    background: #fff;
+    margin: 14px 0;
+}
+
+.dateItem {
+    display: flex;
+    flex-direction: column;
+}
+
+.availability {
+    margin-left: auto;
+    background: #e6f9ea;
+    color: #1a7f37;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.bookingActions {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+}
+
+.section1 {
+    >div {
+        // display: flex;
+    }
+}
+
+.commonInfoSection,
+.imgGallerySection {
+    // width: 50%;
+    width: 100%;
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    background-color: common.$main-color4;
+    // padding: 10px 14px;
+    padding: 10px 0px;
+    font-weight: 600;
+    border-radius: 40px;
+}
+
+.address {
+    margin: 0 5px 0;
+}
+
+.commonInfo {
+    // width: 70%;
+    width: 100%;
+}
+
+.roomTitle {
+    color: common.$main-color5;
+    font-size: common.$font18px;
+}
+
+.price,
+.roomTitle,
+.address,
+.photoText,
+.galleryTitle,
+.thehouseText,
+.amenitiesTitle,
+.applyBtn {
+    @include common.TheseasonsFont;
+}
+
+.des {
+    @include common.HindMysuruFont;
+}
+
+.item {
+    display: flex;
+    align-items: center;
+    background-color: common.$main-color4;
+    padding: 0 4px;
+    margin-bottom: 0.5rem;
+
+    >* {
+        margin-right: 5px;
+    }
+}
+
+.items {
+    grid-column-gap: 15px;
+    grid-row-gap: 15px;
+    flex-wrap: wrap;
+    display: flex;
+}
+
+.line {
+    background-color: common.$main-color15;
+    width: 100%;
+    min-height: 1px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.bigLine {
+    background-color: common.$main-color15;
+    width: 100%;
+    min-height: 1px;
+    // margin-top: 60px;
+    // margin-bottom: 60px;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.linkMenu {
+    color: common.$text-color1;
+}
+
+.recommend {
+    @include common.HindMysuruFont;
+    font-weight: 700;
+    color: common.$text-color1;
+    // width: 50%;
+    width: 100%;
+}
+
+.titleOther {
+    @include common.HindMysuruFont;
+    font-weight: 700;
+    line-height: 1.4em;
+    color: common.$text-color1;
+}
+
+.allExtenstion {
+    display: flex;
+    flex-wrap: wrap;
+
+    >div {
+        width: 50%;
+    }
+}
+
+.amenitiesItem {
+    display: flex;
+    align-items: center;
+
+    >* {
+        margin-right: 5px;
+    }
+}
+
+.amenities {
+    >div {
+        display: flex;
+        flex-wrap: wrap;
+    }
+}
+
+.amenitiesItem {
+    width: 50%;
+}
+
+.listPropertyGallery {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.propertyItem {
+    // width: 25%;
+    width: 50%;
+    cursor: pointer;
+    height: 6rem;
+    // height: 4rem;
+    margin-bottom: 1rem;
+
+    >div {
+        width: 90%;
+        margin-right: auto;
+        height: 100%;
+    }
+}
+
+.propertyImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.applySection {
+    display: flex;
+    align-items: center;
+}
+
+.applyBtn {
+    border-style: solid;
+    border-color: common.$main-color15;
+    background-color: common.$main-color6;
+    color: common.$main-color16;
+    text-align: center;
+    border-radius: 30px;
+    padding: 10px 20px;
+    margin-right: 1rem;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.applyBtn:hover {
+    transform: scale3d(.95, .95, 1.01);
+    transition: 0.4s;
+}
+
+.iconStar {
+    font-size: 25px;
+    cursor: pointer;
+    transition: 0.4s;
+    color: common.$text-color3;
+}
+
+.iconStar:hover {
+    transition: 0.4s;
+    color: common.$main-color16;
+}
+.liked{
+    color: common.$main-color16;  
+}
+@media only screen and (min-width: 600px) {
+    .photoText {
+        font-size: common.$font15px;
+    }
+
+    .right {
+        display: block;
+    }
+
+    .photoGallery {
+        width: 9rem;
+    }
+       
+    .imgFrameContainer {
+        height: 300px;
+    }
+
+    .propertyItem {
+        height: 9rem;
+    }
+
+
+    .thumbStrip {
+        display: flex;
+        gap: 10px;
+        padding: 12px 0;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .thumbItem {
+        width: 96px;
+        height: 64px;
+        border-radius: 8px;
+        overflow: hidden;
+        cursor: pointer;
+        border: 2px solid transparent;
+    }
+
+    .thumbItem img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    .linkMenu,
+    .normalText,
+    .photoText,
+    .address,
+    .des,
+    .recommend {
+        font-size: common.$font14px;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .imgFrameContainer {
+        height: 350px;
+    }
+
+    .propertyItem {
+        width: 25%;
+        height: 6rem;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .imgFrameContainer {
+        height: 500px;
+    }
+
+    .mainGrid {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+    }
+
+    .leftContent {
+        width: 68%;
+    }
+
+    .rightPanel {
+        width: 32%;
+    }
+
+    .photoGalleryArea {
+        top: 96%;
+    }
+
+    .section1 {
+        >div {
+            display: flex;
+            // width: 95%;
+            // @include common.centerLeftRight;
+        }
+    }
+
+    .gallerySection {
+        >div{
+            width: 92%;
+            margin-left: auto;
+        }
+    }
+    .recommend{
+        width: 50%;
+    }
+    .left {
+        >div {
+            width: 98%;
+        }
+    }
+}
+@media only screen and (min-width: 1500px) {
+    .imgFrameContainer{
+        height: 670px;
+        width: common.$widthPercentageLarge;
+    }
+    .roomMoreInfoContainer{
+        width: common.$widthPercentageLarge;
+    }
+    .photoGalleryArea {
+        top: 97%;
+    }
+}
+
+
+
+
+// new
+.room-page {
+  background: #ffffff;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.gallery-main {
+  height: 460px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.gallery-main img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-thumbnails {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.thumbnail {
+  width: 130px;
+  height: 80px;
+  border: 2px solid #e5e7eb;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.thumbnail.active {
+  border-color: #7c3aed;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.more-photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 600;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.content-left {
+  flex: 1;
+}
+
+.content-right {
+  width: 360px;
+}
+
+.room-title {
+  font-size: 42px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.room-rating {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  color: #6b7280;
+}
+
+.dot {
+  font-weight: bold;
+}
+
+.room-info-row {
+  display: flex;
+  gap: 40px;
+  margin-top: 24px;
+  color: #374151;
+}
+
+.booking-search {
+  margin-top: 30px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.booking-grid {
+  display: grid;
+  grid-template-columns:
+    1fr
+    1fr
+    1fr
+    220px;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.availability-box {
+  border: 1px solid #dcfce7;
+  background: #f0fdf4;
+  border-radius: 12px;
+  padding: 16px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.available-title {
+  color: #16a34a;
+  font-weight: 600;
+}
+
+.available-subtitle {
+  color: #22c55e;
+  font-size: 14px;
+}
+
+.section {
+  margin-top: 40px;
+}
+
+.section h2 {
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.section p {
+  line-height: 1.8;
+  color: #4b5563;
+}
+
+.amenities-grid {
+  display: grid;
+  grid-template-columns:
+    repeat(4, 1fr);
+  gap: 28px;
+}
+
+.room-tabs {
+  margin-top: 40px;
+}
+
+.location-grid {
+  display: flex;
+  gap: 24px;
+}
+
+.map-box {
+  width: 400px;
+  height: 250px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.location-info {
+  flex: 1;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.booking-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  position: sticky;
+  top: 24px;
+}
+
+.price-label {
+  color: #6b7280;
+}
+
+.price {
+  font-size: 42px;
+  font-weight: 700;
+  margin-top: 8px;
+}
+
+.price span {
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.total {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+
+.fee-note {
+  margin-top: 12px;
+  text-align: center;
+  color: #9ca3af;
+  font-size: 14px;
+}
+
+.cancel-card {
+  margin-top: 20px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+/* Ant Design */
+
+.ant-picker {
+  width: 100%;
+  height: 52px;
+}
+
+.ant-select-selector {
+  height: 52px !important;
+  align-items: center;
+}
+
+.ant-tabs-ink-bar {
+  background: #7c3aed !important;
+}
+
+.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: #7c3aed !important;
+}

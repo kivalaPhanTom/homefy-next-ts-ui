@@ -87,7 +87,7 @@ export async function getProductsApi(data: any) {
     return getApi(url, options)
 }
 
-export async function getDetailRoomApi(data: any) {
+export async function getDetailRoomApi<T = any>(data: any): Promise<{ data: T; options: any }> {
     const url = `${servicePattern.getDetailProduct}/${data.roomId}`
     let token = data.sessionToken
     let refreshToken = null
@@ -124,9 +124,7 @@ export async function getDetailRoomApi(data: any) {
             cache: 'no-store',
             revalidate: 0
         }, //key để caching
-        headers: {
-            Authorization: `Bearer ${token}`
-        },
+        headers:headers,
         isRefreshToken: isRefreshToken,
         newTokenInfo: {
             access_token: token,
@@ -134,6 +132,6 @@ export async function getDetailRoomApi(data: any) {
             expired_time: expiredTime
         }
     }
-    return getApi(url, options)
+    return getApi<T>(url, options)
 }
 
