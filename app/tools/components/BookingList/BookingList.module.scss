@@ -1,0 +1,234 @@
+.bookingContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+
+  // Header cho bản Desktop (ẩn trên mobile theo ảnh 2)
+  .desktopHeader {
+    display: none;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 24px;
+    
+    @media (min-width: 768px) {
+      display: block;
+    }
+  }
+
+  // Tùy biến Ant Design Tabs cho giống thiết kế
+  :global {
+    .ant-tabs-nav {
+      margin-bottom: 24px !important;
+      &::before {
+        border-bottom: none !important;
+      }
+    }
+    .ant-tabs-tab {
+      padding: 8px 4px !important;
+      margin: 0 16px 0 0 !important;
+      font-size: 15px;
+      color: #666;
+      
+      &-active .ant-tabs-tab-btn {
+        color: #5b46e5 !important;
+        font-weight: 600;
+      }
+    }
+    .ant-tabs-ink-bar {
+      background: #5b46e5 !important;
+      height: 3px !important;
+      border-radius: 2px;
+    }
+  }
+
+  // Danh sách các card
+  .bookingList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  // Item Card cấu trúc Responsive
+  .bookingCard {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+
+    @media (min-width: 768px) {
+      flex-direction: row;
+      padding: 20px;
+      align-items: center;
+    }
+
+    .roomImageWrapper {
+      width: 100%;
+      height: 180px;
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+
+      @media (min-width: 768px) {
+        width: 220px;
+        height: 140px;
+        flex-shrink: 0;
+      }
+
+      .roomImage {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    }
+
+    // Phần thông tin ở giữa
+    .roomInfo {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+
+      .roomName {
+        font-size: 18px;
+        font-weight: 700;
+        color: #11142d;
+        margin: 0;
+      }
+
+      .bookingCode {
+        font-size: 13px;
+        color: #808191;
+        margin-bottom: 4px;
+      }
+
+      .detailsGrid {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        font-size: 14px;
+        color: #555;
+
+        .detailItem {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          span {
+            color: #808191;
+          }
+        }
+      }
+    }
+
+    // Phần giá cả và nút bấm bên phải
+    .cardActions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #f5f5f5;
+      padding-top: 12px;
+
+      @media (min-width: 768px) {
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+        gap: 16px;
+        border-top: none;
+        padding-top: 0;
+        min-width: 180px;
+      }
+
+      .price {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1c1c1e;
+
+        @media (min-width: 768px) {
+          order: -1; // Đẩy giá lên trên nút ở giao diện desktop
+        }
+      }
+
+      // Khối bọc Badge trạng thái riêng trên Mobile
+      .mobileStatus {
+        display: block;
+        @media (min-width: 768px) {
+          display: none;
+        }
+      }
+
+      // Khối bọc các nút hành động
+      .actionButtons {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+
+        .desktopStatus {
+          display: none;
+          @media (min-width: 768px) {
+            display: block;
+            margin-right: 8px;
+          }
+        }
+
+        // Custom style cho các Button AntD giống hệt mẫu
+        :global {
+          .ant-btn {
+            border-radius: 8px;
+            font-weight: 500;
+            height: 38px;
+            padding: 0 20px;
+            font-size: 14px;
+          }
+          .ant-btn-default {
+            border-color: #dcdcdc;
+            color: #5b46e5;
+            &:hover {
+              color: #4a35c9 !important;
+              border-color: #5b46e5 !important;
+            }
+          }
+          .ant-btn-primary {
+            background: #5b46e5;
+            border-color: #5b46e5;
+            &:hover {
+              background: #4a35c9 !important;
+              border-color: #4a35c9 !important;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+// Custom Badge màu sắc theo hình ảnh thiết kế của bạn
+.statusBadge {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  display: inline-block;
+
+  &.success {
+    background-color: #f4faf7;
+    color: #3aa76d;
+  }
+  &.warning {
+    background-color: #fff9e6;
+    color: #ffb800;
+  }
+  &.info {
+    background-color: #f4f5f7;
+    color: #7a869a;
+  }
+  &.error {
+    background-color: #fff5f5;
+    color: #ff4d4f;
+  }
+}

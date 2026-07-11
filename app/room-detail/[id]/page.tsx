@@ -51,15 +51,13 @@ async function page(props: { params: Promise<{ id: string }> }) {
     const expired_time = cookieStore.get(EXPIRED_TIME_TOKEN)
     const refreshToken = cookieStore.get(REFRESH_TOKEN_IN_LOCALSTORAGE)
     let isRefreshToken = false
-    console.log('paramsRRRR:', resolvedParams)
-    console.log('BBBBBBparams.id:', resolvedParams.id)
     const data = await getDetailRoomApi<responseGetDetailRooom>({
         roomId: resolvedParams.id,
         sessionToken: sessionToken?.value || '',
         expired_time: expired_time ? expired_time.value : null,
         refreshToken: refreshToken || '',
     })
-    console.log('dataEEEEE:', data)
+
     const {
         id = '',
         code = '',

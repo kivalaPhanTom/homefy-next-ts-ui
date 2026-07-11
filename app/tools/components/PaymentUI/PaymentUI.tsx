@@ -27,8 +27,8 @@ export default function PaymentUI(props: PaymentUIProps) {
   const { bookingId } = props
   const dispatch = useDispatch()
   const router = useRouter();
-  const [paymentMethod, setPaymentMethod] = useState<string>('card')
-  const paymentHandler = () => {
+  const [paymentMethod, setPaymentMethod] = useState('card')
+  const paymentHandler = (value): void => {
     const payload = {
       data: {
         "bookingId": bookingId,
@@ -40,7 +40,7 @@ export default function PaymentUI(props: PaymentUIProps) {
     dispatch(confirmPayment(payload))
   }
 
-  const handleNavigate = (bookingId: string) => {
+  const handleNavigate = (bookingId: String): void => {
     router.push(`/payment-success/${bookingId}`);
   }
 
