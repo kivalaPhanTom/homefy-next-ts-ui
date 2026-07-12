@@ -1,0 +1,70 @@
+@use "../../common/commonStyles.scss" as common;
+
+.listBtnAction {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 100%;
+    margin-top: 5%;
+    @include common.centerFlexEndItem;
+}
+
+.listBtnActionContainer {
+    width: 100%;
+    @include common.centerFlexEndItem;
+
+    >* {
+        margin-left: 2%;
+    }
+}
+
+.btnItem {
+    padding: 1.2rem 2rem;
+    @include common.centerItem;
+    font-size: common.$font14px;
+    border: none;
+}
+
+.cancelBtn {
+    color: black !important;
+    transition: 0.4s;
+    @include common.TheseasonsFont;
+
+    &:hover {
+        color: black !important;
+        background-color: common.$main-color17 !important;
+        transition: 0.4s;
+    }
+}
+
+.saveAndBackBtn {
+    background-color: common.$main-color5;
+    color: white !important; 
+    transition: 0.4s;
+    @include common.TheseasonsFont;
+
+    &:hover {
+        color: white !important; 
+        background-color: common.$main-color13 !important;
+        transition: 0.4s;
+    }
+}
+.disableSubmit{
+    background-color: common.$main-color18 !important;
+    color: common.$main-color7 !important;
+    border: 1px solid common.$main-color7 !important;
+    &:hover {
+        background-color: common.$main-color18 !important;
+        color: common.$main-color7 !important;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .btnItem {
+        font-size: common.$font16px;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .listBtnAction {
+        width: 100%;
+    }
+}

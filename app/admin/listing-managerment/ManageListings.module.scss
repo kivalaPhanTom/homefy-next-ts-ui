@@ -1,0 +1,85 @@
+@use "../../../app/tools/common/commonStyles.scss" as common;
+
+.manageListings {
+    padding: 0;
+    width: 100%;
+    // background-color: common.$main-color3;
+    height: 100%;
+}
+.manageListingsContainer {
+    width: 90%;
+    @include common.centerLeftRight;
+}
+.listContainer{
+    display: flex;
+    flex-wrap: wrap;
+}
+.emptyContainer{
+    @include common.centerLeftRight;
+    width: 45%;
+    >div{
+        width: 100%;
+    }
+}
+.titlePage {
+    text-transform: uppercase;
+    // color: common.$text-color1;
+    text-align: center;
+    margin: 0;
+    padding: 2rem 0;
+    // @include common.styleFontTitleMobile;
+    @include common.TheseasonsFont;
+}
+.item{
+    margin-bottom: 0.5rem;
+}
+.flexQuantityLarge1 {
+    width: calc(100%/2);
+}
+.div_creatingIcon{
+    @include common.centerItem;
+}
+.emptyData{
+    text-align: center;
+    width: 100%;
+    @include common.TheseasonsFont;
+    // @include common.styleFontTitleMobile;
+}
+@media only screen and (min-width: 600px) {
+    .emptyContainer{
+        width: 30%;
+    }
+}
+@media only screen and (min-width: 768px) {
+    .titlePage, .emptyData {
+        // @include common.styleFontTitleTablet;
+    }
+    .emptyContainer{
+        width: 25%;
+    }
+    .flexQuantityLarge1 {
+        width: calc(100%/3);
+    }
+}
+@media only screen and (min-width: 991px) {
+    .emptyContainer{
+        width: 20%;
+    }
+}
+@media only screen and (min-width: 1024px) {
+    .titlePage {
+        @include common.TheseasonsFont;
+        padding: 3rem 0;
+    }
+    .emptyContainer{
+        width: 18%;
+    }
+}
+@media only screen and (min-width: 1400px) {
+    .emptyContainer{
+        width: 15%;
+    }
+    .flexQuantityLarge1 {
+        width: calc(100%/6);
+    }
+}

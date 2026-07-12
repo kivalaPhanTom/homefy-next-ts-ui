@@ -28,7 +28,7 @@ export default function PaymentUI(props: PaymentUIProps) {
   const dispatch = useDispatch()
   const router = useRouter();
   const [paymentMethod, setPaymentMethod] = useState('card')
-  const paymentHandler = (value): void => {
+  const paymentHandler = (): void => {
     const payload = {
       data: {
         "bookingId": bookingId,

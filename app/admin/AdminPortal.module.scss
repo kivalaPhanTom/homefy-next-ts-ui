@@ -1,0 +1,161 @@
+@use "../../app/tools/common/commonStyles.scss" as common;
+
+.adminPortal {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.4),
+            rgba(0, 0, 0, 0.4)),
+        url("../tools/assets/backgroundAdminPortalMobile12.webp");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #464646;
+    height: 700px;
+}
+
+.adminPortalContainer {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    width: 80%;
+    @include common.centerLeftRight;
+}
+
+.linkMenuItem {
+    text-decoration: none;
+    color: black;
+}
+
+.title {
+    text-align: center;
+    @include common.TheseasonsFont;
+    // color: common.$text-color8;
+    font-size: common.$font18px
+}
+
+.div_logOut {
+    @include common.centerItem;
+    padding-top: 1.5rem;
+    padding-bottom: 2.5rem;
+}
+
+.loginBtn {
+    width: 30%;
+    height: 2rem;
+    background-color: common.$main-color5;
+    @include common.centerItem;
+    border-radius: 3rem;
+    color: common.$main-color4;
+    cursor: pointer;
+    border: none;
+    width: 5rem;
+    @include common.TheseasonsFont;
+    font-size: common.$font14px;
+    transition: 0.4s;
+
+    &:hover {
+        background-color: common.$main-color13;
+        transition: 0.4s;
+    }
+}
+
+.menuItemName {
+    >p {
+        text-align: center;
+        @include common.TheseasonsFont;
+        font-size: common.$font14px;
+    }
+}
+
+.menuItem {
+    @include common.centerLeftRight;
+    width: 80%;
+    margin-bottom: 0.7rem;
+}
+
+.menuItemContainer {
+    display: flex;
+    align-items: center;
+    width: 80%;
+    @include common.centerLeftRight;
+    // border: 3px solid common.$main-color5;
+    height: 100%;
+    border-radius: 30px;
+    background-color: common.$main-color4;
+
+    >div {
+        width: 90%;
+        @include common.centerLeftRight;
+    }
+}
+
+@media only screen and (min-width: 575px) {
+    .adminPortalContainer {
+        width: 60%;
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .adminPortalContainer {
+        width: 50%;
+    }
+
+    .menuItemName>p,
+    .loginBtn>p {
+        // font-size: common.$fontNormalTabletTxt;
+    }
+
+    .loginBtn {
+        height: 2.2rem;
+        width: 6rem;
+    }
+}
+
+@media only screen and (min-width: 991px) {
+    .adminPortalContainer {
+        width: 40%;
+    }
+
+}
+
+@media only screen and (min-width: 1024px) {
+    .title {
+        // font-size: common.$fontNormalDesktopMdTxt;
+    }
+
+    .adminPortalContainer {
+        width: 35%;
+    }
+
+    .loginBtn {
+        height: 2.5rem;
+        width: 7rem;
+    }
+
+    .menuItemContainer {
+        width: 90%;
+    }
+}
+
+@media only screen and (min-width:768px) {
+    .adminPortal {
+        background:
+            linear-gradient(rgba(0, 0, 0, 0.4),
+                rgba(0, 0, 0, 0.4)),
+            /* bottom, image */
+            url("../tools/assets/backgroundAdminPortalDesktop1.webp");
+        background-position: center center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-color: #464646;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .adminPortalContainer {
+        width: 20%;
+    }
+
+    .menuItemName>p,
+    .loginBtn>p {
+        font-size: common.$font18px
+    }
+}

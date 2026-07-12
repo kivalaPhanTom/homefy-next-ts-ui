@@ -1,0 +1,50 @@
+@use "../../../app/tools/common/commonStyles.scss" as common;
+
+.addItem {
+    width: 100%;
+}
+
+.addItemContainer {
+    width: 85%;
+    @include common.centerLeftRight;
+}
+
+.div_img {
+    width: 100%;
+    >img{
+        cursor: pointer;
+        width: 100%;
+        height: auto !important;
+    }
+}
+.info {
+    margin-top: 1rem;
+}
+.div_title {
+    @include common.centerSpaceBetweenItem;
+}
+.title{
+    width: 100%;
+}
+.title>p {
+    font-weight: 550;
+    margin: 0.2em 0;
+    font-size: common.$font14px;
+    @include common.TheseasonsFont;
+    text-align: center;
+}
+.linkImg{
+    text-decoration: none !important;
+    color: black;
+}
+
+@media only screen and (min-width: 768px) {
+    .title>p {
+        // font-size: common.$fontNormalTabletTxt;
+    }
+}
+@media only screen and (min-width: 1024px) {
+    .title>p {
+        // font-size: common.$fontNormalDesktopSmTxt;
+    }
+}

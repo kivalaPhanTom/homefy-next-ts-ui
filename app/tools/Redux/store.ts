@@ -1,5 +1,6 @@
 'use client'
 import { configureStore, type Middleware, isRejectedWithValue } from '@reduxjs/toolkit'
+import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux'
 import createSagaMiddleware from 'redux-saga'
 import homeSlice from './slices/HomeSlice'
 import signUpSlice from './slices/SignUpSlice'
@@ -98,4 +99,6 @@ const store = configureStore({
 sagaMiddleware.run(rootSaga);
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
+export const useAppDispatch = () => useDispatch<AppDispatch>()
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector
 export default store

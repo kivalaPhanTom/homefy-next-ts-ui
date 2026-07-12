@@ -32,7 +32,7 @@ function LoginBtn() {
     };
 
     const isLogin = handleCheckUserTokenExits();
-
+    console.log('isOpenPopover:', isOpenPopover)
     return (
         <>
             {isLogin ? (

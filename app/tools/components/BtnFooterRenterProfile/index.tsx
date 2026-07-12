@@ -1,0 +1,3 @@
+import BtnFooterRenterProfileComponent from './BtnFooterRenterProfile'
+
+export default BtnFooterRenterProfileComponent

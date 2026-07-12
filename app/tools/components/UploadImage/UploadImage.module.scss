@@ -1,0 +1,11 @@
+@use "../../common/commonStyles.scss" as common;
+
+.btnUploadFile {
+    @include common.TheseasonsFont;
+    font-size: common.$font14px;
+}
+@media only screen and (min-width: 768px) {
+    .btnUploadFile {
+        // font-size: common.$fontNormalMobileText;
+    }
+}

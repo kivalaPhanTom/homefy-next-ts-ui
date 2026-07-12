@@ -1,0 +1,218 @@
+@use "../../common/commonStyles.scss" as common;
+
+@mixin styleCommonInput {
+    width: 100% !important;
+    @include common.TheseasonsFont;
+    border-radius: 15px !important;
+}
+
+.addItem {
+    width: 100%;
+}
+
+.addItemContainer {
+    width: 90%;
+    @include common.centerLeftRight;
+}
+
+.inputItem {
+    margin-bottom: 3%;
+}
+
+.titlePage {
+    text-transform: uppercase;
+    // color: common.$text-color1;
+    text-align: center;
+    margin: 0;
+    padding: 2rem 0;
+    font-size: common.$font16px;
+    font-weight: 500;
+    @include common.TheseasonsFont;
+}
+
+.titleSection {
+    @include common.TheseasonsFont;
+    font-size: common.$font14px;
+    margin-bottom: 0.5%;
+}
+
+.inputNumber {
+    width: 100%;
+}
+
+.inputAutoComplete {
+    border-radius: 15px !important;
+    padding-top: 7px !important;
+    padding-bottom: 7px !important;
+}
+
+.inputControl {
+    @include styleCommonInput;
+    padding-top: 1.5px !important;
+    padding-bottom: 1.5px !important;
+    font-size: common.$font14px;
+
+    >div {
+        border-radius: 15px !important;
+    }
+}
+
+.inputTime {
+    @include styleCommonInput;
+    padding-top: 6.5px !important;
+    padding-bottom: 6.5px !important;
+    font-size: common.$font14px;
+}
+
+.inputText {
+    @include styleCommonInput;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    font-size: common.$font14px;
+}
+
+.inputSelect {
+    @include styleCommonInput;
+    font-size: common.$font14px;
+    height: 2.4rem !important;
+
+    >div {
+        border-radius: 15px !important;
+    }
+}
+
+.iconCarAdmin {
+    color: red !important;
+}
+
+.listIconRoomFirnishing {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+}
+
+.iconItem {
+    width: 25%;
+    margin-bottom: 4%;
+    cursor: pointer;
+    >div {
+        width: 98%;
+        @include common.centerLeftRight;
+    }
+}
+
+.divIconItem {
+    @include common.centerItem;
+
+    >* {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+.iconItemTitle {
+    text-align: center;
+    margin-top: 1%;
+    margin-bottom: 1%;
+    font-size: 12px;
+    @include common.TheseasonsFont;
+}
+.tags{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    >div{
+        width: 31%;
+    }
+}
+.housemates{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2%;
+}
+.btnAddHousemates{
+    margin-top: 2%;
+    @include common.centerItem;
+    >div{
+        cursor: pointer;
+        border-radius: 5px;
+        padding-left: 2%;
+        padding-right: 2%;
+        border:1px solid common.$text-color6;
+        background-color: common.$main-color4;
+        >p{
+            margin-top: 3%;
+            margin-bottom: 3%;
+            @include common.TheseasonsFont;
+            font-size: common.$font14px;
+        }
+    }
+}
+.itemInputHousemate{
+    width: 30%;
+}
+.div_btnDeleteHousemate{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 5%;
+}
+.btnDeleteHousemate{
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+.selectedName{
+    color: common.$main-color13;
+}
+.errorInput{
+    >div{
+        border: 1px solid red !important;
+    }   
+}
+@media only screen and (min-width: 575px) {
+    .divIconItem {
+        @include common.centerItem;
+    
+        >* {
+            width: 5rem;
+            height: 5rem;
+        }
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .titlePage {
+        // @include common.styleFontTitleTablet;
+    }
+
+    .addItemContainer {
+        width: 70%;
+    }
+
+    .titleSection, .p_btnAddHousemates {
+        // font-size: common.$fontNormalTabletTxt !important;
+    }
+}
+
+@media only screen and (min-width: 1024px) {
+    .titlePage {
+        font-weight: 500;
+        font-size: 30px;
+        padding: 3rem 0;
+    }
+
+    .addItemContainer {
+        width: 60%;
+    }
+    .iconItemTitle{
+       font-size: common.$font14px;
+    }
+}
+
+@media only screen and (min-width: 1280px) {
+    .addItemContainer {
+        width: 40%;
+    }
+}

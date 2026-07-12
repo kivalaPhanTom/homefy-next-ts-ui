@@ -1,5 +1,4 @@
 'use client'
-import { useSelector } from 'react-redux'
 import Image from 'next/image'
 import styles from './Loading.module.scss'
 import logo from '@/assets/iconLoading1.webp'
