@@ -14,7 +14,8 @@ import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN
 import { Service as UserService } from '@/Services/UserServices'
 import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 import { authenNextServer } from '@/Services/NextAuthenServer'
-
+import { roomObjectType, deleteListingPayloadType } from '@/common/types/RoomTypes'
+import { responseType } from '@/common/types/ResponseApi'
 //dangcode
 function* handleGetListingsApi(action) {
     const { data, isReset, listRoom, total } = action.payload
@@ -174,20 +175,20 @@ function* handleUpdateListingApi(action) {
         yield* handleEror(payloadError)
     }
 }
-function* handleDeleteListingApi(action) {
+function* handleDeleteListingApi(action: { payload: deleteListingPayloadType }): Generator<any, void, unknown> {
     const { data, callRTKquery } = action.payload
     yield put(setLoading(true))
     try {
-        // yield call(handleRefreshTokenApi)
-        const res = yield call(Service.deleteListingApi, data)
-        if (res.data.isError === false) {
+        const res = (yield call(Service.deleteListingApi, data)) as responseType
+        if (res.data.code === 200) {
             yield put(setOpenDeleteListing(false))
             Notification.openNotificationSuccess('Deleted data successfully')
             yield call(callRTKquery)
-        } else {
-            Notification.openNotificationError(res.data.errorMsg)
-            yield put(setLoading(false))
-        }
+        } 
+        // else {
+        //     // Notification.openNotificationError(res.data.errorMsg)
+        //     yield put(setLoading(false))
+        // }
         yield put(setLoading(false))
     } catch (error) {
         const payloadError = {
@@ -196,23 +197,23 @@ function* handleDeleteListingApi(action) {
             actionPayload: action.payload,
             dispatchLoading: setLoading
         }
-        yield* handleEror(payloadError)
+        yield* handleErorrSaga(payloadError)
     }
 }
 
-function* handleEror(payloadError) {
-    // const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
-    // const isCallRefreshToken = handleError(error)
-    // if (isCallRefreshToken) {
-    //     const payloadSendRefreshToken = {
-    //         functionDispatch,
-    //         actionPayload,
-    //         dispatchLoading
-    //     }
-    //     yield put(getRefreshToken(payloadSendRefreshToken))
-    // } else {
-    //     yield put(setLoading(false))
-    // }
+function* handleErorrSaga(payloadError) {
+    const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
+    const isCallRefreshToken = handleError(error)
+    if (isCallRefreshToken) {
+        const payloadSendRefreshToken = {
+            functionDispatch,
+            actionPayload,
+            dispatchLoading
+        }
+        yield put(getRefreshToken(payloadSendRefreshToken))
+    } else {
+        yield put(setLoading(false))
+    }
 }
 
 // function* handleRefreshTokenApi() {

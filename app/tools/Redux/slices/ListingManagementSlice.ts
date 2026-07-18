@@ -1,17 +1,26 @@
 import { createSlice } from '@reduxjs/toolkit'
-const initialState = {
+import { roomObjectType } from '@/common/types/RoomTypes'
+
+interface initialStateType {
+    listings: roomObjectType[],
+    listingInfo: any,//sẽ xóa
+    optionAddressSearchResult: any,//sẽ xóa
+    isShowBtnLoadmore: boolean,
+    isOpenDeleteListing: boolean,
+}
+const initialState: initialStateType = {
     listings: [],
-    listingInfo:null,  //sẽ xóa
-    optionAddressSearchResult:[], //sẽ xóa
-    isShowBtnLoadmore:true,
-    isOpenDeleteListing:false
+    listingInfo: null,  //sẽ xóa
+    optionAddressSearchResult: [], //sẽ xóa
+    isShowBtnLoadmore: true,
+    isOpenDeleteListing: false
 }
 
 const listingManagementSlice = createSlice({
     name: 'listingManagementSlice',
     initialState,
     reducers: {
-        setOptionAddressSearchResult:(state, action) => { //sẽ xóa
+        setOptionAddressSearchResult: (state, action) => { //sẽ xóa
             let newState = { ...state }
             newState.optionAddressSearchResult = action.payload
             return newState
@@ -21,22 +30,22 @@ const listingManagementSlice = createSlice({
             newState.listings = action.payload
             return newState
         },
-        setListingInfo:(state, action) => { //sẽ xóa
+        setListingInfo: (state, action) => { //sẽ xóa
             let newState = { ...state }
             newState.listingInfo = action.payload
             return newState
         },
-        setShowBtnLoadmore:(state, action) => {
+        setShowBtnLoadmore: (state, action) => {
             let newState = { ...state }
             newState.isShowBtnLoadmore = action.payload
             return newState
         },
-        setOpenDeleteListing:(state, action) => {
+        setOpenDeleteListing: (state, action) => {
             let newState = { ...state }
             newState.isOpenDeleteListing = action.payload
             return newState
         },
-        resetData:(state) => {
+        resetData: (state) => {
             let newState = { ...state }
             newState.listings = []
             newState.listingInfo = null

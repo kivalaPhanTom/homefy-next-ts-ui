@@ -1,0 +1,121 @@
+@use "../../common/commonStyles.scss" as common;
+
+.modalContainerFullWidth{
+    overflow-y: auto;
+    max-height: 40rem;
+    width: 100%;
+}
+.antDesignModal {
+    >div{
+        padding: 0 0!important; 
+        >div{
+            padding: 0 0!important; 
+        }
+    }
+    // >div:nth-child(2) {
+    //     padding: 0 !important;
+    // }
+}
+
+.modalHeader {
+    border-bottom: 1px solid common.$text-color6;
+}
+
+.modalHeaderContainer {
+    width: 90%;
+    @include common.centerLeftRight;
+    @include common.centerSpaceBetweenItem;
+}
+
+.modalContainer {
+    width: 90%;
+    @include common.centerLeftRight;
+}
+
+.title {
+    font-size: common.$font16px;
+    font-weight: 600;
+}
+.iconClose{
+    font-size: 1rem;
+    color: common.$text-color6;
+    cursor: pointer;
+}
+.footer{
+    margin-top: 15%;
+}
+
+.listBtnAction {
+    padding-top: 2%;
+    padding-bottom: 2%;
+    width: 100%;
+    margin-top: 5%;
+    @include common.centerFlexEndItem;
+}
+
+.listBtnActionContainer {
+    width: 100%;
+    @include common.centerFlexEndItem;
+
+    >* {
+        margin-left: 2%;
+    }
+}
+
+.btnItem {
+    padding: 4% 6%;
+    @include common.centerItem;
+    font-size: common.$font14px;
+    border: none;
+}
+
+.cancelBtn {
+    color: black !important;
+    transition: 0.4s;
+    @include common.TheseasonsFont;
+
+    &:hover {
+        color: black !important;
+        background-color: common.$main-color17 !important;
+        transition: 0.4s;
+    }
+}
+
+.saveAndBackBtn {
+    background-color: common.$main-color5;
+    color: white;
+    transition: 0.4s;
+    @include common.TheseasonsFont;
+
+    &:hover {
+        color: white !important;
+        background-color: common.$main-color13 !important;
+
+        transition: 0.4s;
+    }
+}
+.subtile{
+    @include common.TheseasonsFont;
+    color: common.$text-color3;
+}
+@media only screen and (min-width: 768px) {
+    .btnItem {
+        // font-size: common.$fontNormalMobileText;
+    }
+}
+@media only screen and (min-width: 1024px) {
+    .title {
+        // font-size: common.$fontNormalTabletText;
+    }
+    .subtile{
+        // font-size: common.$fontNormalMobileText;
+    }
+    .iconClose{
+        font-size: 1.2rem;
+    }
+}
+@media only screen and (min-width: 1280px) {
+    .listBtnAction {
+        width: 100%;
+    }
+}

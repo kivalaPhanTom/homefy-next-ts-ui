@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSelector, useDispatch } from 'react-redux'
+
 import ProductListingItem from '@/components/ProductListingItem/ProductListingItem'
 import CreateListingButton from './CreateListingButton'
 import styles from './ManageListings.module.scss'
@@ -18,15 +19,34 @@ import { useLazyGetRoomsQuery } from '@/RTK_Query/GetRooms_Query'
 import { setListings } from '@/Redux/slices/ListingManagementSlice'
 import Loading from '@/app/tools/components/Loading/Loading'
 import { DEFAULT_LIMIT, DEFAULT_OFFSET, PAGE_INDEX } from '@/common/ParamsCommon/ParamsCommon'
+import type { RootState } from '@/Redux/store';
+import { roomObjectType, deleteListingPayloadType } from '@/common/types/RoomTypes'
 
-function ManageListings(props) {
+interface ManageListingsType {
+    limit: number,
+    offset: number,
+    pageIndex: number,
+}
+interface filterDataType {
+    currentPage: number,
+    pageIndexParams: number,
+    isReset: boolean,
+    listRoom: any,
+    total: number,
+}
+interface filterDataQueryType {
+    currentPage: number,
+    pageSize: number
+}
+
+function ManageListings(props: ManageListingsType) {
     const dispatch = useDispatch()
-    const [itemDeleted, setItemDeleted] = useState(null)
+    const [itemDeleted, setItemDeleted] = useState<roomObjectType | null>(null)
     const [countLoading, setLoadingState] = useState(0)
     const [isFirstLoading, setIsFirstLoading] = useState(false)
-    const { isLogin } = useSelector((state) => state.signInSlice)
-    const { listings, isShowBtnLoadmore, isOpenDeleteListing } = useSelector((state) => state.listingManagementSlice)
-    const { isLoading } = useSelector((state) => state.loadingSlice)
+    const { isLogin } = useSelector((state: RootState) => state.signInSlice)
+    const { listings, isShowBtnLoadmore, isOpenDeleteListing } = useSelector((state: RootState) => state.listingManagementSlice)
+    const { isLoading } = useSelector((state: RootState) => state.loadingSlice)
     const [isLoadingMoreBtn, setLoadingMoreBtn] = useState(false)
     // const queryString = renderQueryString()
     const { limit, offset, pageIndex } = props
@@ -49,7 +69,7 @@ function ManageListings(props) {
         }
         return () => {
             setIsRest(true)
-            dispatch(setListings([])) 
+            dispatch(setListings([]))
         }
     }, [isLogin])
 
@@ -66,9 +86,9 @@ function ManageListings(props) {
             console.log('dataxxx:', data)
             const listRoom = data.result.data
             const total = data.result.count
-            let filterData = {
+            let filterData: filterDataType = {
                 // limitParams: limit,
-                // offsetParams: offset,
+                currentPage: 0,
                 pageIndexParams: pageIndex,
                 isReset: isReset,
                 listRoom,
@@ -117,7 +137,7 @@ function ManageListings(props) {
         // }
     }, [error])
 
-    const handleLoadMore = () => {
+    const handleLoadMore = (): void => {
         setIsRest(false)
         setLoadingState(prev => prev + 1)
         setLoadingMoreBtn(true)
@@ -131,10 +151,10 @@ function ManageListings(props) {
         // push(`?limit=${limit}&&offset=${newOffset}&&pageIndex=${newPageIndex}`, { scroll: false })
     }
 
-    const handleTriggerQueryData = (isCache) => {
+    const handleTriggerQueryData = (isCache: boolean): void => {
         setIsRest(true)
-        let filterData = {
-            currentPage:1,
+        let filterData: filterDataQueryType = {
+            currentPage: 1,
             pageSize: DEFAULT_LIMIT
             // limitParams: limit,
             // offsetParams: DEFAULT_OFFSET,
@@ -149,28 +169,28 @@ function ManageListings(props) {
         queryToCallAPi(filterData, isCache)
     }
 
-    const queryToCallAPi = (filterData, isCache) => { //dangcode
+    const queryToCallAPi = (filterData: filterDataQueryType, isCache: boolean) => { //dangcode
         // const { limitParams, offsetParams } = filterData
         const { currentPage, pageSize } = filterData
 
         let payloadFilter = {
             currentPage,
-           pageSize,
+            pageSize,
         }
         console.log('payloadFilter:', payloadFilter)
         trigger({ data: payloadFilter }, isCache)
     }
 
-    const updateDataToStore = (filterData) => {
+    const updateDataToStore = (filterData: filterDataType): void => {
         // const { limitParams, offsetParams, pageIndexParams, isReset, listRoom = [], total = 0 } = filterData
-        const { currentPage, offsetParams, pageIndexParams, isReset, listRoom = [], total = 0 } = filterData
+        const { currentPage, pageIndexParams, isReset, listRoom = [], total = 0 } = filterData
         let payloadFilter = {
             // offset: offsetParams,
             // limit: limitParams,
-            currentPage:currentPage,
+            currentPage: currentPage,
             pageIndex: pageIndexParams,
         }
-        console.log('payloadFilter:', payloadFilter)
+
         const payload = {
             data: payloadFilter,
             listRoom,
@@ -180,20 +200,22 @@ function ManageListings(props) {
         }
         dispatch(getListings(payload))
     }
-    const handleSetOpenConfirmDelete = (value) => {
+    const handleSetOpenConfirmDelete = (value: boolean): void => {
         dispatch(setOpenDeleteListing(value))
         if (!value) {
             setItemDeleted(null)
         }
     }
 
-    const handleConfirmDelete = () => {
-        const payload = {
-            data: itemDeleted.id,
-            language: '',
-            callRTKquery: () => { handleTriggerQueryData(false) }
+    const handleConfirmDelete = (): void => {
+        if (itemDeleted?.id) {
+            const payload: deleteListingPayloadType = {
+                data: itemDeleted.id,
+                language: '',
+                callRTKquery: () => { handleTriggerQueryData(false) }
+            }
+            dispatch(deleteListing(payload))
         }
-        dispatch(deleteListing(payload))
     }
 
     return (

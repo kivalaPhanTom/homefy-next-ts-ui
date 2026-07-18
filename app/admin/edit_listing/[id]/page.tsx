@@ -1,9 +1,6 @@
-import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 import Loading from '../../../loading'
-const EditListingForm = dynamic(() => import('./EditListingForm'), {
-    ssr: false,
-})
+import EditListingForm from './EditListingForm'
 
 async function Page(props: { params: Promise<{ id: string }> }) {
     const { params } = props

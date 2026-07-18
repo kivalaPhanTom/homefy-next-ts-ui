@@ -1,10 +1,8 @@
-import dynamic from 'next/dynamic'
 import { DEFAULT_LIMIT, DEFAULT_OFFSET, PAGE_INDEX } from '@/common/ParamsCommon/ParamsCommon'
 import { Suspense } from 'react'
 import Loading from '../../loading'
-const ManageListings = dynamic(() => import('./ManageListings'), {
-    ssr: false,
-})
+import ManageListings from './ManageListings'
+
 const Page = (props) => {
     const limit = props?.searchParams?.limit ?? DEFAULT_LIMIT
     const offset = props?.searchParams?.offset ?? DEFAULT_OFFSET

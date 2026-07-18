@@ -1,0 +1,111 @@
+@use "../../common/commonStyles.scss" as common;
+
+.productItem {
+    width: 100%;
+    height: 100%;
+}
+
+.productItemContainer {
+    width: 85%;
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    @include common.centerLeftRight;
+}
+.headerProduct{
+    position: relative;
+    height: 0;
+    padding-bottom: 75%;
+    width: 100%;
+}
+.deleteProduct{
+    position: absolute;
+    top:-0.5em;
+    right: -0.5em;
+    z-index: 3;
+}
+.deleteProductIcon{
+    color:common.$main-color20;
+    cursor: pointer;
+}
+.imgProduct{
+    position: absolute;
+    left: 0;
+    top:0;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+}
+.productImg {
+    width: 100%;
+    position: relative;
+    height: 100%;
+}
+.imageRoom{
+    width: 100%;
+    border-radius: 5%;
+    background-color: common.$main-color10;
+    height: 100%;
+    display: block;
+    background-size: cover;
+    background-position: center center;
+    object-fit: cover; 
+}
+.productInfo {
+    margin-top: 1rem;
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.nameAndPrice {
+    width: 100%;
+    @include common.centerSpaceBetweenItem;
+}
+
+.statusAndStar {
+    width: 100%;
+    @include common.centerSpaceBetweenItem;
+}
+
+.status {
+    width: 100%;
+    @include common.centerSpaceBetweenItem;
+
+    >p {
+        font-weight: 500;
+        margin: 0.3em 0;
+        font-size: common.$font14px;
+        @include common.TheseasonsFont;
+    }
+}
+.name>p{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+}
+.name>p, .price>p {
+    font-weight: 550;
+    margin: 0.2em 0;
+    font-size: common.$font14px;
+    @include common.TheseasonsFont;
+}
+.checkStatus> *{
+    color: common.$main-color5;
+    font-size: 1.5em;
+}
+@media only screen and (min-width: 768px) {
+    .name>p, .price>p, .status>p {
+        // font-size: common.$fontNormalTabletTxt;
+    }
+}
+@media only screen and (min-width: 1024px) {
+    .name>p, .price>p, .status>p {
+        // font-size: common.$fontNormalDesktopSmTxt;
+    }
+    .deleteProductIcon{
+        font-size: 18px;
+    }
+}

@@ -12,7 +12,7 @@ interface conflictDatesType {
 }
 interface responseType {
     data: {
-        code: string,
+        code: number,
         message: string,
         result: {
             available: boolean,
