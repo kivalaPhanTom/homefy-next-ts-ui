@@ -1,14 +1,17 @@
 import { homefyInstance } from './configAxios'
+import { checkRoomAvailabilityType } from '@/common/types/RoomTypes'
 
 export const Service = {
     getListProductApi,
     getDetailProductApi,
-    getFavouriteProductsApi
+    getFavouriteProductsApi,
+    checkRoomAvailabilityApi
 }
 export const servicePattern = {
     getListProduct: 'room/list',
-    getDetailProduct:'room/detail',
-    getFavouriteProducts:'user/favorite'
+    getDetailProduct: 'room/detail',
+    getFavouriteProducts: 'user/favorite',
+    checkRoomAvailability: 'room/check_room_available'
 }
 
 function getListProductApi(data) {
@@ -40,16 +43,16 @@ function getListProductApi(data) {
     // if(data.lon){
     //     result = `${result}lon=${data.lon}&&` 
     // }
-    if(data.address){
-        result = `${result}address=${data.address}&&` 
+    if (data.address) {
+        result = `${result}address=${data.address}&&`
     }
-    if(data.criteria){
-        result = `${result}criteria=${data.criteria}&&` 
+    if (data.criteria) {
+        result = `${result}criteria=${data.criteria}&&`
     }
     return homefyInstance.get(result)
 }
 function getDetailProductApi(data) {
-    return  homefyInstance.get(`${servicePattern.getDetailProduct}/${data}`)
+    return homefyInstance.get(`${servicePattern.getDetailProduct}/${data}`)
 }
 function getFavouriteProductsApi(data) {
     let result = `${servicePattern.getFavouriteProducts}?`
@@ -60,4 +63,7 @@ function getFavouriteProductsApi(data) {
         result = `${result}offset=${data.offset}&&`
     }
     return homefyInstance.get(result)
+}
+function checkRoomAvailabilityApi(data: checkRoomAvailabilityType) {
+    return homefyInstance.post(servicePattern.checkRoomAvailability, data);
 }

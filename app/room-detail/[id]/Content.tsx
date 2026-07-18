@@ -1,10 +1,7 @@
 "use client";
-
-import styles from './RoomDetail.module.scss'
+import { useEffect, useState } from 'react'
 import { useRouter } from "next/navigation";
-import { setSessionStorage } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
-import { formatNumber, renderTextDayMonthValue } from '@/common/FunctionCommon/FunctionCommon'
-import { useState } from "react";
+import { useSelector, useDispatch } from 'react-redux'
 import {
   Form,
   DatePicker,
@@ -13,9 +10,17 @@ import {
   Button,
   Rate,
 } from "antd";
-import type { Dayjs } from 'dayjs';
-
+import dayjs, { type Dayjs } from 'dayjs';
 import { message } from 'antd';
+
+import styles from './RoomDetail.module.scss'
+import { setSessionStorage } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
+import { formatNumber, renderTextDayMonthValue } from '@/common/FunctionCommon/FunctionCommon'
+import { checkRoomAvailability } from '@/Redux/Actions/ProductionAction'
+import { checkRoomAvailabilityType } from '@/common/types/RoomTypes'
+import type { RootState } from '@/Redux/store';
+import SpinLoader from '@/app/tools/components/SpinLoader/SpinLoader';
+import RoomUnavailable from './RoomUnavailable';
 
 const { Option } = Select;
 
@@ -32,10 +37,36 @@ interface ContentProps {
 }
 function Content(props: ContentProps) {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const { isRoomAvailable, conflictDates, isCheckingRoomAvailability } = useSelector((state: RootState) => state.filterProductPageSlice)
   const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address } = props
   const [checkInDate, setCheckInDate] = useState<Dayjs | null>(null)
   const [checkOutDate, setCheckOutDate] = useState<Dayjs | null>(null)
   const [guestCount, setGuestCount] = useState<number>(1)
+
+  useEffect(() => {
+    const today = dayjs();
+    const nextDay = today.add(1, 'day');
+    setCheckInDate(today);
+    setCheckOutDate(nextDay);
+  }, [roomId])
+
+  useEffect(() => {
+    if (checkInDate && checkOutDate && roomId) {
+      const handleCheckRoomAvailability = setTimeout(() => {
+        const fromDate: string = checkInDate.format('DD-MM-YYYY')
+        const toDate: string = checkOutDate.format('DD-MM-YYYY')
+        const payload: checkRoomAvailabilityType = {
+          roomId: roomId,
+          fromDate: fromDate,
+          toDate: toDate,
+        }
+        dispatch(checkRoomAvailability(payload))
+      }, 700)
+      return () => clearTimeout(handleCheckRoomAvailability)
+    }
+  }, [checkInDate, checkOutDate, roomId])
+
 
   const handleCheckInChange = (value: Dayjs | null) => {
     setCheckInDate(value || null)
@@ -172,13 +203,21 @@ function Content(props: ContentProps) {
 
               </div>
 
-              <div className={styles["availability-box"]}>
+              <div className={`${styles["availability-box"]} ${isRoomAvailable ? styles["available-bg"] : styles["notAvailable-bg"]}`}>
                 <div className={styles["available-title"]}>
-                  Còn trống
+                  {
+                    isCheckingRoomAvailability ?
+                      <div className={styles["spiner"]}>
+                        <SpinLoader />
+                      </div>
+                      : isRoomAvailable ? "Phòng có sẵn" : <p className={styles["notAvailable-text"]}>Phòng không có sẵn</p>
+                  }
                 </div>
 
                 <div className={styles["available-subtitle"]}>
-                  Sẵn sàng đặt phòng
+                  {
+                    isCheckingRoomAvailability ? <p className={styles["checking-text"]}>Đang kiểm tra phòng</p> : isRoomAvailable ? " Sẵn sàng đặt phòng" : ""
+                  }
                 </div>
               </div>
 
@@ -187,6 +226,10 @@ function Content(props: ContentProps) {
           </Form>
 
         </div>
+        {
+          !isRoomAvailable && conflictDates.length > 0 && <RoomUnavailable unavailableDates={conflictDates} />
+        }
+
 
         {/* Description */}
 

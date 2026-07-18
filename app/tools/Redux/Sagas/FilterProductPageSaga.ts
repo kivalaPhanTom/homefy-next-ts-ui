@@ -1,10 +1,25 @@
-import { all, takeEvery, put, select } from 'redux-saga/effects'
-import { filterProductInFilterPage } from '../Actions/ProductionAction'
+import { all, takeEvery, put, select, call } from 'redux-saga/effects'
+import { checkRoomAvailabilityType } from '@/common/types/RoomTypes'
+import { filterProductInFilterPage, checkRoomAvailability } from '../Actions/ProductionAction'
 import { setLoading } from '../slices/LoadingSlice'
-import { setListProduct, setShowBtnLoadmore, setTotal } from '../slices/FilterProductPageSlice'
+import { setListProduct, setShowBtnLoadmore, setTotal, saveState } from '../slices/FilterProductPageSlice'
 import { getRefreshToken } from '../Actions/TokenAction'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
-
+import { Service } from '@/Services/ProductServices'
+interface conflictDatesType {
+    date: string,
+    reason: string
+}
+interface responseType {
+    data: {
+        code: string,
+        message: string,
+        result: {
+            available: boolean,
+            conflicts: conflictDatesType[]
+        }
+    }
+}
 // function* handleGetListProductInFilterPageApi(action) {
 //     const { data, isReset, listProducts, total } = action.payload
 //     try {
@@ -64,7 +79,7 @@ function* handleGetListProductInFilterPageApi(action) {
         yield put(setListProduct([]))
     }
 }
-function* handleUpdateData(dataResult, totalProduct) {
+function* handleUpdateData(dataResult: any, totalProduct: number): Generator<any, void, unknown> {
     yield put(setListProduct(dataResult))
     yield put(setTotal(totalProduct))
     if (totalProduct === dataResult.length) {
@@ -75,7 +90,25 @@ function* handleUpdateData(dataResult, totalProduct) {
     yield put(setLoading(false))
 }
 
-function* handleEror(payloadError) {
+function* handleCheckRoomAvailabilityApi(action: { payload: checkRoomAvailabilityType }): Generator<any, void, unknown> {
+    yield put(saveState({
+        isCheckingRoomAvailability: true
+    }))
+    try {
+        const res = (yield call(Service.checkRoomAvailabilityApi, action.payload)) as responseType
+        const result = res?.data?.result
+        yield put(saveState({
+            isCheckingRoomAvailability: false,
+            isRoomAvailable: result?.available,
+            conflictDates: result?.conflicts.map((e: conflictDatesType) => e.date) || []
+        }))
+    } catch (error) {
+        yield put(saveState({
+            isCheckingRoomAvailability: false
+        }))
+    }
+}
+function* handleEror(payloadError: any): Generator<any, void, unknown> {
     const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     const isCallRefreshToken = handleError(error)
     if (isCallRefreshToken) {
@@ -90,11 +123,17 @@ function* handleEror(payloadError) {
     }
 }
 
-function* getListProductInFilterPageSaga() {
+function* getListProductInFilterPageSaga(): Generator<any, void, unknown> {
     yield takeEvery(filterProductInFilterPage, handleGetListProductInFilterPageApi)
 }
-export function* filterProductPageSagaList() {
+
+function* getRoomAvailabilitySaga(): Generator<any, void, unknown> {
+    yield takeEvery(checkRoomAvailability, handleCheckRoomAvailabilityApi)
+}
+
+export function* filterProductPageSagaList(): Generator<any, void, unknown> {
     yield all([
-        getListProductInFilterPageSaga()
+        getListProductInFilterPageSaga(),
+        getRoomAvailabilitySaga()
     ])
 }

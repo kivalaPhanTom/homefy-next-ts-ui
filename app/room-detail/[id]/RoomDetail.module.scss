@@ -1,5 +1,8 @@
 @use "../../tools/common//commonStyles.scss" as common;
-.frameArea { position: relative; }
+
+.frameArea {
+    position: relative;
+}
 
 .linkMenu,
 .normalText,
@@ -155,7 +158,7 @@
     background: #ffffff;
     padding: 18px;
     border-radius: 12px;
-    box-shadow: 0 6px 18px rgba(29,38,50,0.06);
+    box-shadow: 0 6px 18px rgba(29, 38, 50, 0.06);
     position: sticky;
     top: 96px;
 }
@@ -402,9 +405,11 @@
     transition: 0.4s;
     color: common.$main-color16;
 }
-.liked{
-    color: common.$main-color16;  
+
+.liked {
+    color: common.$main-color16;
 }
+
 @media only screen and (min-width: 600px) {
     .photoText {
         font-size: common.$font15px;
@@ -417,7 +422,7 @@
     .photoGallery {
         width: 9rem;
     }
-       
+
     .imgFrameContainer {
         height: 300px;
     }
@@ -449,6 +454,7 @@
         height: 100%;
         object-fit: cover;
     }
+
     .linkMenu,
     .normalText,
     .photoText,
@@ -502,28 +508,33 @@
     }
 
     .gallerySection {
-        >div{
+        >div {
             width: 92%;
             margin-left: auto;
         }
     }
-    .recommend{
+
+    .recommend {
         width: 50%;
     }
+
     .left {
         >div {
             width: 98%;
         }
     }
 }
+
 @media only screen and (min-width: 1500px) {
-    .imgFrameContainer{
+    .imgFrameContainer {
         height: 670px;
         width: common.$widthPercentageLarge;
     }
-    .roomMoreInfoContainer{
+
+    .roomMoreInfoContainer {
         width: common.$widthPercentageLarge;
     }
+
     .photoGalleryArea {
         top: 97%;
     }
@@ -534,257 +545,279 @@
 
 // new
 .room-page {
-  background: #ffffff;
-  min-height: 100vh;
+    background: #ffffff;
+    min-height: 100vh;
 }
 
 .container {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 24px;
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 24px;
 }
 
 .gallery-main {
-  height: 460px;
-  border-radius: 12px;
-  overflow: hidden;
+    height: 460px;
+    border-radius: 12px;
+    overflow: hidden;
 }
 
 .gallery-main img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .gallery-thumbnails {
-  display: flex;
-  gap: 12px;
-  margin-top: 16px;
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
 }
 
 .thumbnail {
-  width: 130px;
-  height: 80px;
-  border: 2px solid #e5e7eb;
-  border-radius: 10px;
-  overflow: hidden;
-  cursor: pointer;
+    width: 130px;
+    height: 80px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .thumbnail.active {
-  border-color: #7c3aed;
+    border-color: #7c3aed;
 }
 
 .thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .more-photo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
 }
 
 .content-wrapper {
-  display: flex;
-  gap: 40px;
-  margin-top: 30px;
+    display: flex;
+    gap: 40px;
+    margin-top: 30px;
 }
 
 .content-left {
-  flex: 1;
+    flex: 1;
 }
 
 .content-right {
-  width: 360px;
+    width: 360px;
 }
 
 .room-title {
-  font-size: 42px;
-  font-weight: 700;
-  margin: 0;
+    font-size: 42px;
+    font-weight: 700;
+    margin: 0;
 }
 
 .room-rating {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 12px;
-  color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+    color: #6b7280;
 }
 
 .dot {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .room-info-row {
-  display: flex;
-  gap: 40px;
-  margin-top: 24px;
-  color: #374151;
+    display: flex;
+    gap: 40px;
+    margin-top: 24px;
+    color: #374151;
 }
 
 .booking-search {
-  margin-top: 30px;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 20px;
+    margin-top: 30px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
 }
 
 .booking-grid {
-  display: grid;
-  grid-template-columns:
-    1fr
-    1fr
-    1fr
-    220px;
-  gap: 16px;
+    display: grid;
+    grid-template-columns:
+        1fr 1fr 1fr 220px;
+    gap: 16px;
 }
 
 .full-width {
-  width: 100%;
+    width: 100%;
+}
+
+.available-bg {
+    border: 1px solid #dcfce7;
+    background: #f0fdf4;
+}
+
+.notAvailable-bg {
+     border: 1px solid #FED7AA;
+    background: #f8f8f5;
 }
 
 .availability-box {
-  border: 1px solid #dcfce7;
-  background: #f0fdf4;
-  border-radius: 12px;
-  padding: 16px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+    // background: #f0fdf4;
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.spiner {
+    @include common.centerItem;
 }
 
 .available-title {
-  color: #16a34a;
-  font-weight: 600;
+    color: #16a34a;
+    font-weight: 600;
+}
+
+.notAvailable-text {
+    text-align: center;
+    color: #DC2626;
+}
+
+.checking-text {
+    text-align: center;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #ffa516;
 }
 
 .available-subtitle {
-  color: #22c55e;
-  font-size: 14px;
+    color: #22c55e;
+    font-size: 14px;
 }
 
 .section {
-  margin-top: 40px;
+    margin-top: 40px;
 }
 
 .section h2 {
-  font-size: 24px;
-  margin-bottom: 18px;
+    font-size: 24px;
+    margin-bottom: 18px;
 }
 
 .section p {
-  line-height: 1.8;
-  color: #4b5563;
+    line-height: 1.8;
+    color: #4b5563;
 }
 
 .amenities-grid {
-  display: grid;
-  grid-template-columns:
-    repeat(4, 1fr);
-  gap: 28px;
+    display: grid;
+    grid-template-columns:
+        repeat(4, 1fr);
+    gap: 28px;
 }
 
 .room-tabs {
-  margin-top: 40px;
+    margin-top: 40px;
 }
 
 .location-grid {
-  display: flex;
-  gap: 24px;
+    display: flex;
+    gap: 24px;
 }
 
 .map-box {
-  width: 400px;
-  height: 250px;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+    width: 400px;
+    height: 250px;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
 
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .location-info {
-  flex: 1;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px;
+    flex: 1;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 20px;
 }
 
 .booking-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 24px;
-  position: sticky;
-  top: 24px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 24px;
+    position: sticky;
+    top: 24px;
 }
 
 .price-label {
-  color: #6b7280;
+    color: #6b7280;
 }
 
 .price {
-  font-size: 42px;
-  font-weight: 700;
-  margin-top: 8px;
+    font-size: 42px;
+    font-weight: 700;
+    margin-top: 8px;
 }
 
 .price span {
-  font-size: 16px;
-  font-weight: 400;
+    font-size: 16px;
+    font-weight: 400;
 }
 
 .summary-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 16px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 16px;
 }
 
 .total {
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid #e5e7eb;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
 
-  display: flex;
-  justify-content: space-between;
-  font-weight: 700;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
 }
 
 .fee-note {
-  margin-top: 12px;
-  text-align: center;
-  color: #9ca3af;
-  font-size: 14px;
+    margin-top: 12px;
+    text-align: center;
+    color: #9ca3af;
+    font-size: 14px;
 }
 
 .cancel-card {
-  margin-top: 20px;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  padding: 20px;
+    margin-top: 20px;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+    padding: 20px;
 }
 
 /* Ant Design */
 
 .ant-picker {
-  width: 100%;
-  height: 52px;
+    width: 100%;
+    height: 52px;
 }
 
 .ant-select-selector {
-  height: 52px !important;
-  align-items: center;
+    height: 52px !important;
+    align-items: center;
 }
 
 .ant-tabs-ink-bar {
-  background: #7c3aed !important;
+    background: #7c3aed !important;
 }
 
 .ant-tabs-tab-active .ant-tabs-tab-btn {
-  color: #7c3aed !important;
+    color: #7c3aed !important;
 }

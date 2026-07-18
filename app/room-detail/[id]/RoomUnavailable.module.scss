@@ -1,0 +1,105 @@
+.wrapper {
+    margin-top: 10px;
+    width: 100%;
+    border: 1px solid #f5b46b;
+    border-radius: 16px;
+    background: #fff;
+}
+
+.container {
+    width: 90%;
+    padding: 28px;
+}
+
+.header {
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+
+    h2 {
+        margin: 0;
+        color: #eb6a00;
+        font-size: 30px;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    p {
+        margin: 10px 0 0;
+        color: #555;
+        font-size: 17px;
+        line-height: 1.6;
+    }
+}
+
+.icon {
+    width: 40px;
+    height: 40px;
+    border: 2px solid #eb6a00;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #eb6a00;
+    font-size: 22px;
+    flex-shrink: 0;
+}
+
+.divider {
+    margin: 24px 0;
+    border-top: 1px dashed #f3c596;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #333;
+    font-size: 20px;
+    font-weight: 600;
+
+    .anticon {
+        color: #eb6a00;
+        font-size: 20px;
+    }
+}
+
+.dateList {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.dateItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 12px 18px;
+    min-width: 180px;
+
+    background: #fff7ef;
+    border: 1px solid #ffd6ab;
+    border-radius: 10px;
+
+    color: #eb6a00;
+    font-size: 16px;
+    font-weight: 600;
+
+    .anticon {
+        font-size: 16px;
+    }
+}
+
+.footer {
+    margin: 0;
+    color: #555;
+    font-size: 16px;
+    line-height: 1.6;
+}
