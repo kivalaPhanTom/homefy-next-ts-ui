@@ -18,10 +18,10 @@ import { roomObjectType, deleteListingPayloadType, uploadFileResponseType, updat
 import { responseType } from '@/common/types/ResponseApi'
 
 //dangcode
-function* handleGetListingsApi(action) {
+function* handleGetListingsApi(action:any): Generator<any, void, unknown> {
     const { data, isReset, listRoom, total } = action.payload
     try {
-        const prevRooms = yield select((state) => state.listingManagementSlice.listings)
+        const prevRooms:any = yield select((state) => state.listingManagementSlice.listings)
         let prevRoomsClone = [...prevRooms]
         if (data.offset !== null && data.offset !== null && data.pageIndex) {
             if (isReset) {
@@ -41,11 +41,11 @@ function* handleGetListingsApi(action) {
             actionPayload: action.payload,
             dispatchLoading: setLoading
         }
-        yield* handleEror(payloadError)
+        yield* handleErorrSaga(payloadError)
         yield put(setListings([]))
     }
 }
-function* handleUpdateData(dataResult, totalProduct) {
+function* handleUpdateData(dataResult:any, totalProduct:any) {
     yield put(setListings(dataResult))
     if (totalProduct === dataResult.length) {
         yield put(setShowBtnLoadmore(false))
@@ -160,7 +160,7 @@ function* handleUpdateListingApi(action: { payload: updateRoomToReduxType }): Ge
             actionPayload: action.payload,
             dispatchLoading: setLoading
         }
-        yield* handleEror(payloadError)
+        yield* handleErorrSaga(payloadError)
     }
 }
 function* handleDeleteListingApi(action: { payload: deleteListingPayloadType }): Generator<any, void, unknown> {
@@ -189,7 +189,7 @@ function* handleDeleteListingApi(action: { payload: deleteListingPayloadType }):
     }
 }
 
-function* handleErorrSaga(payloadError) {
+function* handleErorrSaga(payloadError:any) {
     const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     const isCallRefreshToken = handleError(error)
     if (isCallRefreshToken) {

@@ -125,7 +125,7 @@ homefyInstanceGet.interceptors.request.use(config => {
     },
     async function (error) {
         if (error.response && error.response.status === 401) {
-            handleRefreshToken(error, homefyInstanceGet)
+            // handleRefreshToken(error, homefyInstanceGet)
         } else {
             return Promise.reject(error);
         }

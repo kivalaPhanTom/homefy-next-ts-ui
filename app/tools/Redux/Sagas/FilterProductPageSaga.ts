@@ -49,12 +49,12 @@ interface responseType {
 //         yield put(setListProduct([]))
 //     }
 // }
-function* handleGetListProductInFilterPageApi(action) {
+function* handleGetListProductInFilterPageApi(action:any): Generator<any, void, unknown> {
     const { data, isReset, listProducts, total } = action.payload
     const totalProduct = total
     yield put(setLoading(true))
     try {
-        const listProductPrev = yield select((state) => state.filterProductPageSlice.listProduct)
+        const listProductPrev:any = yield select((state) => state.filterProductPageSlice.listProduct)
         let listProductClone = [...listProductPrev]
         if (data.offset !== null && data.offset !== null && data.pageIndex) {
             if (isReset) {

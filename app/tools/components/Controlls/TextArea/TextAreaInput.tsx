@@ -2,7 +2,7 @@
 import { Input, Form } from "antd";
 import styleCommon from '../controller.module.scss'
 const { TextArea } = Input;
-const TextAreaInput = (props) => {
+const TextAreaInput = (props:any) => {
     const { label, name, rules = [], disabled = false, placeholder = "", allowClear = true, prefix = null, customClassname, rowNumber } = props;
     return (
         <>

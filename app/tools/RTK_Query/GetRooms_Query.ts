@@ -3,12 +3,33 @@ import { servicePattern } from '@/Services/ProductServices'
 import { homefyInstanceGet } from '@/Services/configAxios'
 import { CACHE_TIME } from '@/common/ParamsCommon/ParamsCommon'
 
+interface RoomsApiResponse {
+    result: {
+        data: any[]
+        count: number
+    }
+}
+
+const axiosBaseQuery = async ({ url, method }: { url: string; method: string }) => {
+    try {
+        const result = await homefyInstanceGet({ url, method })
+        return { data: result.data }
+    } catch (error: any) {
+        return {
+            error: {
+                status: error?.response?.status ?? 500,
+                data: error?.response?.data ?? error?.message,
+            },
+        }
+    }
+}
+
 export const getRoomsApi = createApi({
     reducerPath: 'roomsHomeApi',
-    tagTypes: ['roomsHomeApi'],
-    baseQuery: homefyInstanceGet,
+    tagTypes: ['roomsListApi', 'favouriteRoomsListApi'],
+    baseQuery: axiosBaseQuery,
     endpoints: (builder) => ({
-        getRooms: builder.query({  //lấy danh sách theo phân trang, hoặc keysearch
+        getRooms: builder.query<RoomsApiResponse, { data: Record<string, any> }>({
             query: (payload) => {
                 const { data } = payload
                 let result = `${servicePattern.getListProduct}?`
@@ -35,12 +56,10 @@ export const getRoomsApi = createApi({
                     method: 'GET'
                 })
             },
-            keepUnusedDataFor: CACHE_TIME,//thời gian mà RTK query giữ data trong cache, có đơn vị là giây(second), mặc định là 60s
-            providesTags: () => {
-                return [{ type: 'roomsListApi', id: 'ROOMS_LIST' }]
-            },
+            keepUnusedDataFor: CACHE_TIME,
+            providesTags: () => [{ type: 'roomsListApi', id: 'ROOMS_LIST' }],
         }),
-        getFavouriteRooms: builder.query({
+        getFavouriteRooms: builder.query<RoomsApiResponse, { data: Record<string, any> }>({
             query: (payload) => {
                 const { data } = payload
                 let result = `${servicePattern.getFavouriteProducts}?`
@@ -55,10 +74,8 @@ export const getRoomsApi = createApi({
                     method: 'GET'
                 })
             },
-            keepUnusedDataFor: CACHE_TIME,//thời gian mà RTK query giữ data trong cache, có đơn vị là giây(second), mặc định là 60s
-            providesTags: () => {
-                return [{ type: 'favouriteRoomsListApi', id: 'FAVOURITE_ROOMS_LIST' }]
-            },
+            keepUnusedDataFor: CACHE_TIME,
+            providesTags: () => [{ type: 'favouriteRoomsListApi', id: 'FAVOURITE_ROOMS_LIST' }],
         })
     })
 })

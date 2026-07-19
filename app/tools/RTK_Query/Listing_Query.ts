@@ -8,41 +8,55 @@ import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN
 import { authenNextServer } from '@/Services/NextAuthenServer'
 import { checkExpiredToken } from '@/common/FunctionCommon/FunctionCommon'
 
+interface ListingDetailResponse {
+    result: any
+}
+
+const axiosBaseQuery = async ({ url, method }: { url: string; method: string }) => {
+    try {
+        const result = await homefyInstanceGet({ url, method })
+        return { data: result.data }
+    } catch (error: any) {
+        return {
+            error: {
+                status: error?.response?.status ?? 500,
+                data: error?.response?.data ?? error?.message,
+            },
+        }
+    }
+}
+
 export const listingApi = createApi({
     reducerPath: 'listingApi',
-    tagTypes: ['listingApi'],
-    baseQuery: homefyInstanceGet,
+    tagTypes: ['listingApi', 'getListingDetail', 'getFurnitures'],
+    baseQuery: axiosBaseQuery,
     endpoints: (builder) => ({
-        getListingDetail: builder.query({
+        getListingDetail: builder.query<ListingDetailResponse, { roomId: string }>({
             query: (payload) => {
                 const { roomId } = payload
-                // await handleRefreshTokenApi()
                 return ({
                     url: `${servicePattern.getListingDetail}/${roomId}`,
                     method: 'GET'
                 })
             },
-            keepUnusedDataFor: CACHE_TIME,//thời gian mà RTK query giữ data trong cache, có đơn vị là giây(second), mặc định là 60s
-            providesTags: () => {
-                return [{ type: 'getListingDetail', id: 'GET_LISTING_DETAIL' }]
-            },
+            keepUnusedDataFor: CACHE_TIME,
+            providesTags: () => [{ type: 'getListingDetail', id: 'GET_LISTING_DETAIL' }],
         }),
-        getFurnitures: builder.query({
+        getFurnitures: builder.query<unknown, void>({
             query: () => ({
                 url: servicePattern.getFurnitures,
                 method: 'GET'
             }),
             keepUnusedDataFor: CACHE_TIME,
-            providesTags: () => {
-                return [{ type: 'getFurnitures', id: 'GET_FURNITURES' }]
-            },
+            providesTags: () => [{ type: 'getFurnitures', id: 'GET_FURNITURES' }],
         }),
     })
 })
 async function handleRefreshTokenApi() {
     const refreshToken = getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE)
     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
-    const isExpired = checkExpiredToken(expired_time)
+    const expiredTimestamp = Number(expired_time)
+    const isExpired = checkExpiredToken(expiredTimestamp)
     console.log('isExpiredxxx:', isExpired)
     console.log('refreshToken:', refreshToken)
     console.log('expired_time:', expired_time)

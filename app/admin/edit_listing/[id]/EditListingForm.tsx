@@ -59,7 +59,7 @@ function EditListingForm(props: EditListingFormProps) {
   const listingInfo = data ? data.result : null
   console.log('listingInfo:', listingInfo)
   const [trigger, result] = useLazySearchAddressResultQuery()
-  const dataSearchResult = result.data || []
+  const dataSearchResult:any = result.data || []
   console.log('dataSearchResult:', dataSearchResult)
   let options: any[] = data ? (dataSearchResult.data || []).map((item: any) => item) : []
 
@@ -88,7 +88,7 @@ function EditListingForm(props: EditListingFormProps) {
     if (error) {
       const lang = {}
       const isShowError = true
-      handleErrorRTKQuery(data, error, refetch, isShowError, lang)
+      handleErrorRTKQuery(data, error, refetch, isShowError)
     }
   }, [error])
 

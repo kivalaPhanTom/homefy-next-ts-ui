@@ -8,12 +8,12 @@ import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 import { getOptionSearchAdressResult } from '../Actions/HomeAction'
 import { setOptionSearchResult } from '../slices/HomeSlice'
 
-function* handleGetListProductInHomeApi(action) {
+function* handleGetListProductInHomeApi(action:any): Generator<any, void, unknown> {
     const { data, isReset, listProducts, total } = action.payload
     const totalProduct = total
     yield put(setLoading(true))
     try {
-        const listProductPrev = yield select((state) => state.homeSlice.listProduct)
+        const listProductPrev:any = yield select((state) => state.homeSlice.listProduct)
         let listProductClone = [...listProductPrev]
         if (data.offset !== null && data.offset !== null && data.pageIndex) {
             if (isReset) {
@@ -51,7 +51,7 @@ function* handleGetListProductInHomeApi(action) {
 //     }
 
 // }
-function* handleUpdateData(dataResult, totalProduct) {
+function* handleUpdateData(dataResult:any, totalProduct:any) {
     yield put(setListProduct(dataResult))
     if (totalProduct === dataResult.length) {
         yield put(setShowBtnLoadmore(false))
@@ -61,10 +61,10 @@ function* handleUpdateData(dataResult, totalProduct) {
     yield put(setLoading(false))
 }
 
-function* handleGetOptionsAddressSearchHomeApi(action) {   //sẽ xóa
+function* handleGetOptionsAddressSearchHomeApi(action:any): Generator<any, void, unknown> {   //sẽ xóa
     const { data } = action.payload
     try {
-        const res = yield call(addressServices.searchAddressApi, data)
+        const res:any = yield call(addressServices.searchAddressApi, data)
         if (res.data.isError === false) {
             yield put(setOptionSearchResult(res.data.data))
         } else {
@@ -82,7 +82,7 @@ function* handleGetOptionsAddressSearchHomeApi(action) {   //sẽ xóa
     }
 }
 
-function* handleEror(payloadError) {
+function* handleEror(payloadError:any) {
     const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     const isCallRefreshToken = handleError(error)
     if (isCallRefreshToken) {

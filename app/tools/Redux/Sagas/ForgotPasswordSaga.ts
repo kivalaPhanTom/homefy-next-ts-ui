@@ -6,22 +6,22 @@ import { Service } from '@/Services/UserServices'
 import { Notification } from '@/common/FunctionCommon/Notification'
 // import { setOpenPopup } from '../slices/SignUpSlice'
 
-function* handleForgotPasswordApi(action) {
+function* handleForgotPasswordApi(action:any): Generator<any, void, unknown> {
   const { data } = action.payload
   const payload = {
     payload: data
   }
   yield put(setLoading(true))
   try {
-    const res = yield call(Service.forgotPasswordApi, payload);
-    if (res.data.isError === false) {
+    const res:any = yield call(Service.forgotPasswordApi, payload);
+    if (res.data.code === 200) {
     //   yield put(setOpenPopup(false))
     //   Notification.openNotificationSuccess('You have successfully registered an account')
     //   yield put(setOpenPopup(false))
     //   yield put(setOpenPopupSignIn(true))
     //   yield put(setLoading(false))
     } else {
-      Notification.openNotificationError(res.data.errorMsg)
+      Notification.openNotificationError(res.data.message)
       yield put(setLoading(false))
     }
   } catch (error) {

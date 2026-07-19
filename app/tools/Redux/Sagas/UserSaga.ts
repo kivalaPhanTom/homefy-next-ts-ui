@@ -9,7 +9,7 @@ import { setCurrentUserLogin } from '../slices/SignInSlice'
 import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 import { logoutNextServer } from '@/Services/NextAuthenServer'
 
-function* handleUserLikeApi(action) {
+function* handleUserLikeApi(action:any): Generator<any, void, unknown> {
     const { data } = action.payload
     try {
         yield call(Service.userLikeApi, data)
@@ -24,7 +24,7 @@ function* handleUserLikeApi(action) {
     }
 }
 
-function* handleUserRemoveLikeApi(action) {
+function* handleUserRemoveLikeApi(action:any): Generator<any, void, unknown> {
     const { data } = action.payload
     console.log('dataxxxx:', data)
     try {
@@ -39,7 +39,7 @@ function* handleUserRemoveLikeApi(action) {
         yield* handleEror(payloadError)
     }
 }
-function* handleLogOutApi(action) {
+function* handleLogOutApi(action:any): Generator<any, void, unknown> {
     const { router  } = action.payload
     yield put(setLoading(true))
     try {
@@ -67,7 +67,7 @@ function* handleLogOutApi(action) {
         yield* handleEror(payloadError)
     }
 }
-function* handleEror(payloadError) {
+function* handleEror(payloadError:any) {
     const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     const isCallRefreshToken = handleError(error)
     if (isCallRefreshToken) {

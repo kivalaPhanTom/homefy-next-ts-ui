@@ -23,20 +23,20 @@ export const servicePattern = {
 function getListingsApi() { //sẽ xóa
     return homefyInstanceGet.get(`${servicePattern.getListings}`)
 }
-function getListingApi(data) {//sẽ xóa
+function getListingApi(data:any) {//sẽ xóa
     return homefyInstance.get(`${servicePattern.getListing}/${data}`)
 }
 
-function uploadFileApi(data) {
+function uploadFileApi(data:any) {
     return homefyInstanceForm.post(servicePattern.upLoadFile, data);
 }
-function insertListingApi(data) {
+function insertListingApi(data:any) {
     return homefyInstance.post(servicePattern.insertListing, data);
 }
-function updateListingApi(payload) {
+function updateListingApi(payload:any) {
     const {id, data} = payload
     return homefyInstancePut.put(`${servicePattern.updateListing}`, data);
 }
-function deleteListingApi(data) {
+function deleteListingApi(data:any) {
     return homefyInstanceDelete.delete(`${servicePattern.deleteListing}/${data}`);
 }

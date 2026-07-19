@@ -3,10 +3,15 @@ import { memo, type ChangeEvent } from 'react'
 import { useAppSelector, type RootState } from '@/Redux/store'
 import { Input, Form, AutoComplete } from 'antd'
 import { FiSearch } from 'react-icons/fi'
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import dynamic from 'next/dynamic'
 
-const CKEditorAny: any = CKEditor as any;
+const CKEditorAny: any = dynamic(async () => {
+    const mod = await import('@ckeditor/ckeditor5-react')
+    return mod.CKEditor
+}, { ssr: false })
+
+const ClassicEditor: any = typeof window !== 'undefined' ? require('@ckeditor/ckeditor5-build-classic') : null
+
 import styles from './ListingForm.module.scss'
 // import UploadImage from '../UploadImage/UploadImage'
 import UploadImage from '../UploadFile/UploadFile';

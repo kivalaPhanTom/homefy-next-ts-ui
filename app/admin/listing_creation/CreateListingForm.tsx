@@ -6,15 +6,17 @@ import { Form } from 'antd'
 import type { RootState } from '@/Redux/store';
 import { setOpenPopupSignIn } from '@/Redux/slices/SignInSlice'
 import { handleCheckUserTokenExits } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
+import dynamic from 'next/dynamic'
 import { setOptionAddressSearchResult } from '@/Redux/slices/ListingManagementSlice'
 import { insertListing } from '@/Redux/Actions/ListingManagementAction'
 import { v4 as uuidv4 } from 'uuid'
 import { convertTimeRawValueToTimeStamp } from '@/common/FunctionCommon/FunctionCommon'
 // import { handleCheckValidListHouseMates } from './validate'
-import ListingForm from '@/app/tools/components/ListingForm/ListingForm'
 import { roomObjectToRedux, updateRoomToReduxType } from '@/common/types/RoomTypes'
 import { useLazySearchAddressResultQuery } from '@/RTK_Query/SearchAddressResult'
 // import { convertSearchAddressOption } from '@/utils/SearchAddress_utils'
+
+const ListingForm = dynamic(() => import('@/app/tools/components/ListingForm/ListingForm'), { ssr: false })
 
 function CreateListingForm() {
     const [form] = Form.useForm()
@@ -32,7 +34,8 @@ function CreateListingForm() {
     const { isLogin } = useSelector((state: RootState) => state.signInSlice)
     const [trigger, result] = useLazySearchAddressResultQuery()
     const { data } = result
-    let options: any[] = data ? (data.result || []).map((item: any) => item) : []
+     let options: any[] = data ? (data.result || []).map((item: any) => item) : []
+
 
     useEffect(() => {
         if (!handleCheckUserTokenExits()) {

@@ -77,3 +77,6 @@ export const removeSessionStorage = (key:string) => {
     if (typeof window === "undefined") return;
     sessionStorage.removeItem(key);
 };
+export function vhToPixels(vh: number): number {
+    return Math.round(window.innerHeight / (100 / vh))
+}

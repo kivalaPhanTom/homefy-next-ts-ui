@@ -3,7 +3,7 @@
 
 
 'use client'
-function IconCarAdmin(props) {
+function IconCarAdmin(props:any) {
     const { color } = props
     return (
         <svg

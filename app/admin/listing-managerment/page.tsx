@@ -3,7 +3,15 @@ import { Suspense } from 'react'
 import Loading from '../../loading'
 import ManageListings from './ManageListings'
 
-const Page = (props) => {
+interface PageProps {
+    searchParams?: {
+        limit?: string | number
+        offset?: string | number
+        pageIndex?: string | number
+    }
+}
+
+const Page = (props: PageProps) => {
     const limit = props?.searchParams?.limit ?? DEFAULT_LIMIT
     const offset = props?.searchParams?.offset ?? DEFAULT_OFFSET
     const pageIndex = props?.searchParams?.pageIndex ?? PAGE_INDEX

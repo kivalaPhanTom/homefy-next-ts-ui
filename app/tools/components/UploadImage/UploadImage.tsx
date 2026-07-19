@@ -18,14 +18,14 @@ function UploadImage(propsFile: UploadImageProps) {
         action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
         maxCount: maxCount,
         multiple: multiple,
-        beforeUpload(file){
+        beforeUpload(file:any){
             const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
             if (!isJpgOrPng) {
                 message.error('You can only upload JPG/PNG file!')
             }
             return isJpgOrPng 
         },
-        onChange(info) {
+        onChange(info:any) {
             if (info.file.status === 'error') {
                 info.file.status = "done"
             }

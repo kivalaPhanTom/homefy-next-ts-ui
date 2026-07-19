@@ -5,11 +5,11 @@ import { setListProduct, setShowBtnLoadmore, setTotal } from '../slices/Favourit
 import { getRefreshToken } from '../Actions/TokenAction'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 
-function* handleGetFavouriteProductsPageApi(action) {
+function* handleGetFavouriteProductsPageApi(action:any): Generator<any, void, unknown> {
     const { data, isReset, listProducts, total, } = action.payload
     yield put(setLoading(true))
     try {
-        const prevListProduct = yield select((state) => state.favouriteProductSlice.listProduct)
+        const prevListProduct:any = yield select((state) => state.favouriteProductSlice.listProduct)
         let prevListProductClone = [...prevListProduct]
         if (data.offset !== null && data.offset !== null && data.pageIndex) {
             if (isReset) {
@@ -34,7 +34,7 @@ function* handleGetFavouriteProductsPageApi(action) {
         yield put(setListProduct([]))
     }
 }
-function* handleUpdateData(dataResult, totalProduct) {
+function* handleUpdateData(dataResult:any, totalProduct:any): Generator<any, void, unknown> {
     yield put(setListProduct(dataResult))
     yield put(setTotal(totalProduct))
     if (totalProduct === dataResult.length) {
@@ -45,7 +45,7 @@ function* handleUpdateData(dataResult, totalProduct) {
     yield put(setLoading(false))
 }
 
-function* handleEror(payloadError) {
+function* handleEror(payloadError:any) {
     const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     const isCallRefreshToken = handleError(error)
     if (isCallRefreshToken) {

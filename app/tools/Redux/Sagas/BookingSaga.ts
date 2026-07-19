@@ -6,18 +6,18 @@ import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 import { Notification } from '@/common/FunctionCommon/Notification'
 import { clearAuthen } from '../Actions/TokenAction'
 
-function* handleCreateBookingApi(action) {
+function* handleCreateBookingApi(action:any): Generator<any, void, unknown> {
     const { data, navigate } = action.payload
     // let { dataAboutMe, formDataFile, oldFile, isCallUploadApi } = data
     // yield put(setLoadingAboutMe(true))
     try {
-         const res = yield call(Service.reservations, data)
+         const res:any = yield call(Service.reservations, data)
           if (res.data.code === 200) {
             const bookingId = res.data.result.booking_id
             if(navigate) navigate(bookingId)
           }
        
-        yield put(setLoadingAboutMe(false))
+        // yield put(setLoadingAboutMe(false))
     } catch (error) {
         // const payloadError = {
         //     error: error,
@@ -29,7 +29,7 @@ function* handleCreateBookingApi(action) {
     }
 }
 
-function* handleEror(payloadError) {
+function* handleEror(payloadError:any) {
     // const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     // const isErrorAuthen = handleError(error)
     // if (isErrorAuthen) {

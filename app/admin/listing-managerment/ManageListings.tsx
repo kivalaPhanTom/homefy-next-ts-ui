@@ -84,8 +84,8 @@ function ManageListings(props: ManageListingsType) {
     useEffect(() => {
         if (data && !error) {
             console.log('dataxxx:', data)
-            const listRoom = data.result.data
-            const total = data.result.count
+            const listRoom:any = data.result.data
+            const total:any = data.result.count
             let filterData: filterDataType = {
                 // limitParams: limit,
                 currentPage: 0,

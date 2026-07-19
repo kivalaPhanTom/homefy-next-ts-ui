@@ -7,14 +7,14 @@ import { Notification } from '@/common/FunctionCommon/Notification'
 import { setOpenPopup } from '../slices/SignUpSlice'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 
-function* handleSignUpApi(action) {
+function* handleSignUpApi(action:any): Generator<any, void, unknown> {
   const { data } = action.payload
   const payload = {
     payload: data
   }
   yield put(setLoading(true))
   try {
-    const res = yield call(Service.createUserApi, data);
+    const res:any = yield call(Service.createUserApi, data);
     if (res.data.code === 200) {
       yield put(setOpenPopup(false))
       Notification.openNotificationSuccess('You have successfully registered an account')
@@ -36,7 +36,7 @@ function* handleSignUpApi(action) {
     yield put(setLoading(false))
   }
 }
-function* handleEror(payloadError) {
+function* handleEror(payloadError:any) {
   const { error } = payloadError
   handleError(error)
   yield put(setLoading(false))

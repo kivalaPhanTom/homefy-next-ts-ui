@@ -12,15 +12,12 @@ import { Service as UserService } from '@/Services/UserServices'
 import { authenNextServer } from '@/Services/NextAuthenServer'
 import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 
-export function vhToPixels(vh: number): number {
-    return Math.round(window.innerHeight / (100 / vh))
-}
 
 export function isValidEmail(email: string) {
     return /\S+@\S+\.\S+/.test(email)
 }
 
-export function convertTimeRawValueToTimeStamp(rawValue) {
+export function convertTimeRawValueToTimeStamp(rawValue:any) {
     const d = new Date(rawValue)
     return d.getTime()
 }
@@ -223,7 +220,7 @@ export function saveLocalStorage(name: string, value: any): void {
 //     }
 //     return result
 // }
-export function handleError(error, lang): boolean {
+export function handleError(error:any): boolean {
     let isErrorAuthen = false;
     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
     if (error.response && error.response.status === 401 && expired_time) {
@@ -280,7 +277,7 @@ export function removeVietnameseTones(str: string): string {
 export function clearLocalStorageByKey(key: string) {
     localStorage.removeItem(key)
 }
-export async function handleErrorRTKQuery(data, error, refetch, isShowError: boolean, lang) {
+export async function handleErrorRTKQuery(data:any, error:any, refetch:any, isShowError: boolean) {
     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
     if (error) {
         if (error.response && error.response.status === 401 && expired_time) {

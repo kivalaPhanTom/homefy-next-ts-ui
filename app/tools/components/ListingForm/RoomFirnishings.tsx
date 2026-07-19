@@ -24,11 +24,12 @@ interface RoomFirnishingsProps {
 function RoomFirnishings(props: RoomFirnishingsProps) {
     const { listFirnishings, handleSetListFirnishings } = props
     const { data, isFetching, error, refetch } = useGetFurnituresQuery(undefined)
-    const funitures: funituresFromApiType[] = data ? data.result : []
+    // const funitures: funituresFromApiType[] = data ? data.result : []
+    const funitures: funituresFromApiType[] = (data as any)?.result ?? [];
     const funitureOptions: FunitureOption[] = []
-    const ROOM_FUNITURES =["Bed", "Wardrobe", "Desk", "Chair", "Bedside drawer", "Lamp", "Air conditioner", "Door lock"]
-  
-    const renderIcon=(funitureItem: funituresFromApiType)=>{
+    const ROOM_FUNITURES = ["Bed", "Wardrobe", "Desk", "Chair", "Bedside drawer", "Lamp", "Air conditioner", "Door lock"]
+
+    const renderIcon = (funitureItem: funituresFromApiType) => {
         switch (funitureItem.name) {
             case 'Bed':
                 return <IconCarAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
@@ -51,16 +52,16 @@ function RoomFirnishings(props: RoomFirnishingsProps) {
         }
     }
 
-    funitures.forEach((e:funituresFromApiType)=>{
-       const findFuniture = ROOM_FUNITURES.find(item => item === e.name);
-       if(findFuniture){
-        funitureOptions.push({
-            ...e,
-            icon: renderIcon(e)
-        })
-       }
+    funitures.forEach((e: funituresFromApiType) => {
+        const findFuniture = ROOM_FUNITURES.find(item => item === e.name);
+        if (findFuniture) {
+            funitureOptions.push({
+                ...e,
+                icon: renderIcon(e)
+            })
+        }
     })
-  
+
     return (
         <div className={styles['listIconRoomFirnishing']}>
             {

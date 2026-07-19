@@ -1,7 +1,7 @@
 import { all, takeEvery, put, call } from 'redux-saga/effects'
 import { getRefreshToken, clearAuthen, updateAuthenBrowser } from '../Actions/TokenAction'
 import { REFRESH_TOKEN_IN_LOCALSTORAGE, TOKEN_IN_LOCALSTORAGE, EXPIRED_TIME_TOKEN } from '@/common/ParamsCommon/ParamsCommon'
-import { getLocalStorage, clearLocalStorageByKey } from '@/common/FunctionCommon/FunctionCommon'
+import { clearLocalStorageByKey } from '@/common/FunctionCommon/FunctionCommon'
 import { saveLocalStorage } from '@/common/FunctionCommon/FunctionCommon'
 // import { setOpenPopupSignIn } from 'Redux/slices/SignInSlice'
 // import { sigupAccount } from '../Actions/UserAction'
@@ -14,12 +14,12 @@ import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientCompon
 import { authenNextServer } from '@/Services/NextAuthenServer'
 import { logOut } from '../Actions/UserAction'
 
-function* handleGetRefreshTokenpi(action) {
+function* handleGetRefreshTokenpi(action: any): Generator<any, void, unknown> {
     const refreshToken = getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE)
     if (refreshToken) {
         const { actionPayload, functionDispatch, dispatchLoading } = action.payload
         try {
-            const res = yield call(Service.getRefeshTokenApi, { refresh_token: refreshToken })
+            const res:any = yield call(Service.getRefeshTokenApi, { refresh_token: refreshToken })
             if (res.data.isError === false) {
                 const { access_token, refresh_token, expired_time } = res.data.data
                 yield call(authenNextServer, {
@@ -52,10 +52,10 @@ function* handleGetRefreshTokenpi(action) {
 function* handleClearAuthen() {
     clearLocalStorageByKey(TOKEN_IN_LOCALSTORAGE);
     clearLocalStorageByKey(REFRESH_TOKEN_IN_LOCALSTORAGE);
-    yield put(setOpenPopupSignIn(true))
+    // yield put(setOpenPopupSignIn(true))
 
 }
-function* handleUpdateAuthenBrowser(action) {
+function* handleUpdateAuthenBrowser(action: any): Generator<any, void, unknown> {
     const { access_token, refresh_token, expired_time } = action.payload
     try {
         yield call(authenNextServer, {

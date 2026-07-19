@@ -10,9 +10,9 @@ export const servicePattern = {
     checkRoomInventory:'room/room_inventory',
 }
 
-function reservations(data) {
+function reservations(data:any) {
     return homefyInstance.post(servicePattern.booking, data)
 }
-function checkRoomInventory(data) {
+function checkRoomInventory(data:any) {
     return homefyInstance.post(servicePattern.checkRoomInventory, data);
 }

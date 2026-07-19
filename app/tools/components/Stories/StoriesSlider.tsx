@@ -4,7 +4,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 import styles from './Stories.module.scss'
 import SliderItem from "./SliderItem";
-import Carousel from "@itseasy21/react-elastic-carousel";
+// import Carousel from "@itseasy21/react-elastic-carousel";
 
 function StoriesSlider() {
     const carouselRef = useRef<any>(null);
@@ -47,7 +47,7 @@ function StoriesSlider() {
         <div className={styles['slider']}>
             <div>
                 <div className={styles['mainSlice']}>
-                    <Carousel
+                    {/* <Carousel
                         isRTL={false}
                         itemsToShow={itemsToShow}
                         disableArrowsOnEnd={false}
@@ -75,7 +75,7 @@ function StoriesSlider() {
                         <SliderItem index={"4"} />
                         <SliderItem index={"5"} />
                         <SliderItem index={"6"} />
-                    </Carousel>
+                    </Carousel> */}
                     {/* <Carousel
                         itemsToShow={itemsToShow}
                         disableArrowsOnEnd={false}

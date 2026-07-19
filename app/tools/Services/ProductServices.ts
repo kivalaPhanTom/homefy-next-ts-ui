@@ -14,7 +14,7 @@ export const servicePattern = {
     checkRoomAvailability: 'room/check_room_available'
 }
 
-function getListProductApi(data) {
+function getListProductApi(data:any) {
     let result = `${servicePattern.getListProduct}?`
     if (data.limit) {
         result = `${result}limit=${data.limit}&&`
@@ -51,10 +51,10 @@ function getListProductApi(data) {
     }
     return homefyInstance.get(result)
 }
-function getDetailProductApi(data) {
+function getDetailProductApi(data:any) {
     return homefyInstance.get(`${servicePattern.getDetailProduct}/${data}`)
 }
-function getFavouriteProductsApi(data) {
+function getFavouriteProductsApi(data:any) {
     let result = `${servicePattern.getFavouriteProducts}?`
     if (data.limit) {
         result = `${result}limit=${data.limit}&&`

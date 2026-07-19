@@ -7,6 +7,6 @@ export const servicePattern = {
     searchAddress: 'room/location-suggestions',
 }
 
-function searchAddressApi(data) {
+function searchAddressApi(data:any) {
     return homefyInstanceGet.get(`${servicePattern.searchAddress}?query=${data}`);
 }

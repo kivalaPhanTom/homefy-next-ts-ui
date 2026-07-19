@@ -4,17 +4,17 @@ import Link from 'next/link'
 import { BiLogoInstagram, BiLogoFacebook, BiLogoTumblr, BiLogoTwitter } from 'react-icons/bi'
 import { CiMail } from "react-icons/ci"
 import Image from 'next/image'
-import { Waypoint } from 'react-waypoint';
+// import { Waypoint } from 'react-waypoint';
 import styles from './Footer.module.scss'
 import logo from '@/assets/Homefy-logo.webp'
 
-function FooterContent(props) {
+function FooterContent() {
     const [countView, setCountView] = useState(0);
     const handleWaypointEnter = () => {
         if (countView === 0) setCountView(1)
     };
     return (
-        <Waypoint onEnter={handleWaypointEnter}>
+        // <Waypoint onEnter={handleWaypointEnter}>
             <div className={styles['content']+ ' ' + styles[countView  > 0 ? 'contentAnimation' : '']}>
                 <div className={styles['left']}>
                     <div>
@@ -69,7 +69,7 @@ function FooterContent(props) {
                     </div>
                 </div>
             </div>
-        </Waypoint>
+        // </Waypoint>
     )
 }
 
