@@ -1,9 +1,7 @@
 import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 import Loading from '../../loading'
-const CreateListingForm = dynamic(() => import('./CreateListingForm'), {
-    ssr: false,
-})
+import CreateListingForm from './CreateListingForm'
 
 const Page = () => {
     return (

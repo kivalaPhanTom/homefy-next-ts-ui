@@ -93,7 +93,7 @@ function ListingForm(props: ListingFormProps) {
                         >
                             {/* LISTING ID */}
                             <div className={styles['inputItem']}>
-                                <p className={styles['titleSection']}>Room ID</p>
+                                <p className={styles['titleSection']}>Mã phòng</p>
                                 <TextInput
                                     name='listing_id'
                                     customClassname={styles['inputText']}

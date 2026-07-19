@@ -14,8 +14,9 @@ import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN
 import { Service as UserService } from '@/Services/UserServices'
 import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 import { authenNextServer } from '@/Services/NextAuthenServer'
-import { roomObjectType, deleteListingPayloadType } from '@/common/types/RoomTypes'
+import { roomObjectType, deleteListingPayloadType, uploadFileResponseType, updateRoomToReduxType } from '@/common/types/RoomTypes'
 import { responseType } from '@/common/types/ResponseApi'
+
 //dangcode
 function* handleGetListingsApi(action) {
     const { data, isReset, listRoom, total } = action.payload
@@ -54,29 +55,24 @@ function* handleUpdateData(dataResult, totalProduct) {
     yield put(setLoading(false))
 }
 
-function* handleInsertListingApi(action) {
-    const { data, formDataFile, form, setFileList, setDescription, setNumberHousemates, setListFirnishings, navigate } = action.payload
-
+function* handleInsertListingApi(action: { payload: updateRoomToReduxType }): Generator<any, void, unknown> {
+    const { data, formDataFile, form, setFileList, setDescription, setListFirnishings, navigate } = action.payload
     yield put(setLoading(true))
     try {
-        // yield call(handleRefreshTokenApi)
-        let image_paths = []
+        let image_paths:string[] = []
         if (formDataFile !== null) {
-            const resFile = yield call(Service.uploadFileApi, formDataFile)
+            const resFile = (yield call(Service.uploadFileApi, formDataFile)) as uploadFileResponseType
             if (resFile.data.code === STATUS_CODE.SUCCESS) {
                 image_paths = resFile.data.result
             }
         }
         let dataClone = JSON.parse(JSON.stringify(data))
         dataClone.image_paths = image_paths
-        console.log('dataClone:', dataClone)
-        const res = yield call(Service.insertListingApi, dataClone)
-        // console.log('res.data:', res.data)
+        const res = (yield call(Service.insertListingApi, dataClone)) as responseType
         if (res.data.code === STATUS_CODE.SUCCESS) {
             yield put(getRoomsApi.util.invalidateTags([{ type: 'roomsListApi', id: 'ROOMS_LIST' }]))
             setFileList([])
             setDescription('')
-            setNumberHousemates([])
             setListFirnishings([])
             form.setFieldsValue({
                 location: null,
@@ -111,38 +107,30 @@ function* handleInsertListingApi(action) {
     }
 }
 
-function* handleUpdateListingApi(action) {
-    const { data, oldFile, formDataFile, form, setFileList, setDescription, setNumberHousemates, setListFirnishings, navigate } = action.payload
-    console.log('action.payload:', action.payload)
+function* handleUpdateListingApi(action: { payload: updateRoomToReduxType }): Generator<any, void, unknown> {
+    const { data, oldFile, formDataFile, form, setFileList, setDescription, setListFirnishings, navigate } = action.payload
     yield put(setLoading(true))
     let dataClone = JSON.parse(JSON.stringify(data))
     try {
         dataClone.old_image_ids = oldFile
-        // yield call(handleRefreshTokenApi)
-        let image_paths = []
+        let image_paths: string[] = []
         if (formDataFile !== null) {
-            console.log('vffffffff')
-            const resFile = yield call(Service.uploadFileApi, formDataFile)
-            if (resFile.data.isError === false) {
-                image_paths = resFile.data.data
+            const resFile = (yield call(Service.uploadFileApi, formDataFile)) as uploadFileResponseType
+            if (resFile.data.code === STATUS_CODE.SUCCESS) {
+                image_paths = resFile.data.result
             }
         }
-        // dataClone = JSON.parse(JSON.stringify(data))
-        // dataClone.image_paths = [...oldFile, ...image_paths]
         dataClone.new_image_paths = image_paths
         const updatedPayload = {
             id: dataClone.id,
             data: dataClone
         }
-        console.log('updatedPayload', updatedPayload)
-        const res = yield call(Service.updateListingApi, updatedPayload)
-        console.log('TTTTTTTTT:', res)
-        if (resFile.data.code === STATUS_CODE.SUCCESS) {
+        const res = (yield call(Service.updateListingApi, updatedPayload)) as responseType
+        if (res.data.code === STATUS_CODE.SUCCESS) {
             yield put(getRoomsApi.util.invalidateTags([{ type: 'roomsListApi', id: 'ROOMS_LIST' },]))
             yield put(listingApi.util.invalidateTags([{ type: 'getListingDetail', id: 'GET_LISTING_DETAIL' }]))
             setFileList([])
             setDescription('')
-            setNumberHousemates([])
             setListFirnishings([])
             form.setFieldsValue({
                 location: null,
@@ -162,7 +150,7 @@ function* handleUpdateListingApi(action) {
             yield put(setLoading(false))
             navigate('/admin/listing-managerment')
         } else {
-            Notification.openNotificationError(res.data.errorMsg)
+            Notification.openNotificationError(res.data.message)
             yield put(setLoading(false))
         }
     } catch (error) {
@@ -184,7 +172,7 @@ function* handleDeleteListingApi(action: { payload: deleteListingPayloadType }):
             yield put(setOpenDeleteListing(false))
             Notification.openNotificationSuccess('Deleted data successfully')
             yield call(callRTKquery)
-        } 
+        }
         // else {
         //     // Notification.openNotificationError(res.data.errorMsg)
         //     yield put(setLoading(false))

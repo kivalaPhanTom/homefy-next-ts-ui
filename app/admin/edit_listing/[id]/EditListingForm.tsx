@@ -20,6 +20,7 @@ import { setLoading } from '@/Redux/slices/LoadingSlice'
 import { useLazySearchAddressResultQuery } from '@/RTK_Query/SearchAddressResult'
 // import { convertSearchAddressOption } from '@/utils/SearchAddress_utils'
 import Loading from '@/app/tools/components/Loading/Loading'
+import { roomObjectToRedux, updateRoomToReduxType } from '@/common/types/RoomTypes'
 
 function checkAddFile(listFile: any[]) {
   let result = false
@@ -48,7 +49,7 @@ function EditListingForm(props: EditListingFormProps) {
   const [listFirnishings, setListFirnishings] = useState<string[]>([])
   const [countSubmit, setCountSubmit] = useState(0)
   const [countLoading, setLoadingState] = useState(0)
-  const { isLoading } = useAppSelector((state:RootState) => state.loadingSlice)
+  const { isLoading } = useAppSelector((state: RootState) => state.loadingSlice)
   const [keySearch, setKeySearch] = useState('')
   // const { optionAddressSearchResult } = useSelector((state) => state.listingManagementSlice)
   const numberHouseMate = Form.useWatch('number_housemates', form)
@@ -64,7 +65,7 @@ function EditListingForm(props: EditListingFormProps) {
 
   interface documentObject {
     uid: string;
-    name: string; 
+    name: string;
     status: string;
     url: string;
     id: string;
@@ -82,7 +83,7 @@ function EditListingForm(props: EditListingFormProps) {
       dispatch(setLoading(false))
     }
   }, [])
- 
+
   useEffect(() => {
     if (error) {
       const lang = {}
@@ -176,7 +177,7 @@ function EditListingForm(props: EditListingFormProps) {
   //   }
   // }, [JSON.stringify(optionAddressSearchResult)])
 
-  const handleChangeNumberOfHousemates = (value:number|null):void => {
+  const handleChangeNumberOfHousemates = (value: number | null): void => {
     let numberHousematesClone = JSON.parse(JSON.stringify(numberHousemates))
     if (value) {
       if (value > numberHousematesClone.length) {
@@ -200,7 +201,7 @@ function EditListingForm(props: EditListingFormProps) {
     }
   }
 
-  const handleSetListFirnishings = useCallback((value:string):void => {
+  const handleSetListFirnishings = useCallback((value: string): void => {
     let listFirnishingsClone: string[] = JSON.parse(JSON.stringify(listFirnishings))
     if (listFirnishingsClone.includes(value)) {
       listFirnishingsClone = listFirnishingsClone.filter((el: string) => el !== value)
@@ -225,7 +226,7 @@ function EditListingForm(props: EditListingFormProps) {
   }
 
 
-  const handleManualValidate = ():boolean => {
+  const handleManualValidate = (): boolean => {
     let result = true
     setCountSubmit(preState => preState + 1)
     if (numberHouseMate !== null && numberHouseMate !== undefined && numberHouseMate > 0) {
@@ -269,40 +270,38 @@ function EditListingForm(props: EditListingFormProps) {
       numberHousematesClone.forEach((el: any) => {
         delete el.id
       })
-      const data = {
+      const data: roomObjectToRedux = {
         id: roomId,
+        code: values.listing_id,
         address: values.location,
-        rent_per_week: values.rent_per_week,
+        price: values.price,
         date_available: values.date_available ? convertTimeRawValueToTimeStamp(values.date_available) : null,
-        minimum_stay: values.minimum_stay,
         num_bedroom: values.num_bedroom,
         num_bathroom: values.num_bathroom,
-        room_name: values.room_name,
+        name: values.room_name,
         bathroom_type: values.bathroom_type,
         bed_size: values.bed_size,
         room_firnishings: listFirnishings,
         description: description,
-        number_housemates: values.number_housemates,
-        housemates_info: numberHousematesClone,
-        listing_id: values.listing_id
+        max_guests: values.number_housemates,
+        new_image_paths: [],
+        old_image_ids: []
       }
-      const payload = {
+      const payload: updateRoomToReduxType = {
         data,
         oldFile,
         formDataFile,
         form,
         setFileList,
         setDescription,
-        setNumberHousemates,
         setListFirnishings,
-        lang: '',
-        navigate:push
+        navigate: push
       }
       dispatch(updateListing(payload))
     }
   }
-  const handleCancel = ():void => {
-   
+  const handleCancel = (): void => {
+
     // setOptions([])
     setFileList([])
     setDescription('')
@@ -312,7 +311,7 @@ function EditListingForm(props: EditListingFormProps) {
     setCountSubmit(0)
     form.resetFields()
     push('/admin/listing-managerment')
-    
+
   }
 
   return (

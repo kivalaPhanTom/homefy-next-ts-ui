@@ -1,3 +1,6 @@
+import type { FormInstance } from 'antd';
+import { responseType } from '@/common/types/ResponseApi'
+
 export interface checkRoomAvailabilityType {
     roomId: string,
     fromDate: string,
@@ -33,4 +36,42 @@ export interface deleteListingPayloadType {
     data: string,
     language: string,
     callRTKquery: () => void
+}
+
+export interface uploadFileResponseType {
+    data: responseType["data"] & {
+        result: string[];
+    };
+}
+
+export interface roomObjectToRedux {
+    id?: string,
+    code: string,
+    name: string,
+    address: string,
+    price: number,
+    date_available: number | null,
+    num_bedroom: number,
+    num_bathroom: number,
+    bathroom_type: string,
+    bed_size: string,
+    lat?: number | null,
+    lon?: number | null,
+    status?: string,
+    max_guests: number,
+    room_firnishings: string[],
+    description: string,
+    new_image_paths?: string[],
+    old_image_ids?: string[],
+    image_paths?:string[]
+}
+export interface updateRoomToReduxType {
+    data: roomObjectToRedux,
+    oldFile?: string[],
+    formDataFile: FormData | null,
+    form: FormInstance<Record<string, any>>,
+    setFileList: (data: any[]) => void,
+    setDescription: (value: string) => void,
+    setListFirnishings: React.Dispatch<React.SetStateAction<string[]>>;
+    navigate: (type: string) => void
 }

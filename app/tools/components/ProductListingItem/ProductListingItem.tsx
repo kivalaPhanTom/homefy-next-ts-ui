@@ -20,6 +20,9 @@ function ProductListingItem(props: ProductListingItemType) {
         setItemDeleted(data)
     }
 
+    const imageSrc = typeof data?.images?.[0]?.path === 'string' ? data.images[0].path : noImage
+    const shouldUseImgTag = typeof imageSrc === 'string'
+
     return (
         <>
             <div className={styles['productItem']}>
@@ -31,7 +34,21 @@ function ProductListingItem(props: ProductListingItemType) {
                         <div className={styles['imgProduct']}>
                             <Link href={handleCheckUserTokenExits() ? `/admin/edit_listing/${data.id}` : ''} className={styles['linkDetailRoom']}>
                                 <div className={styles['productImg']}>
-                                    <Image layout="fill" className={styles['imageRoom']} src={data.images !== null && data.images.length > 0 ? data.images[0].path : noImage} alt='product image' />
+                                    {shouldUseImgTag && imageSrc.startsWith('http') ? (
+                                        <img
+                                            className={styles['imageRoom']}
+                                            src={imageSrc}
+                                            alt='product image'
+                                        />
+                                    ) : (
+                                        <Image
+                                            fill
+                                            className={styles['imageRoom']}
+                                            src={imageSrc}
+                                            alt='product image'
+                                            sizes="(max-width: 768px) 100vw, 33vw"
+                                        />
+                                    )}
                                 </div>
                             </Link>
                         </div>

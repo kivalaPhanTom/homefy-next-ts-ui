@@ -12,6 +12,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { convertTimeRawValueToTimeStamp } from '@/common/FunctionCommon/FunctionCommon'
 // import { handleCheckValidListHouseMates } from './validate'
 import ListingForm from '@/app/tools/components/ListingForm/ListingForm'
+import { roomObjectToRedux, updateRoomToReduxType } from '@/common/types/RoomTypes'
 import { useLazySearchAddressResultQuery } from '@/RTK_Query/SearchAddressResult'
 // import { convertSearchAddressOption } from '@/utils/SearchAddress_utils'
 
@@ -101,7 +102,7 @@ function CreateListingForm() {
     // const handleSearch = (e) => {
     //     setKeySearch(e.target.value)
     // }
-    const handleSetListFirnishings = useCallback((value:string):void => {
+    const handleSetListFirnishings = useCallback((value: string): void => {
         let listFirnishingsClone: string[] = JSON.parse(JSON.stringify(listFirnishings))
         if (listFirnishingsClone.includes(value)) {
             listFirnishingsClone = listFirnishingsClone.filter((el: string) => el !== value)
@@ -129,7 +130,7 @@ function CreateListingForm() {
             number_housemates: numberHousematesClone.length,
         })
     }
-    const handleManualValidate = ():boolean => {
+    const handleManualValidate = (): boolean => {
         let result = true
         // setCountSubmit(preState => preState + 1)
         // if (numberHouseMate !== null && numberHouseMate !== undefined && numberHouseMate > 0) {
@@ -171,39 +172,32 @@ function CreateListingForm() {
             numberHousematesClone.forEach((el: any) => {
                 delete el.id
             })
-            const data = {
+            const data: roomObjectToRedux = {
                 address: values.location,
                 code: values.listing_id,
                 price: values.price,
                 date_available: values.date_available ? convertTimeRawValueToTimeStamp(values.date_available) : null,
-                minimum_stay: values.minimum_stay,
                 num_bedroom: values.num_bedroom,
                 num_bathroom: values.num_bathroom,
                 name: values.room_name,
                 bathroom_type: values.bathroom_type,
                 bed_size: values.bed_size,
-                // room_firnishings: listFirnishings,
                 room_firnishings: listFirnishings,
                 description: description,
                 max_guests: values.number_housemates,//temp
-                status: "AVAILABLE", //temp,
                 lat,
                 lon,
-
-                // housemates_info: numberHousematesClone
+                image_paths: []
             }
-            const payload = {
+            const payload:updateRoomToReduxType = {
                 data,
                 formDataFile,
                 form,
                 setFileList,
                 setDescription,
-                setNumberHousemates,
                 setListFirnishings,
-                lang: '',
                 navigate: push
             }
-            console.log('payloadxxxxL', payload)
             dispatch(insertListing(payload))
         }
     }

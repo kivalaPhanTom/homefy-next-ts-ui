@@ -1,6 +1,4 @@
-import PaymentUI from "../../tools/components/PaymentUI/PaymentUI"
-
-
+import PaymentUI from "@/components/PaymentUI/PaymentUI"
 
 async  function Page(props: { params: Promise<{ id: string }> }) {
     const { params } = props
