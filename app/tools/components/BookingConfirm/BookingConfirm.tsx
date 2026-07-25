@@ -30,30 +30,11 @@ import { createBooking } from '@/Redux/Actions/BookingAction'
 import { responseGetDetailRooom } from '@/common/types/RoomTypes'
 import { useGetListingDetailQuery } from '@/RTK_Query/Listing_Query'
 import noImage from '@/assets/empty.webp'
+import { BookingData } from '@/tools/common/types/BookingType'
 const { TextArea } = Input;
 const { useBreakpoint } = Grid;
 
-interface BookingData {
-  roomId: string;
-  code: string;
-  names: string;
-  checkIn: string;
-  checkOut: string;
-  numGuest: number;
-  totalPrice: number;
-  name?: string;
-  email?: string;
-  phone?: string;
-  description?: string;
-}
-interface BookingConfirmType {
-  sessionToken: string | null;
-  expired_time: number | null;
-  refreshToken: string | null;
-  isRefreshToken: boolean;
-}
-export default function BookingConfirm(props: BookingConfirmType) {
-  const { sessionToken, expired_time, refreshToken, isRefreshToken } = props
+export default function BookingConfirm() {
   const dispatch = useDispatch()
   const screens = useBreakpoint();
   const router = useRouter();
@@ -269,7 +250,7 @@ export default function BookingConfirm(props: BookingConfirmType) {
                     <span>{formatNumber(roomInfo?.price)}đ</span>
                   </div>
 
-                  <div className={styles.priceRow}>
+                  {/* <div className={styles.priceRow}>
                     <span>Phí dịch vụ</span>
                     <span>{formatNumber(0)}đ</span>
                   </div>
@@ -277,7 +258,7 @@ export default function BookingConfirm(props: BookingConfirmType) {
                   <div className={styles.priceRow}>
                     <span>VAT</span>
                     <span>{formatNumber(0)}đ</span>
-                  </div>
+                  </div> */}
                 </>
               )}
 

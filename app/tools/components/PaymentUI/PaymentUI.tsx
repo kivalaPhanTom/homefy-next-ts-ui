@@ -16,18 +16,49 @@ import {
 } from "@ant-design/icons";
 import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from "next/navigation";
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styles from "./PaymentUI.module.scss";
 import { confirmPayment } from '@/Redux/Actions/PaymentAction'
-
+import { useGetListingDetailQuery } from '@/RTK_Query/Listing_Query'
+import noImage from '@/assets/empty.webp'
+import { BookingData } from '@/tools/common/types/BookingType'
+import { formatNumber } from '@/common/FunctionCommon/FunctionCommon'
 interface PaymentUIProps {
   bookingId: string;
 }
 export default function PaymentUI(props: PaymentUIProps) {
   const { bookingId } = props
+
   const dispatch = useDispatch()
   const router = useRouter();
+  const [bookingData, setBookingData] = useState<BookingData | null>(null)
   const [paymentMethod, setPaymentMethod] = useState('card')
+  const { data, isFetching, error, refetch } = useGetListingDetailQuery(
+    { roomId: bookingData?.roomId || '' },
+    { skip: !bookingData?.roomId }
+  )
+  const roomInfo = data ? data.result : null
+
+  useEffect(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? window.sessionStorage.getItem('BOOKING') : null
+      if (!raw) return
+      const data = JSON.parse(raw)
+      setBookingData(data)
+    } catch (e) {
+      // ignore parse errors
+    }
+  }, [])
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push('/');
+  }
+
   const paymentHandler = (): void => {
     const payload = {
       data: {
@@ -44,10 +75,12 @@ export default function PaymentUI(props: PaymentUIProps) {
     router.push(`/payment-success/${bookingId}`);
   }
 
+  const imageSrc = roomInfo?.images && roomInfo.images.length > 0 ? roomInfo.images[0].path : noImage;
+  const totalPrice: number = roomInfo && roomInfo.price ? Number(roomInfo.price) : 0
   return (
     <div className={styles.container}>
       {/* Header */}
-      <div className={styles.back}>
+      <div className={styles.back} onClick={handleBack}>
         ← Quay lại xác nhận đặt phòng
       </div>
 
@@ -156,12 +189,12 @@ export default function PaymentUI(props: PaymentUIProps) {
 
             <div className={styles.roomInfo}>
               <img
-                src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+                src={imageSrc}
                 alt=""
               />
 
               <div>
-                <h4>Room 4</h4>
+                <h4>{roomInfo?.name}</h4>
 
                 <span>
                   1 khách · 1 phòng · 1 đêm
@@ -183,23 +216,23 @@ export default function PaymentUI(props: PaymentUIProps) {
 
             <div className={styles.priceRow}>
               <span>Giá phòng</span>
-              <span>1.000.000đ</span>
+              <span>{roomInfo?.price ? formatNumber(roomInfo.price) : '0'}đ</span>
             </div>
 
-            <div className={styles.priceRow}>
+            {/* <div className={styles.priceRow}>
               <span>Phí dịch vụ</span>
               <span>50.000đ</span>
-            </div>
+            </div> */}
 
-            <div className={styles.priceRow}>
+            {/* <div className={styles.priceRow}>
               <span>Thuế VAT</span>
               <span>80.000đ</span>
-            </div>
+            </div> */}
 
             <div className={styles.total}>
               <span>Tổng cộng</span>
 
-              <strong>1.130.000đ</strong>
+              <strong>{formatNumber(totalPrice)}đ</strong>
             </div>
 
             <div className={styles.freeCancel}>

@@ -1,6 +1,6 @@
 import PaymentUI from "@/components/PaymentUI/PaymentUI"
 
-async  function Page(props: { params: Promise<{ id: string }> }) {
+async function Page(props: { params: Promise<{ id: string }> }) {
     const { params } = props
     const resolvedParams = await params
     const bookingId: string = resolvedParams.id

@@ -1,5 +1,5 @@
 'use client';
-
+import { useEffect, useState } from 'react'
 import {
   Button,
   Card,
@@ -16,10 +16,30 @@ import {
 } from '@ant-design/icons';
 
 import styles from './PaymentUISuccess.module.scss';
-
+import { useGetListingDetailQuery } from '@/RTK_Query/Listing_Query'
+import noImage from '@/assets/empty.webp'
+import { formatNumber } from '@/common/FunctionCommon/FunctionCommon'
+import { BookingData } from '@/tools/common/types/BookingType'
 const { Title, Text } = Typography;
 
 export default function PaymentUISuccess() {
+  const [bookingData, setBookingData] = useState<BookingData | null>(null)
+  const { data, isFetching, error, refetch } = useGetListingDetailQuery(
+    { roomId: bookingData?.roomId || '' },
+    { skip: !bookingData?.roomId }
+  )
+  useEffect(() => {
+    try {
+      const raw = typeof window !== 'undefined' ? window.sessionStorage.getItem('BOOKING') : null
+      if (!raw) return
+      const data = JSON.parse(raw)
+      setBookingData(data)
+    } catch (e) {
+      // ignore parse errors
+    }
+  }, [])
+  const roomInfo = data ? data.result : null
+  const imageSrc = roomInfo?.images && roomInfo.images.length > 0 ? roomInfo.images[0].path : noImage;
   return (
     <div className={styles.container}>
       <Card className={styles.wrapper}>
@@ -64,22 +84,22 @@ export default function PaymentUISuccess() {
         <div className={styles.bookingCard}>
           <div className={styles.roomSection}>
             <img
-              src="https://images.unsplash.com/photo-1566665797739-1674de7a421a?q=80&w=1200"
+              src={imageSrc}
               alt="room"
               className={styles.roomImage}
             />
 
             <div className={styles.roomContent}>
-              <Title level={4}>Room 4</Title>
+              <Title level={4}>{roomInfo?.name}</Title>
 
               <Text type="secondary">
                 1 khách • 1 đêm
               </Text>
 
               <div className={styles.date}>
-                <span>05/10/2025</span>
+                <span>{ bookingData?.checkIn}</span>
                 <span>→</span>
-                <span>06/10/2025</span>
+                <span>{ bookingData?.checkOut}</span>
               </div>
             </div>
           </div>

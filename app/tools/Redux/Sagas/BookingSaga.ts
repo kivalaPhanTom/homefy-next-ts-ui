@@ -19,6 +19,15 @@ function* handleCreateBookingApi(action:any): Generator<any, void, unknown> {
        
         // yield put(setLoadingAboutMe(false))
     } catch (error) {
+        console.log('errorxxx:', error)
+        console.log('error.response:', error.response)
+        console.log('YYYYYY:', error.response.status )
+        if(error?.response?.data?.code === 1008 && error?.response?.status === 400){
+            console.log("Có vào đây nh")
+            Notification.openNotificationError("Phòng này không còn trống để đặt")
+        }else{
+
+        }
         // const payloadError = {
         //     error: error,
         //     functionDispatch: setAboutMeInfo,
