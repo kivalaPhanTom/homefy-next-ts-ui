@@ -11,38 +11,8 @@ import styles from './RoomDetail.module.scss'
 import RoomDetail from './RoomDetail'
 import GallerySection from './GallerySection'
 import Content from './Content'
-// const ClientEmptyToRefreshApi = dynamic(() => import('./ClientEmptyToRefreshApi'), {
-//     ssr: false,
-// })
+import { responseGetDetailRooom } from '@/common/types/RoomTypes'
 
-interface imageObj{
-    id:string;
-    path:string;
-    roomId: string;
-}
-interface RoomDetail {
-    id: string;
-    code: string;
-    name: string;
-    address: string;
-    price: number;
-    date_available: Date | null;
-    num_bedroom: number;
-    num_bathroom: number;
-    bathroom_type: null;
-    bed_size: string;
-    description: string;
-    lat: null;
-    lon: null;
-    status: null;
-    max_guests: number;
-    furnitures: string[];
-    images: imageObj[];
-    hasLike:boolean;
-}
-interface responseGetDetailRooom{
-    result: RoomDetail;
-}
 async function page(props: { params: Promise<{ id: string }> }) {
     const { params } = props
     const resolvedParams = await params
@@ -104,6 +74,7 @@ async function page(props: { params: Promise<{ id: string }> }) {
                     num_bedroom={num_bedroom}
                     num_bathroom={num_bathroom}
                     max_guests={max_guests}
+                    furnitures={furnitures}
                 />
             </div>
 

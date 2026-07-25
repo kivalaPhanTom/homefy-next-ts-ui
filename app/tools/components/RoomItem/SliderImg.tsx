@@ -21,7 +21,7 @@ interface SliderImgProps {
 
 function SliderImg(props: SliderImgProps) {
     const { data } = props
-
+  
     return (
         <Carousel
             renderIndicator={() => null}
@@ -59,22 +59,30 @@ function SliderImg(props: SliderImgProps) {
             }}
         >
             {data.length > 0
-                ? data.map((e) => (
-                    <div key={e.id} className={styles.carouselItem}>
-                        <Image
-                            src={e.path}
-                            alt="room img"
-                            fill
-                            className={styles.roomimg}
-                        />
-                    </div>
-                ))
+                ? data.map((e) => {
+                    const imageSrc = e.path && e.path.trim() ? e.path : noImage;
+
+                    return (
+                        <div key={e.id} className={styles.carouselItem}>
+                            <Image
+                                src={imageSrc}
+                                alt="room img"
+                                fill
+                                sizes="(max-width: 768px) 100vw, 33vw"
+                                unoptimized
+                                className={styles.roomimg}
+                            />
+                        </div>
+                    );
+                })
                 : [
                     <div key="empty" className={styles.carouselItem}>
                         <Image
                             src={noImage}
                             alt="room img"
                             fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            unoptimized
                             className={styles.roomimg}
                         />
                     </div>,

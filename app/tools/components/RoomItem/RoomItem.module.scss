@@ -107,6 +107,8 @@
 
 .carouselItem {
     width: 100%;
+    position: relative;
+    overflow: hidden;
     // height: 235px;
     object-fit: cover;
     border-radius: 0 0 28px;

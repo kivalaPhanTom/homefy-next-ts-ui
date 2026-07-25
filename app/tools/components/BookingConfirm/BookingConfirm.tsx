@@ -22,9 +22,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
+
+import { getDetailRoomApi } from '@/Services/NextProductServices'
 import { formatNumber } from '@/common/FunctionCommon/FunctionCommon'
 import styles from "./BookingConfirm.module.scss";
 import { createBooking } from '@/Redux/Actions/BookingAction'
+import { responseGetDetailRooom } from '@/common/types/RoomTypes'
+import { useGetListingDetailQuery } from '@/RTK_Query/Listing_Query'
+import noImage from '@/assets/empty.webp'
 const { TextArea } = Input;
 const { useBreakpoint } = Grid;
 
@@ -41,7 +46,14 @@ interface BookingData {
   phone?: string;
   description?: string;
 }
-export default function BookingConfirm() {
+interface BookingConfirmType {
+  sessionToken: string | null;
+  expired_time: number | null;
+  refreshToken: string | null;
+  isRefreshToken: boolean;
+}
+export default function BookingConfirm(props: BookingConfirmType) {
+  const { sessionToken, expired_time, refreshToken, isRefreshToken } = props
   const dispatch = useDispatch()
   const screens = useBreakpoint();
   const router = useRouter();
@@ -52,6 +64,13 @@ export default function BookingConfirm() {
   const [bookingData, setBookingData] = useState<BookingData | null>(null)
   const isMobile = !screens.md;
   const isTablet = screens.md && !screens.xl;
+
+  const { data, isFetching, error, refetch } = useGetListingDetailQuery(
+    { roomId: bookingData?.roomId || '' },
+    { skip: !bookingData?.roomId }
+  )
+  const roomInfo = data ? data.result : null
+
   const continuePayment = () => {
     const data = Object.assign({}, bookingData || {}, {
       "name": contactName,
@@ -72,8 +91,17 @@ export default function BookingConfirm() {
     dispatch(createBooking(payload))
   }
 
-  const handleNavigate = (bookingId:string):void => {
+  const handleNavigate = (bookingId: string): void => {
     router.push(`/payment/${bookingId}`);
+  }
+
+  const handleBack = () => {
+    if (typeof window !== 'undefined' && window.history.length > 1) {
+      router.back();
+      return;
+    }
+
+    router.push('/');
   }
 
   useEffect(() => {
@@ -95,13 +123,13 @@ export default function BookingConfirm() {
     ? Math.max(0, dayjs(bookingData.checkOut, 'DD-MM-YYYY').diff(dayjs(bookingData.checkIn, 'DD-MM-YYYY'), 'day'))
     : 0
 
-  const totalPrice:number = bookingData && bookingData.totalPrice ? Number(bookingData.totalPrice) : 0
-  const pricePerNight:number = nights > 0 ? Math.round(totalPrice / nights) : 0
-
+  const totalPrice: number = roomInfo && roomInfo.price ? Number(roomInfo.price) : 0
+  // const pricePerNight: number = nights > 0 ? Math.round(totalPrice / nights) : 0
+  const imageSrc = roomInfo?.images && roomInfo.images.length > 0 ? roomInfo.images[0].path : noImage;
   return (
     <div className={styles.page}>
       <div className={styles.container}>
-        <div className={styles.backBtn}>
+        <div className={styles.backBtn} onClick={handleBack} style={{ cursor: 'pointer' }}>
           <ArrowLeftOutlined />
           <span>
             {isMobile ? "Quay lại" : "Quay lại chi tiết phòng"}
@@ -208,13 +236,13 @@ export default function BookingConfirm() {
               </h2>
 
               <img
-                src="/images/room.jpg"
+                src={imageSrc}
                 alt=""
                 className={styles.roomImage}
               />
 
               <div className={styles.roomInfo}>
-                <h3>{bookingData && bookingData.roomId ? `Phòng ${bookingData.code} - ${bookingData.names}` : 'Room'}</h3>
+                <h3>{bookingData && bookingData.roomId ? `Phòng ${roomInfo?.code} - ${roomInfo?.name}` : 'Room'}</h3>
 
                 <div className={styles.meta}>
                   <UserOutlined />
@@ -238,7 +266,7 @@ export default function BookingConfirm() {
                 <>
                   <div className={styles.priceRow}>
                     <span>Giá phòng</span>
-                    <span>{formatNumber(pricePerNight)}đ</span>
+                    <span>{formatNumber(roomInfo?.price)}đ</span>
                   </div>
 
                   <div className={styles.priceRow}>

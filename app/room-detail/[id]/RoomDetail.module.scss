@@ -410,6 +410,63 @@
     color: common.$main-color16;
 }
 
+.image-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 16px;
+}
+
+.image-modal {
+    position: relative;
+    max-width: min(92vw, 1000px);
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal-image {
+    width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.image-modal-close,
+.image-modal-nav {
+    position: absolute;
+    border: none;
+    background: rgba(255, 255, 255, 0.9);
+    color: #111;
+    cursor: pointer;
+    border-radius: 999px;
+    width: 42px;
+    height: 42px;
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-modal-close {
+    top: -12px;
+    right: -12px;
+}
+
+.image-modal-prev {
+    left: -12px;
+}
+
+.image-modal-next {
+    right: -12px;
+}
+
 @media only screen and (min-width: 600px) {
     .photoText {
         font-size: common.$font15px;

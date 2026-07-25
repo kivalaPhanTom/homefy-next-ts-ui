@@ -149,12 +149,10 @@ function CreateListingForm() {
     const onFinish = (values: Record<string, any>) => {
         // let location = ''
         let formDataFile: FormData | null = null
-        console.log('valuesxxxx:', values)
         const manualValid = handleManualValidate()
         let lat = null
         let lon = null
 
-        console.log('manualValid:', manualValid)
         if (manualValid) {
             if (fileList.length > 0) {
                 formDataFile = new FormData()

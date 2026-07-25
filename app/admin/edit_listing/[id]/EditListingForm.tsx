@@ -55,12 +55,9 @@ function EditListingForm(props: EditListingFormProps) {
   const numberHouseMate = Form.useWatch('number_housemates', form)
   const { isLogin } = useAppSelector((state: RootState) => state.signInSlice)
   const { data, isFetching, error, refetch } = useGetListingDetailQuery({ roomId })
-  // console.log('dataxxx:', data)
   const listingInfo = data ? data.result : null
-  console.log('listingInfo:', listingInfo)
   const [trigger, result] = useLazySearchAddressResultQuery()
   const dataSearchResult:any = result.data || []
-  console.log('dataSearchResult:', dataSearchResult)
   let options: any[] = data ? (dataSearchResult.data || []).map((item: any) => item) : []
 
   interface documentObject {

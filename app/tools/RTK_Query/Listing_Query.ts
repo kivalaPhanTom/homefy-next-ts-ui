@@ -57,13 +57,10 @@ async function handleRefreshTokenApi() {
     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
     const expiredTimestamp = Number(expired_time)
     const isExpired = checkExpiredToken(expiredTimestamp)
-    console.log('isExpiredxxx:', isExpired)
-    console.log('refreshToken:', refreshToken)
-    console.log('expired_time:', expired_time)
     if (isExpired) {
         // const res = yield call(UserService.getRefeshTokenApi, { refresh_token: refreshToken })
         const res = await UserService.getRefeshTokenApi({ refresh_token: refreshToken });
-        console.log('res.data.data:', res.data.data)
+      
         // const { access_token, refresh_token, expired_time } = res.data.data;
         // await authenNextServer({
         //         token: access_token,

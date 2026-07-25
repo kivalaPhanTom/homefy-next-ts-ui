@@ -75,3 +75,27 @@ export interface updateRoomToReduxType {
     setListFirnishings: React.Dispatch<React.SetStateAction<string[]>>;
     navigate: (type: string) => void
 }
+
+export interface RoomDetail {
+    id: string;
+    code: string;
+    name: string;
+    address: string;
+    price: number;
+    date_available: Date | null;
+    num_bedroom: number;
+    num_bathroom: number;
+    bathroom_type: null;
+    bed_size: string;
+    description: string;
+    lat: null;
+    lon: null;
+    status: null;
+    max_guests: number;
+    furnitures: string[];
+    images: imageObject[];
+    hasLike:boolean;
+}
+export interface responseGetDetailRooom{
+    result: RoomDetail;
+}

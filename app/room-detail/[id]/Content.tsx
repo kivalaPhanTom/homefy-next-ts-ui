@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from 'react'
+import { useEffect, useState, JSX } from 'react'
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -12,8 +12,10 @@ import {
 } from "antd";
 import dayjs, { type Dayjs } from 'dayjs';
 import { message } from 'antd';
+import parse from "html-react-parser";
 
 import styles from './RoomDetail.module.scss'
+import { useGetFurnituresQuery } from '@/RTK_Query/Listing_Query'
 import { setSessionStorage } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 import { formatNumber, renderTextDayMonthValue } from '@/common/FunctionCommon/FunctionCommon'
 import { checkRoomAvailability } from '@/Redux/Actions/ProductionAction'
@@ -23,7 +25,12 @@ import SpinLoader from '@/app/tools/components/SpinLoader/SpinLoader';
 import RoomUnavailable from './RoomUnavailable';
 
 const { Option } = Select;
-
+interface FunitureOption {
+  id: string,
+  name: string,
+  icon: JSX.Element | null
+}
+type funituresFromApiType = Pick<FunitureOption, "id" | "name">;
 interface ContentProps {
   roomId: string;
   code: string;
@@ -34,12 +41,15 @@ interface ContentProps {
   num_bedroom: number;
   num_bathroom: number;
   max_guests: number;
+  furnitures: string[];
 }
 function Content(props: ContentProps) {
   const router = useRouter();
   const dispatch = useDispatch();
+  const { data, isFetching, error, refetch } = useGetFurnituresQuery(undefined)
+  const funituresOptions: funituresFromApiType[] = (data as any)?.result ?? [];
   const { isRoomAvailable, conflictDates, isCheckingRoomAvailability } = useSelector((state: RootState) => state.filterProductPageSlice)
-  const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address } = props
+  const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address, furnitures } = props
   const [checkInDate, setCheckInDate] = useState<Dayjs | null>(null)
   const [checkOutDate, setCheckOutDate] = useState<Dayjs | null>(null)
   const [guestCount, setGuestCount] = useState<number>(1)
@@ -239,9 +249,7 @@ function Content(props: ContentProps) {
             Giới thiệu về phòng
           </h2>
 
-          <p>
-            {description}
-          </p>
+          <p>{parse(description || "")}</p>
 
           <a href="#">
             Xem thêm
@@ -258,17 +266,12 @@ function Content(props: ContentProps) {
           </h2>
 
           <div className={styles["amenities-grid"]}>
-
-            <div>Wi-Fi tốc độ cao</div>
-            <div>Máy giặt & máy sấy</div>
-            <div>Điều hòa</div>
-            <div>Bãi đỗ xe riêng</div>
-
-            <div>Phòng tắm riêng</div>
-            <div>Bàn ủi</div>
-            <div>TV thông minh</div>
-            <div>Bồn rửa</div>
-
+            {
+              furnitures.map((furnitureId) => {
+                const furnitureOption = funituresOptions.find((option) => option.id === furnitureId);
+                return furnitureOption ? <div>{furnitureOption.name}</div>: "";
+              })
+            }
           </div>
 
         </section>
