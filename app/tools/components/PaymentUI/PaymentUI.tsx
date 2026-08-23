@@ -72,7 +72,7 @@ export default function PaymentUI(props: PaymentUIProps) {
   }
 
   const handleNavigate = (bookingId: String): void => {
-    router.push(`/payment-success/${bookingId}`);
+    router.push(`/payment-result/${bookingId}`);
   }
 
   const imageSrc = roomInfo?.images && roomInfo.images.length > 0 ? roomInfo.images[0].path : noImage;
@@ -122,21 +122,21 @@ export default function PaymentUI(props: PaymentUIProps) {
               value={paymentMethod}
               onChange={(e) => setPaymentMethod(e.target.value)}
             >
-              <Radio value="card">
+              {/* <Radio value="card">
                 Thẻ tín dụng / Thẻ ghi nợ
-              </Radio>
+              </Radio> */}
 
               <Radio value="vnpay">
                 VNPay
               </Radio>
 
-              <Radio value="momo">
+              {/* <Radio value="momo">
                 MoMo
               </Radio>
 
               <Radio value="bank">
                 Chuyển khoản ngân hàng
-              </Radio>
+              </Radio> */}
             </Radio.Group>
 
             {/* <div className={styles.form}>

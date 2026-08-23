@@ -1,5 +1,5 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects'
-import { confirmPayment } from '../Actions/PaymentAction'
+import { confirmPayment, paymentStatus } from '../Actions/PaymentAction'
 import { Service } from '@/Services/PaymentServices'
 import { getRefreshToken } from '../Actions/TokenAction'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
@@ -13,11 +13,35 @@ function* handleConfirmPaymentApi(action:any): Generator<any, void, unknown> {
     try {
           const res:any = yield call(Service.payment, data)
           if (res.data.code === 200) {
-            const bookingId = res?.data?.result?.bookingId
-            if(bookingId && navigate) navigate(bookingId)
+            const paymentRedirectUrl = res?.data?.result?.paymentUrl
+                        if (paymentRedirectUrl && typeof window !== 'undefined') {
+                            window.location.assign(paymentRedirectUrl)
+                        }
           }
 
 
+    } catch (error) {
+        // const payloadError = {
+        //     error: error,
+        //     functionDispatch: setAboutMeInfo,
+        //     actionPayload: action.payload,
+        //     dispatchLoading: setLoadingAboutMe
+        // }
+        // yield* handleEror(payloadError)
+    }
+}
+
+function* handlePaymentStatusApi(action: {
+    payload: {
+        data: {
+            bookingId: string
+            paymentStatus: string
+        }
+    }
+}): Generator<unknown, void, unknown> {
+    const { data } = action.payload
+    try {
+        yield call(Service.paymentStatus, data)
     } catch (error) {
         // const payloadError = {
         //     error: error,
@@ -48,9 +72,14 @@ function* confirmPaymentSaga() {
     yield takeEvery(confirmPayment, handleConfirmPaymentApi)
 }
 
+function* paymentStatusSaga() {
+    yield takeEvery(paymentStatus, handlePaymentStatusApi)
+}
+
 
 export function* paymentSagaList() {
     yield all([
-        confirmPaymentSaga()
+        confirmPaymentSaga(),
+        paymentStatusSaga()
     ])
 }

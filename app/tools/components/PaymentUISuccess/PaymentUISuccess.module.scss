@@ -39,6 +39,14 @@
   font-size: 30px;
 }
 
+.cancelled .successIcon {
+  background: #faad14;
+}
+
+.failed .successIcon {
+  background: #ef4444;
+}
+
 .title {
   margin-bottom: 8px !important;
 }
@@ -61,6 +69,14 @@
   border-radius: 12px;
   background: #f6fbf6;
   text-align: center;
+}
+
+.bookingCode.cancelled {
+  background: #fffaf0;
+}
+
+.bookingCode.failed {
+  background: #fff5f5;
 }
 
 .codeLabel {
@@ -184,6 +200,35 @@
 
 .detailBtn {
   background: #5b4ce6 !important;
+}
+
+.detailBtn.cancelled {
+  background: #faad14 !important;
+}
+
+.detailBtn.failed {
+  background: #ef4444 !important;
+}
+
+.statusNotice {
+  margin: 0 16px 16px;
+  padding: 12px;
+  display: flex;
+  gap: 10px;
+  border: 1px solid #ffccc7;
+  border-radius: 8px;
+  background: #fff2f0;
+  color: #ef4444;
+
+  .infoDesc {
+    color: #6b7280;
+  }
+}
+
+.cancelled .statusNotice {
+  border-color: #ffe58f;
+  background: #fffbe6;
+  color: #d48806;
 }
 
 /* MOBILE */
