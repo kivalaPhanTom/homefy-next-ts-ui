@@ -67,7 +67,7 @@ const RoomItem = (props: RoomItemProps) => {
                     <div>
                         <Link href={`/room-detail/${data.id}`} className={styles['roomElement']}>
                             <div className={styles['first']}>
-                                <p>$<span className={styles['price']}>{formatNumber(data.price)}</span> / <span className={styles['price']}>Week</span></p>
+                                <p><span className={styles['price']}>{formatNumber(data.price)}đ</span> / <span className={styles['price']}>đêm</span></p>
                                 <p className={styles['typeRoom']}>{data.bed_size ? renderBedSizeName(data.bed_size) : ''} bed</p>
                                 <div className={styles['divAddress']}>
                                     <CiLocationOn className={styles['locationIcon']} />
