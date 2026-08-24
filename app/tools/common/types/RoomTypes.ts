@@ -63,7 +63,7 @@ export interface roomObjectToRedux {
     description: string,
     new_image_paths?: string[],
     old_image_ids?: string[],
-    image_paths?:string[]
+    image_paths?: string[]
 }
 export interface updateRoomToReduxType {
     data: roomObjectToRedux,
@@ -94,8 +94,17 @@ export interface RoomDetail {
     max_guests: number;
     furnitures: string[];
     images: imageObject[];
-    hasLike:boolean;
+    hasLike: boolean;
 }
-export interface responseGetDetailRooom{
+export interface responseGetDetailRooom {
     result: RoomDetail;
+}
+export interface likeActionType {
+    room_id: String
+}
+export interface likeActionTypeResponse {
+    data: {
+        code: number,
+        message: string,
+    }
 }

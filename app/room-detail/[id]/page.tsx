@@ -45,7 +45,8 @@ async function page(props: { params: Promise<{ id: string }> }) {
         status = null,
         max_guests = 1,
         furnitures = [],
-        images = [], } = data ? data?.data?.result : initialState
+        images = [],
+        hasLike = false } = data ? data?.data?.result : initialState
 
 
     // const isFavorite = data ? data?.payload?.result.hasLike : false
@@ -75,6 +76,7 @@ async function page(props: { params: Promise<{ id: string }> }) {
                     num_bathroom={num_bathroom}
                     max_guests={max_guests}
                     furnitures={furnitures}
+                    hasLike = {hasLike}
                 />
             </div>
 

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, JSX } from 'react'
+import { useState, useEffect, JSX } from 'react'
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -20,9 +20,11 @@ import { setSessionStorage } from '@/common/FunctionCommon/FunctionCommonForClie
 import { formatNumber, renderTextDayMonthValue } from '@/common/FunctionCommon/FunctionCommon'
 import { checkRoomAvailability } from '@/Redux/Actions/ProductionAction'
 import { checkRoomAvailabilityType } from '@/common/types/RoomTypes'
+import { userLike, userRemoveLike, logOut } from '@/Redux/Actions/UserAction'
 import type { RootState } from '@/Redux/store';
 import SpinLoader from '@/app/tools/components/SpinLoader/SpinLoader';
 import RoomUnavailable from './RoomUnavailable';
+import { likeActionType } from '@/common/types/RoomTypes'
 
 const { Option } = Select;
 interface FunitureOption {
@@ -42,23 +44,27 @@ interface ContentProps {
   num_bathroom: number;
   max_guests: number;
   furnitures: string[];
+  hasLike: boolean;
 }
+
 function Content(props: ContentProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { data, isFetching, error, refetch } = useGetFurnituresQuery(undefined)
   const funituresOptions: funituresFromApiType[] = (data as any)?.result ?? [];
   const { isRoomAvailable, conflictDates, isCheckingRoomAvailability } = useSelector((state: RootState) => state.filterProductPageSlice)
-  const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address, furnitures } = props
+  const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address, furnitures, hasLike } = props
   const [checkInDate, setCheckInDate] = useState<Dayjs | null>(null)
   const [checkOutDate, setCheckOutDate] = useState<Dayjs | null>(null)
   const [guestCount, setGuestCount] = useState<number>(1)
+  const [hasLikeState, setHasLikeState] = useState<boolean>(hasLike)
 
   useEffect(() => {
     const today = dayjs();
     const nextDay = today.add(1, 'day');
     setCheckInDate(today);
     setCheckOutDate(nextDay);
+    setHasLikeState(hasLike)
   }, [roomId])
 
   useEffect(() => {
@@ -129,6 +135,21 @@ function Content(props: ContentProps) {
     }
     setSessionStorage("BOOKING", payload)
     router.push("/booking");
+  }
+  const handleLike = (): void => {
+    const payload: likeActionType = {
+      room_id: roomId
+    }
+    setHasLikeState(true)
+    dispatch(userLike(payload))
+  }
+
+  const handleRemoveLike = (): void => {
+    const payload: likeActionType = {
+      room_id: roomId
+    }
+    setHasLikeState(false)
+    dispatch(userRemoveLike(payload))
   }
 
   return (
@@ -269,7 +290,7 @@ function Content(props: ContentProps) {
             {
               furnitures.map((furnitureId) => {
                 const furnitureOption = funituresOptions.find((option) => option.id === furnitureId);
-                return furnitureOption ? <div>{furnitureOption.name}</div>: "";
+                return furnitureOption ? <div>{furnitureOption.name}</div> : "";
               })
             }
           </div>
@@ -383,13 +404,14 @@ function Content(props: ContentProps) {
           >
             Đặt phòng ngay
           </Button>
-
           <Button
             size="large"
             block
             style={{ marginTop: 12 }}
+            onClick={hasLikeState ? handleRemoveLike : handleLike}
           >
-            Lưu phòng này
+            {hasLikeState ? "Bỏ lưu phòng này" : "Lưu phòng này"}
+
           </Button>
 
           <div className={styles["fee-note"]}>
