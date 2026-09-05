@@ -93,6 +93,14 @@
   background: #6b46ff !important;
 }
 
+.payButton:disabled {
+  background: #d1d5db !important;
+  border-color: #d1d5db !important;
+  color: #6b7280 !important;
+  cursor: not-allowed;
+  opacity: 1 !important;
+}
+
 .roomInfo {
   display: flex;
   gap: 12px;

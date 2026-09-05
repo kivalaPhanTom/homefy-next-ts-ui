@@ -32,7 +32,8 @@ export default function PaymentUI(props: PaymentUIProps) {
   const dispatch = useDispatch()
   const router = useRouter();
   const [bookingData, setBookingData] = useState<BookingData | null>(null)
-  const [paymentMethod, setPaymentMethod] = useState('card')
+  const [paymentMethod, setPaymentMethod] = useState('')
+  const [hasAgreedToTerms, setHasAgreedToTerms] = useState(false)
   const { data, isFetching, error, refetch } = useGetListingDetailQuery(
     { roomId: bookingData?.roomId || '' },
     { skip: !bookingData?.roomId }
@@ -164,7 +165,11 @@ export default function PaymentUI(props: PaymentUIProps) {
             </div> */}
           </Card>
 
-          <Checkbox className={styles.checkbox}>
+          <Checkbox
+            className={styles.checkbox}
+            checked={hasAgreedToTerms}
+            onChange={(e) => setHasAgreedToTerms(e.target.checked)}
+          >
             Tôi đã đọc và đồng ý với
             <span> Điều khoản đặt phòng </span>
             và
@@ -177,6 +182,7 @@ export default function PaymentUI(props: PaymentUIProps) {
             block
             className={styles.payButton}
             onClick={paymentHandler}
+            disabled={!hasAgreedToTerms || !paymentMethod}
           >
             Thanh toán ngay - 1.130.000đ
           </Button>
@@ -266,7 +272,12 @@ export default function PaymentUI(props: PaymentUIProps) {
           <strong>1.130.000đ</strong>
         </div>
 
-        <Button type="primary">
+        <Button
+          type="primary"
+          className={styles.payButton}
+          onClick={paymentHandler}
+          disabled={!hasAgreedToTerms || !paymentMethod}
+        >
           Thanh toán ngay
         </Button>
       </div>

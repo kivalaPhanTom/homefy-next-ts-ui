@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useParams, useSearchParams } from 'next/navigation'
+import { useParams, useRouter, useSearchParams } from 'next/navigation'
 import {
   Button,
   Card,
@@ -28,16 +28,17 @@ import { BookingData } from '@/tools/common/types/BookingType'
 import { paymentStatus } from '@/Redux/Actions/PaymentAction'
 const { Title, Text } = Typography;
 
-type PaymentResultStatus = 'SUCESS' | 'CANCELLED' | 'FAILED'
+type PaymentResultStatus = 'SUCCESS' | 'CANCELLED' | 'FAILED'
 
 function getPaymentResultStatus(responseCode: string | null, transactionStatus: string | null): PaymentResultStatus {
-  if (responseCode === '00' && transactionStatus === '00') return 'SUCESS'
+  if (responseCode === '00' && transactionStatus === '00') return 'SUCCESS'
   if (responseCode === '24' && transactionStatus === '02') return 'CANCELLED'
   return 'FAILED'
 }
 
 export default function PaymentUISuccess() {
   const dispatch = useDispatch()
+  const router = useRouter()
   const params = useParams<{ id: string }>()
   const searchParams = useSearchParams()
   const paymentStatusSent = useRef(false)
@@ -79,8 +80,16 @@ export default function PaymentUISuccess() {
 
   const roomInfo = data ? data.result : null
   const imageSrc = roomInfo?.images && roomInfo.images.length > 0 ? roomInfo.images[0].path : noImage;
-  const isSuccess = resultStatus === 'SUCESS'
+  const isSuccess = resultStatus === 'SUCCESS'
   const isCancelled = resultStatus === 'CANCELLED'
+  const handleRetry = () => {
+    if (isCancelled) {
+      router.push('/booking')
+      return
+    }
+
+    router.push(`/payment/${params.id}`)
+  }
   const statusContent = isSuccess
     ? {
         icon: <CheckOutlined />,
@@ -231,6 +240,7 @@ export default function PaymentUISuccess() {
             icon={<HomeOutlined />}
             size="large"
             className={styles.homeBtn}
+            onClick={() => router.push('/')}
           >
             Về trang chủ
           </Button>
@@ -241,6 +251,7 @@ export default function PaymentUISuccess() {
             icon={<ArrowRightOutlined />}
             iconPosition="end"
             className={`${styles.detailBtn} ${styles[resultStatus.toLowerCase()]}`}
+            onClick={isSuccess ? undefined : handleRetry}
           >
             {statusContent.detailButton}
           </Button>
