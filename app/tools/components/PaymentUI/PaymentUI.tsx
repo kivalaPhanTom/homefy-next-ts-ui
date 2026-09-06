@@ -184,7 +184,7 @@ export default function PaymentUI(props: PaymentUIProps) {
             onClick={paymentHandler}
             disabled={!hasAgreedToTerms || !paymentMethod}
           >
-            Thanh toán ngay - 1.130.000đ
+            Thanh toán ngay - {formatNumber(totalPrice)}đ
           </Button>
         </div>
 
@@ -269,7 +269,7 @@ export default function PaymentUI(props: PaymentUIProps) {
       <div className={styles.mobileBar}>
         <div>
           <span>Tổng cộng</span>
-          <strong>1.130.000đ</strong>
+          <strong>{formatNumber(totalPrice)}đ</strong>
         </div>
 
         <Button

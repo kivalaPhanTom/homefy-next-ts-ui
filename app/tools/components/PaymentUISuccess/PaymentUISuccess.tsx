@@ -24,8 +24,11 @@ import styles from './PaymentUISuccess.module.scss';
 import { useGetListingDetailQuery } from '@/RTK_Query/Listing_Query'
 import noImage from '@/assets/empty.webp'
 import { formatNumber } from '@/common/FunctionCommon/FunctionCommon'
-import { BookingData } from '@/tools/common/types/BookingType'
+import { getLocalStorage } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
+import { BOOKING_CODE_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
+import { getBooking } from '@/Redux/Actions/BookingAction'
 import { paymentStatus } from '@/Redux/Actions/PaymentAction'
+import { useAppSelector } from '@/Redux/store'
 const { Title, Text } = Typography;
 
 type PaymentResultStatus = 'SUCCESS' | 'CANCELLED' | 'FAILED'
@@ -42,25 +45,30 @@ export default function PaymentUISuccess() {
   const params = useParams<{ id: string }>()
   const searchParams = useSearchParams()
   const paymentStatusSent = useRef(false)
+  const [bookingCode, setBookingCode] = useState('')
+  const bookingDetail = useAppSelector((state) => state.bookingSlice.bookingDetail)
   const resultStatus = getPaymentResultStatus(
     searchParams.get('vnp_ResponseCode'),
     searchParams.get('vnp_TransactionStatus')
   )
-  const [bookingData, setBookingData] = useState<BookingData | null>(null)
   const { data, isFetching, error, refetch } = useGetListingDetailQuery(
-    { roomId: bookingData?.roomId || '' },
-    { skip: !bookingData?.roomId }
+    { roomId: bookingDetail?.roomId || '' },
+    { skip: !bookingDetail?.roomId }
   )
   useEffect(() => {
-    try {
-      const raw = typeof window !== 'undefined' ? window.sessionStorage.getItem('BOOKING') : null
-      if (!raw) return
-      const data = JSON.parse(raw)
-      setBookingData(data)
-    } catch (e) {
-      // ignore parse errors
-    }
+    const timeoutId = window.setTimeout(() => {
+      setBookingCode(String(getLocalStorage(BOOKING_CODE_IN_LOCALSTORAGE) || ''))
+    }, 0)
+
+    return () => window.clearTimeout(timeoutId)
   }, [])
+
+  useEffect(() => {
+    const bookingId = params.id
+    if (!bookingId) return
+
+    dispatch(getBooking({ bookingId }))
+  }, [dispatch, params.id])
 
   useEffect(() => {
     const bookingId = params.id
@@ -129,7 +137,7 @@ export default function PaymentUISuccess() {
           </Text>
 
           <Text className={styles.email}>
-            abc@gmail.com
+            {bookingDetail?.email || '-'}
           </Text>
         </div>
 
@@ -141,7 +149,7 @@ export default function PaymentUISuccess() {
           </Text>
 
           <div className={styles.codeValue}>
-            BK-20261005-000123
+            {bookingDetail?.bookingCode || bookingCode || '-'}
 
             <CopyOutlined className={styles.copyIcon} />
           </div>
@@ -161,13 +169,13 @@ export default function PaymentUISuccess() {
               <Title level={4}>{roomInfo?.name}</Title>
 
               <Text type="secondary">
-                1 khách • 1 đêm
+                {bookingDetail?.numGuest || 0} khách • 1 đêm
               </Text>
 
               <div className={styles.date}>
-                <span>{ bookingData?.checkIn}</span>
+                <span>{bookingDetail?.checkIn || '-'}</span>
                 <span>→</span>
-                <span>{ bookingData?.checkOut}</span>
+                <span>{bookingDetail?.checkOut || '-'}</span>
               </div>
             </div>
           </div>
@@ -178,7 +186,7 @@ export default function PaymentUISuccess() {
             <Text strong>Tổng thanh toán</Text>
 
             <span className={styles.price}>
-              1.130.000đ
+              {formatNumber(bookingDetail?.totalPrice || 0)}đ
             </span>
           </div>
 
@@ -198,7 +206,7 @@ export default function PaymentUISuccess() {
                 </div>
 
                 <div className={styles.infoValue}>
-                  abc@gmail.com
+                  {bookingDetail?.email || '-'}
                 </div>
               </div>
             </div>
@@ -212,7 +220,9 @@ export default function PaymentUISuccess() {
                 </div>
 
                 <div className={styles.infoValue}>
-                  Thẻ Visa •••• 4242
+                  {bookingDetail?.paymentMethod === 'CASH'
+                    ? 'Thanh toán tiền mặt'
+                    : bookingDetail?.paymentMethod || '-'}
                 </div>
               </div>
             </div>

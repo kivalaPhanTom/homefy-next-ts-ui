@@ -51,6 +51,7 @@ export const USER_NAME_IN_LOCALSTORAGE = 'homefyUserName'
 export const ADDRESS_SEARCH_IN_LOCALSTORAGE = 'homefyAddresSearch'
 export const TOKEN_IN_LOCALSTORAGE = 'homefyUserToken'
 export const REFRESH_TOKEN_IN_LOCALSTORAGE = 'homefyUserRefreshToken'
+export const BOOKING_CODE_IN_LOCALSTORAGE = 'homefyBookingCode'
 
 interface commonObject {
     code:string,

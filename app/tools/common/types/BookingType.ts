@@ -11,3 +11,21 @@ export interface BookingData {
   phone?: string;
   description?: string;
 }
+
+export interface BookingDetail {
+  bookingId: string | number;
+  bookingCode: string;
+  email: string;
+  name: string;
+  checkIn: string;
+  checkOut: string;
+  description?: string;
+  phone?: string;
+  errorReasonCode?: string | number | null;
+  isDeleted?: boolean;
+  numGuest: number;
+  paymentMethod?: string;
+  status?: string;
+  roomId: string;
+  totalPrice: number;
+}

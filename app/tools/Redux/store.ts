@@ -20,6 +20,7 @@ import filterProductPageSlice from './slices/FilterProductPageSlice'
 // import applicationSlice from './slices/ApplicationSlice'
 import favouriteProductSlice from './slices/FavouriteProductSlice'
 import forgotPasswordSlice from './slices/ForgotPasswordSlice'
+import bookingSlice from './slices/BookingSlice'
 // import inspectionSlice from './slices/InspectionSlice'
 import { getRoomsApi } from '@/RTK_Query/GetRooms_Query'
 import { searchAddressResultApi } from '../RTK_Query/SearchAddressResult'
@@ -59,6 +60,7 @@ const allReducer = {
   // applicationSlice,
   favouriteProductSlice,
   forgotPasswordSlice,
+  bookingSlice,
   // inspectionSlice
 }
 const store = configureStore({
