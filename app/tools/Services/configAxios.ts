@@ -1,10 +1,13 @@
-import axios from 'axios'
+import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from 'axios'
 import { VITE_API_URL, VITE_TIMEOUT } from '../config'
-import { getLocalStorage, getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
-import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
-import { checkExpiredToken } from '@/common/FunctionCommon/FunctionCommon'
-import { Service } from './UserServices'
+import { getCookie } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
+import { USER_TOKEN, REFRESH_TOKEN_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
+import { calculateExpiredTime } from '@/common/FunctionCommon/FunctionCommon'
 import { authenNextServer } from '@/Services/NextAuthenServer'
+import { logOut } from '@/Redux/Actions/UserAction'
+
+const REFRESH_TOKEN_URL = 'users/refresh_token'
+const REVOKE_TOKEN_URL = 'users/revoke_token'
 
 export const homefyInstance = axios.create({
     method: 'post',
@@ -13,16 +16,8 @@ export const homefyInstance = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
-        // "Authorization": token ? `Bearer ${token}` : null
     },
 })
-homefyInstance.interceptors.request.use(config => {
-    // return handleRefreshToken(config)
-    if(getCookie(USER_TOKEN)){
-        config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-    }
-    return config
-}, null)
 
 export const homefyInstancePut = axios.create({
     method: 'put',
@@ -31,14 +26,8 @@ export const homefyInstancePut = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
-        // "Authorization": token ? `Bearer ${token}` : null
     },
 })
-homefyInstancePut.interceptors.request.use(config => {
-    // return handleRefreshToken(config)
-    config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-    return config
-}, null)
 
 export const homefyInstanceDelete = axios.create({
     method: 'delete',
@@ -47,28 +36,8 @@ export const homefyInstanceDelete = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
-        // "Authorization": token ? `Bearer ${token}` : null
     },
 })
-homefyInstanceDelete.interceptors.request.use(config => {
-    // return handleRefreshToken(config)
-    config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-    return config
-}, null)
-
-// homefyInstanceDelete.interceptors.response.use(
-//     (response) => {
-//         return response;
-//     },
-//     async function (error) {
-//         if (error.response && error.response.status === 401) {
-//             handleRefreshToken(error, homefyInstanceGet)
-//         } else {
-//             return Promise.reject(error);
-//         }
-//     }
-// )
-
 
 export const homefyInstanceGet = axios.create({
     method: 'get',
@@ -77,61 +46,8 @@ export const homefyInstanceGet = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json',
-        // "Authorization": token ? `Bearer ${token}` : null
     },
 })
-homefyInstanceGet.interceptors.request.use(config => {
-    // return handleRefreshToken(config)
-    config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-    return config
-}, null)
-// homefyInstanceGet.interceptors.request.use(
-//     async (config) => {
-//     //  return await handleRefreshToken(config)
-//         const expired_time = getCookie(EXPIRED_TIME_TOKEN)
-//         const refreshToken = getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE)
-//         const isExpired = checkExpiredToken(expired_time)
-//         // const res = Service.getRefeshTokenApi({ refresh_token: refreshToken });
-//         if(isExpired){
-//             const customError = new Error('TOKEN_EXPIRED');
-//             throw new Error('Special endpoint not allowed');
-//             // return config;
-//             // You can also include additional information in the error object
-//             // customError.response = error.response; // You can attach the original error response
-//             // return Promise.reject(customError)
-//         }
-//         config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-//         return config
-//     },
-//     (error) => {
-//         console.log('dfdfdfDF:', error.response)
-//       return Promise.reject(error);
-//     }
-//   );
-// homefyInstanceGet.interceptors.request.use(
-//     async function (config) {
-//       return handleRefreshToken(config)
-//     // config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-//     // return config
-//     },
-//     function (error) {
-//       return Promise.reject(error);
-//     }
-//   );
-  
-  homefyInstanceGet.interceptors.response.use(
-    (response) => {
-        return response;
-    },
-    async function (error) {
-        if (error.response && error.response.status === 401) {
-            // handleRefreshToken(error, homefyInstanceGet)
-        } else {
-            return Promise.reject(error);
-        }
-    }
-)
-
 
 export const homefyInstanceForm = axios.create({
     method: 'post',
@@ -140,55 +56,85 @@ export const homefyInstanceForm = axios.create({
     withCredentials: true,
     headers: {
         'Content-Type': 'multipart/form-data',
-        // "Authorization": token ? `Bearer ${token}` : null
     },
-});
-homefyInstanceForm.interceptors.request.use(config => {
-    config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-    return config
-}, null)
+})
 
-// function handleRefreshToken(config) {
-//     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
-//     const refreshToken = getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE)
-//     const isExpired = checkExpiredToken(expired_time)
-//     console.log('isExpired:', isExpired)
-//     // const isExpired = true
-//     if(isExpired){
-//         // const res = await Sevrice.getRefeshTokenApi({ refresh_token: refreshToken });
-//         // console.log('resccccc:', res)
-//         // if (res.data.isError === false) {
-//         //     const { access_token, refresh_token, expired_time } = res.data.data
-//         //     await authenNextServer({
-//         //         token: access_token,
-//         //         refreshToken: refresh_token,
-//         //         expired_time
-//         //     })
-//         //     config.headers.Authorization = "Bearer " + access_token
-//         // } else {
-//         // }
-//         // config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-//         return Promise.reject("Request rejected for some reason");
-//     }else{
-//         config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-//     }
-//     // config.headers.Authorization = "Bearer " + getCookie(USER_TOKEN)
-//     return config
-// }
+const bareInstance = axios.create({
+    baseURL: VITE_API_URL,
+    timeout: VITE_TIMEOUT,
+})
 
-// async function handleRefreshToken(error, instanceFunc) {
-//     const refreshToken = getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE)
-//     const expired_time = getCookie(EXPIRED_TIME_TOKEN)
-//     const originalRequest = error.config;
-//     if (error.response && error.response.status === 401 && expired_time &&!originalRequest._retry) {
-//         const res = await Service.getRefeshTokenApi({ refresh_token: refreshToken });
-//         const { access_token, refresh_token, expired_time } = res.data.data
-//         await authenNextServer({
-//                 token: access_token,
-//                 refreshToken: refresh_token,
-//                 expired_time
-//             })
-//         return instanceFunc(originalRequest);
-//     }
-//     return Promise.reject(error);
-// }
+let browserRefreshInFlight: Promise<string | null> | null = null
+
+async function refreshBrowserSession(): Promise<string | null> {
+    const refreshToken = getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE)
+    if (!refreshToken) return null
+    try {
+        const res = await bareInstance.post(REFRESH_TOKEN_URL, { refresh_token: refreshToken })
+        const result = res.data?.result ?? res.data?.data
+        const accessToken = result?.access_token
+        if (!accessToken) return null
+        const expiredTime = result?.expired_time ?? (result?.expires_in ? calculateExpiredTime(result.expires_in) : null)
+        await authenNextServer({
+            token: accessToken,
+            refreshToken: result?.refresh_token ?? '',
+            expired_time: expiredTime,
+        })
+        return accessToken
+    } catch (error) {
+        console.error('[configAxios] Failed to refresh token, forcing logout:', error)
+        return null
+    }
+}
+
+let isForceLogoutDispatched = false
+
+async function forceLogoutBrowser() {
+    if (isForceLogoutDispatched) return
+    isForceLogoutDispatched = true
+    const { default: store } = await import('@/Redux/store')
+    store.dispatch(logOut({}))
+}
+
+function applyAuthInterceptors(instance: AxiosInstance) {
+    instance.interceptors.request.use(config => {
+        const token = getCookie(USER_TOKEN)
+        if (token) {
+            config.headers.Authorization = "Bearer " + token
+        }
+        return config
+    }, null)
+
+    instance.interceptors.response.use(
+        (response) => response,
+        async (error) => {
+            const originalRequest = error?.config as (InternalAxiosRequestConfig & { _retried?: boolean }) | undefined
+            const requestUrl: string = originalRequest?.url ?? ''
+            if (requestUrl.includes(REFRESH_TOKEN_URL) || requestUrl.includes(REVOKE_TOKEN_URL)) {
+                return Promise.reject(error)
+            }
+            if (error?.response?.status !== 401 || !originalRequest || originalRequest._retried) {
+                return Promise.reject(error)
+            }
+            originalRequest._retried = true
+            if (!browserRefreshInFlight) {
+                browserRefreshInFlight = refreshBrowserSession().finally(() => {
+                    browserRefreshInFlight = null
+                })
+            }
+            const accessToken = await browserRefreshInFlight
+            if (!accessToken) {
+                await forceLogoutBrowser()
+                return Promise.reject(error)
+            }
+            originalRequest.headers.Authorization = "Bearer " + accessToken
+            return instance(originalRequest)
+        }
+    )
+}
+
+applyAuthInterceptors(homefyInstance)
+applyAuthInterceptors(homefyInstancePut)
+applyAuthInterceptors(homefyInstanceDelete)
+applyAuthInterceptors(homefyInstanceGet)
+applyAuthInterceptors(homefyInstanceForm)

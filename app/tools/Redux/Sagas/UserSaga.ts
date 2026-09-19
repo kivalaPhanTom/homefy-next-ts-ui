@@ -51,27 +51,21 @@ function* handleLogOutApi(action: any): Generator<any, void, unknown> {
     yield put(setLoading(true))
     try {
         yield call(Service.logoutApi, { refresh_token: getCookie(REFRESH_TOKEN_IN_LOCALSTORAGE) })
-        clearLocalStorageByKey(USER_NAME_IN_LOCALSTORAGE)
-        clearLocalStorageByKey(ADDRESS_SEARCH_IN_LOCALSTORAGE)
-        clearLocalStorageByKey(TOKEN_IN_LOCALSTORAGE)
-        clearLocalStorageByKey(REFRESH_TOKEN_IN_LOCALSTORAGE)
-        yield put(setCurrentUserLogin({
-            username: null,
-            token: null
-        }))
-        yield put(setLoading(false))
-        yield call(logoutNextServer)
-        if (router) {
-            router.refresh();
-        }
-    } catch (error) {
-        const payloadError = {
-            error: error,
-            functionDispatch: logOut,
-            actionPayload: null,
-            dispatchLoading: setLoading
-        }
-        yield* handleEror(payloadError)
+    } catch {
+        // revoke token lỗi thì vẫn tiếp tục đăng xuất local
+    }
+    clearLocalStorageByKey(USER_NAME_IN_LOCALSTORAGE)
+    clearLocalStorageByKey(ADDRESS_SEARCH_IN_LOCALSTORAGE)
+    clearLocalStorageByKey(TOKEN_IN_LOCALSTORAGE)
+    clearLocalStorageByKey(REFRESH_TOKEN_IN_LOCALSTORAGE)
+    yield put(setCurrentUserLogin({
+        username: null,
+        token: null
+    }))
+    yield put(setLoading(false))
+    yield call(logoutNextServer)
+    if (router) {
+        router.refresh();
     }
 }
 function* handleEror(payloadError: any) {
