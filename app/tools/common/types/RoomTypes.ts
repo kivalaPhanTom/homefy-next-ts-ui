@@ -108,3 +108,20 @@ export interface likeActionTypeResponse {
         message: string,
     }
 }
+
+export interface searchAddressObjectType {
+    lon: string,
+    display_name: string,
+    lat: string
+}
+export interface searchAddressResultResponseType {
+    code: number,
+    message: string,
+    result: searchAddressObjectType[]
+}
+export interface addressOptionObject {
+    value: string,
+    label: string,
+    lat: string,
+    lon: string
+}

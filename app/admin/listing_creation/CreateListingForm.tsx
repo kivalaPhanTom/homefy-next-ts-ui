@@ -15,7 +15,7 @@ import { convertTimeRawValueToTimeStamp } from '@/common/FunctionCommon/Function
 import { roomObjectToRedux, updateRoomToReduxType } from '@/common/types/RoomTypes'
 import { useLazySearchAddressResultQuery } from '@/RTK_Query/SearchAddressResult'
 // import { convertSearchAddressOption } from '@/utils/SearchAddress_utils'
-
+import { addressOptionObject, searchAddressObjectType, searchAddressResultResponseType } from '@/common/types/RoomTypes'
 const ListingForm = dynamic(() => import('@/app/tools/components/ListingForm/ListingForm'), { ssr: false })
 
 function CreateListingForm() {
@@ -29,12 +29,14 @@ function CreateListingForm() {
     const [numberHousemates, setNumberHousemates] = useState<any[]>([])
     const [listFirnishings, setListFirnishings] = useState<string[]>([])
     const [keySearch, setKeySearch] = useState('')
+    const [addressLatLon, setAddressLatLon] = useState<{ lat: number | null, lon: number | null }>({ lat: null, lon: null })
     const [countSubmit, setCountSubmit] = useState(0)
     const numberHouseMate = Form.useWatch('number_housemates', form)
     const { isLogin } = useSelector((state: RootState) => state.signInSlice)
     const [trigger, result] = useLazySearchAddressResultQuery()
-    const { data } = result
-     let options: any[] = data ? (data.result || []).map((item: any) => item) : []
+    // const { data } = result
+    const dataSearchResult: searchAddressResultResponseType | undefined = result.data
+     let options: searchAddressObjectType[] = dataSearchResult ? (dataSearchResult.result || []).map((item) => item) : []
 
 
     useEffect(() => {
@@ -82,7 +84,7 @@ function CreateListingForm() {
         let numberHousematesClone = JSON.parse(JSON.stringify(numberHousemates))
         if (value) {
             if (value > numberHousematesClone.length) {
-                let distanceNumber = Number(value) - numberHousematesClone.length
+                let distanceNumber:number = Number(value) - numberHousematesClone.length
                 let initHouseMates = []
                 for (let i = 0; i < distanceNumber; i++) {
                     initHouseMates.push({
@@ -105,6 +107,13 @@ function CreateListingForm() {
     // const handleSearch = (e) => {
     //     setKeySearch(e.target.value)
     // }
+    const handleSelectAddress = useCallback((option: addressOptionObject): void => {
+        setAddressLatLon({
+            lat: option?.lat != null ? Number(option.lat) : null,
+            lon: option?.lon != null ? Number(option.lon) : null,
+        })
+    }, [])
+
     const handleSetListFirnishings = useCallback((value: string): void => {
         let listFirnishingsClone: string[] = JSON.parse(JSON.stringify(listFirnishings))
         if (listFirnishingsClone.includes(value)) {
@@ -147,11 +156,8 @@ function CreateListingForm() {
     }
 
     const onFinish = (values: Record<string, any>) => {
-        // let location = ''
         let formDataFile: FormData | null = null
         const manualValid = handleManualValidate()
-        let lat = null
-        let lon = null
 
         if (manualValid) {
             if (fileList.length > 0) {
@@ -163,12 +169,6 @@ function CreateListingForm() {
                 })
             }
 
-            options.forEach((el: any) => {
-                if (el.detail.display_name === values.location) {
-                    lat = parseFloat(el.detail.lat)
-                    lon = parseFloat(el.detail.lon)
-                }
-            })
             let numberHousematesClone: any[] = JSON.parse(JSON.stringify(numberHousemates))
             numberHousematesClone.forEach((el: any) => {
                 delete el.id
@@ -186,8 +186,8 @@ function CreateListingForm() {
                 room_firnishings: listFirnishings,
                 description: description,
                 max_guests: values.number_housemates,//temp
-                lat,
-                lon,
+                lat: addressLatLon.lat,
+                lon: addressLatLon.lon,
                 image_paths: []
             }
             const payload:updateRoomToReduxType = {
@@ -226,6 +226,7 @@ function CreateListingForm() {
             numberHousemates={numberHousemates}
             countSubmit={countSubmit}
             handleCancel={handleCancel}
+            handleSelectAddress={handleSelectAddress}
             setKeySearch={setKeySearch}
             handleSetListFirnishings={handleSetListFirnishings}
             handleAddHousemates={handleAddHousemates}

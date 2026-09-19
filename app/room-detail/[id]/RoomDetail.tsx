@@ -3,6 +3,7 @@
 import "./room-detail.css";
 
 import { useState } from "react";
+import dynamic from "next/dynamic";
 import {
   Form,
   DatePicker,
@@ -14,6 +15,31 @@ import {
 
 const { Option } = Select;
 
+// Map phải load client-side only (react-leaflet cần window/DOM)
+const RoomMap = dynamic(() => import("./RoomMap"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        width: "100%",
+        height: "400px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      Đang tải bản đồ...
+    </div>
+  ),
+});
+
+interface MapProps {
+  latitude: number;
+  longitude: number;
+  address?: string;
+}
+// map
+
 export default function RoomDetail() {
   const images = [
     "/images/room1.jpg",
@@ -24,6 +50,10 @@ export default function RoomDetail() {
   ];
 
   const [selectedImage, setSelectedImage] = useState(images[0]);
+
+  const latitude = 12.2388; // Vĩ độ của vị trí
+  const longitude = 109.1967;
+  const address = "Nha Trang, Phường Bắc Nha Trang, Tỉnh Khánh Hòa, Việt Nam";
 
   return (
     <div className="room-page">
@@ -209,12 +239,20 @@ export default function RoomDetail() {
                     label: "Vị trí",
                     children: (
                       <div className="location-grid">
-
                         <div className="map-box">
-                          MAP
+                          <RoomMap
+                            latitude={latitude}
+                            longitude={longitude}
+                            address={address}
+                          />
                         </div>
 
-                        <div className="location-info">
+
+                        {/* <div className="map-box">
+                          MAP
+                        </div> */}
+
+                        {/* <div className="location-info">
 
                           <h3>Vị trí</h3>
 
@@ -228,7 +266,7 @@ export default function RoomDetail() {
                             tiện di chuyển.
                           </p>
 
-                        </div>
+                        </div> */}
 
                       </div>
                     ),

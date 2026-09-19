@@ -2,16 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react'
 import { servicePattern } from '@/Services/SearchAddressServices'
 import { homefyInstanceGet } from '@/Services/configAxios'
 import { CACHE_TIME } from '@/common/ParamsCommon/ParamsCommon'
-
-interface SearchAddressResponse {
-    result: Array<{
-        display_name?: string
-        lat?: string
-        lon?: string
-        name?: string
-        [key: string]: any
-    }>
-}
+import { searchAddressResultResponseType } from '@/common/types/RoomTypes'
 
 const axiosBaseQuery = async ({ url, method }: { url: string; method: string }) => {
     try {
@@ -32,7 +23,7 @@ export const searchAddressResultApi = createApi({
     tagTypes: ['searchAddressResultApi'],
     baseQuery: axiosBaseQuery,
     endpoints: (builder) => ({
-        searchAddressResult: builder.query<SearchAddressResponse, { data: string }>({
+        searchAddressResult: builder.query<searchAddressResultResponseType, { data: string }>({
             query: (payload) => {
                 const { data } = payload
                 return ({

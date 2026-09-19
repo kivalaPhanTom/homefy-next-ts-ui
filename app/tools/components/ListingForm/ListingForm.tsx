@@ -18,6 +18,7 @@ import UploadImage from '../UploadFile/UploadFile';
 import RoomFirnishings from './RoomFirnishings'
 import BtnFooterRenterProfileComponent from '../BtnFooterRenterProfile/BtnFooterRenterProfile'
 import { bathroom_type, bed_size } from '@/common/ParamsCommon/ParamsCommon'
+import { addressOptionObject, searchAddressObjectType } from '@/common/types/RoomTypes'
 // import { setOptionAddressSearchResult } from '../../Redux/slices/ListingManagementSlice'
 // import { useSelector, useDispatch } from 'react-redux'
 // import { getAddressResult, insertListing } from '../../Redux/Actions/ListingManagementAction'
@@ -40,13 +41,14 @@ interface ListingFormProps {
     form: any,
     onFinish: (values: any) => void,
     listFirnishings: any[],
-    options: any[],
+    options: searchAddressObjectType[],
     fileList: any[],
     setFileList: (fileList: any[]) => void,
     description: string,
     numberHousemates: any[],
     countSubmit: number,
     handleCancel: () => void,
+    handleSelectAddress: (option: addressOptionObject) => void,
     setKeySearch: (value: string) => void,
     handleSetListFirnishings: (funitureId: string) => void,
     handleAddHousemates: () => void,
@@ -57,7 +59,7 @@ interface ListingFormProps {
 }
 function ListingForm(props: ListingFormProps) {
     const { form, onFinish, listFirnishings, options, fileList, setFileList, description, numberHousemates, countSubmit, handleCancel,
-        setKeySearch, handleSetListFirnishings, handleAddHousemates, handleChangeNumberOfHousemates, setDescription,
+        setKeySearch, handleSelectAddress, handleSetListFirnishings, handleAddHousemates, handleChangeNumberOfHousemates, setDescription,
         setNumberHousemates, modePage } = props
     const { isLoading } = useAppSelector((state: RootState) => state.loadingSlice)
 
@@ -85,6 +87,13 @@ function ListingForm(props: ListingFormProps) {
             label: e.name
         })
     })
+
+    const addressOptions: addressOptionObject[] = (options || []).map((option: searchAddressObjectType) => ({
+        value: option.display_name,
+        label: option.display_name,
+        lat: option.lat,
+        lon: option.lon,
+    }))
 
     return (
         <>
@@ -184,8 +193,9 @@ function ListingForm(props: ListingFormProps) {
                                     ]}
                                 >
                                     <AutoComplete
-                                        options={options}
+                                        options={addressOptions}
                                         allowClear={true}
+                                        onSelect={(_value, option) => handleSelectAddress(option as addressOptionObject)}
                                         className={styles[''] + ' ' + styles['div_selectInput']}
                                         disabled={false}
                                     >

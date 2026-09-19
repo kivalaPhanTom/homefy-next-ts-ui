@@ -21,6 +21,7 @@ import { useLazySearchAddressResultQuery } from '@/RTK_Query/SearchAddressResult
 // import { convertSearchAddressOption } from '@/utils/SearchAddress_utils'
 import Loading from '@/app/tools/components/Loading/Loading'
 import { roomObjectToRedux, updateRoomToReduxType } from '@/common/types/RoomTypes'
+import { addressOptionObject, searchAddressObjectType, searchAddressResultResponseType } from '@/common/types/RoomTypes'
 
 function checkAddFile(listFile: any[]) {
   let result = false
@@ -49,6 +50,7 @@ function EditListingForm(props: EditListingFormProps) {
   const [listFirnishings, setListFirnishings] = useState<string[]>([])
   const [countSubmit, setCountSubmit] = useState(0)
   const [countLoading, setLoadingState] = useState(0)
+  const [addressLatLon, setAddressLatLon] = useState<{ lat: number | null, lon: number | null }>({ lat: null, lon: null })
   const { isLoading } = useAppSelector((state: RootState) => state.loadingSlice)
   const [keySearch, setKeySearch] = useState('')
   // const { optionAddressSearchResult } = useSelector((state) => state.listingManagementSlice)
@@ -57,8 +59,8 @@ function EditListingForm(props: EditListingFormProps) {
   const { data, isFetching, error, refetch } = useGetListingDetailQuery({ roomId })
   const listingInfo = data ? data.result : null
   const [trigger, result] = useLazySearchAddressResultQuery()
-  const dataSearchResult:any = result.data || []
-  let options: any[] = data ? (dataSearchResult.data || []).map((item: any) => item) : []
+  const dataSearchResult: searchAddressResultResponseType | undefined = result.data
+  let options: searchAddressObjectType[] = data ? (dataSearchResult?.result || []).map((item) => item) : []
 
   interface documentObject {
     uid: string;
@@ -97,7 +99,11 @@ function EditListingForm(props: EditListingFormProps) {
       //   elClone.idfe = uuidv4()
       //   listHouseMates.push(elClone)
       // })
-      const furnitures = listingInfo.furnitures
+      const furnitures:string[] = listingInfo.furnitures
+      setAddressLatLon({
+        lat: listingInfo.lat != null ? Number(listingInfo.lat) : null,
+        lon: listingInfo.lon != null ? Number(listingInfo.lon) : null,
+      })
       form.setFieldsValue({
         location: listingInfo.address,
         price: listingInfo.price,
@@ -178,7 +184,7 @@ function EditListingForm(props: EditListingFormProps) {
     let numberHousematesClone = JSON.parse(JSON.stringify(numberHousemates))
     if (value) {
       if (value > numberHousematesClone.length) {
-        let distanceNumber = Number(value) - numberHousematesClone.length
+        let distanceNumber:number = Number(value) - numberHousematesClone.length
         let initHouseMates = []
         for (let i = 0; i < distanceNumber; i++) {
           initHouseMates.push({
@@ -281,6 +287,8 @@ function EditListingForm(props: EditListingFormProps) {
         room_firnishings: listFirnishings,
         description: description,
         max_guests: values.number_housemates,
+        lat: addressLatLon.lat,
+        lon: addressLatLon.lon,
         new_image_paths: [],
         old_image_ids: []
       }
@@ -297,6 +305,13 @@ function EditListingForm(props: EditListingFormProps) {
       dispatch(updateListing(payload))
     }
   }
+  const handleSelectAddress = useCallback((option: addressOptionObject): void => {
+    setAddressLatLon({
+      lat: option?.lat != null ? Number(option.lat) : null,
+      lon: option?.lon != null ? Number(option.lon) : null,
+    })
+  }, [])
+
   const handleCancel = (): void => {
 
     // setOptions([])
@@ -324,6 +339,7 @@ function EditListingForm(props: EditListingFormProps) {
         numberHousemates={numberHousemates}
         countSubmit={countSubmit}
         handleCancel={handleCancel}
+        handleSelectAddress={handleSelectAddress}
         setKeySearch={setKeySearch}
         handleSetListFirnishings={handleSetListFirnishings}
         handleAddHousemates={handleAddHousemates}
