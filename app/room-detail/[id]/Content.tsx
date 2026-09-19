@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, JSX } from 'react'
+import dynamic from 'next/dynamic'
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from 'react-redux'
 import {
@@ -27,6 +28,24 @@ import RoomUnavailable from './RoomUnavailable';
 import { likeActionType } from '@/common/types/RoomTypes'
 
 const { Option } = Select;
+
+const RoomMap = dynamic(() => import("./RoomMap"), {
+  ssr: false,
+  loading: () => (
+    <div
+      style={{
+        width: "100%",
+        height: "400px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      Đang tải bản đồ...
+    </div>
+  ),
+});
+
 interface FunitureOption {
   id: string,
   name: string,
@@ -44,6 +63,8 @@ interface ContentProps {
   num_bathroom: number;
   max_guests: number;
   furnitures: string[];
+  lat: number | null;
+  lon: number | null;
   hasLike: boolean;
 }
 
@@ -53,7 +74,7 @@ function Content(props: ContentProps) {
   const { data, isFetching, error, refetch } = useGetFurnituresQuery(undefined)
   const funituresOptions: funituresFromApiType[] = (data as any)?.result ?? [];
   const { isRoomAvailable, conflictDates, isCheckingRoomAvailability } = useSelector((state: RootState) => state.filterProductPageSlice)
-  const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address, furnitures, hasLike } = props
+  const { roomId, code, name, price, description, num_bedroom, num_bathroom, max_guests, address, furnitures, lat, lon, hasLike } = props
   const [checkInDate, setCheckInDate] = useState<Dayjs | null>(null)
   const [checkOutDate, setCheckOutDate] = useState<Dayjs | null>(null)
   const [guestCount, setGuestCount] = useState<number>(1)
@@ -105,6 +126,9 @@ function Content(props: ContentProps) {
     if (!checkOutDate) return false
     return current && (current.isSame(checkOutDate, 'day') || current.isAfter(checkOutDate, 'day'))
   }
+
+  const mapLat = lat ?? 10.8142
+  const mapLon = lon ?? 106.7009
 
   const calcNights = () => {
     if (!checkInDate || !checkOutDate) return 0
@@ -270,7 +294,7 @@ function Content(props: ContentProps) {
             Giới thiệu về phòng
           </h2>
 
-          <p>{parse(description || "")}</p>
+          <div>{parse(description || "")}</div>
 
           <a href="#">
             Xem thêm
@@ -290,7 +314,7 @@ function Content(props: ContentProps) {
             {
               furnitures.map((furnitureId) => {
                 const furnitureOption = funituresOptions.find((option) => option.id === furnitureId);
-                return furnitureOption ? <div>{furnitureOption.name}</div> : "";
+                return furnitureOption ? <div key={furnitureOption.id}>{furnitureOption.name}</div> : null;
               })
             }
           </div>
@@ -310,11 +334,9 @@ function Content(props: ContentProps) {
                 children: (
                   <div className={styles["location-grid"]}>
 
-                    <div className={styles["map-box"]}>
-                      MAP
-                    </div>
+                    <RoomMap latitude={mapLat} longitude={mapLon} address={address} />
 
-                    <div className={styles["location-info"]}>
+                    {/* <div className={styles["location-info"]}>
 
                       <h3>Vị trí</h3>
 
@@ -328,20 +350,64 @@ function Content(props: ContentProps) {
                         tiện di chuyển.
                       </p>
 
-                    </div>
+                    </div> */}
 
                   </div>
                 ),
               },
               {
-                key: "2",
-                label: "Phòng của bạn",
-                children: "Thông tin phòng"
-              },
-              {
                 key: "3",
                 label: "Quy định",
-                children: "Quy định"
+                children: (
+                  <div style={{ display: "grid", gap: 12 }}>
+                    <div>
+                      <h3 style={{ margin: "0 0 4px" }}>Nhận phòng &amp; trả phòng</h3>
+                      <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+                        <li>Nhận phòng từ 14:00, trả phòng trước 12:00.</li>
+                        <li>Vui lòng thông báo trước nếu đến sớm hoặc trả phòng muộn.</li>
+                        <li>Phòng sẽ được giữ đến 18:00 nếu không có thông báo trễ.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 style={{ margin: "0 0 4px" }}>Giấy tờ &amp; khách lưu trú</h3>
+                      <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+                        <li>Xuất trình CCCD/hộ chiếu hợp lệ khi nhận phòng.</li>
+                        <li>Chỉ khách đã đăng ký được lưu trú, không tự ý mang thêm người.</li>
+                        <li>Vượt số khách tối đa sẽ bị phụ phí hoặc từ chối lưu trú.</li>
+                        <li>Trẻ em dưới 12 tuổi phải đi cùng người giám hộ.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 style={{ margin: "0 0 4px" }}>An ninh &amp; an toàn</h3>
+                      <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+                        <li>Cấm hút thuốc trong phòng (có khu vực hút thuốc riêng).</li>
+                        <li>Cấm mang vũ khí, chất dễ cháy nổ, chất cấm vào khuôn viên.</li>
+                        <li>Không tổ chức tiệc tùng, gây ồn sau 22:00.</li>
+                        <li>Tắt điện, khóa cửa cẩn thận khi rời phòng.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 style={{ margin: "0 0 4px" }}>Tài sản &amp; vật nuôi</h3>
+                      <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+                        <li>Không mang vật nuôi vào phòng.</li>
+                        <li>Khách chịu trách nhiệm bồi thường nếu làm hư hỏng tài sản.</li>
+                        <li>Khu nghỉ nghỉ không chịu trách nhiệm giữ tài sản quý của khách.</li>
+                      </ul>
+                    </div>
+
+                    <div>
+                      <h3 style={{ margin: "0 0 4px" }}>Hủy phòng &amp; hoàn tiền</h3>
+                      <ul style={{ margin: 0, paddingLeft: 20, lineHeight: 1.7 }}>
+                        <li>Hủy miễn phí trước 3 ngày nhận phòng.</li>
+                        <li>Hủy trong vòng 3 ngày: hoàn 50% tiền phòng.</li>
+                        <li>No-show: không hoàn tiền.</li>
+                      </ul>
+                    </div>
+                  </div>
+                ),
               },
               {
                 key: "4",

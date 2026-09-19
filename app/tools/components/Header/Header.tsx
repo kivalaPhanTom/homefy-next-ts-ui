@@ -15,7 +15,8 @@ const Header = () => {
                 <div className={styles['logo']}>
                     <Link href={'/'} className={styles['link_logo']}>
                         <div className={styles['logo']}>
-                            <Image src={logo} alt='homefy logo' />
+                            {/* priority: báo Next.js đây là ảnh LCP (hiển thị đầu trang) => preload ngay trong <head> và tắt lazy-loading, giúp logo hiện nhanh hơn. Lưu ý: từ Next.js 16 prop này bị deprecated, thay bằng preload */}
+                            <Image src={logo} alt='homefy logo' priority />
                         </div>
                     </Link>
                 </div>

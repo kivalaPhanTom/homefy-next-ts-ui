@@ -3,6 +3,7 @@ import { cookies } from 'next/headers'
 import { initialState } from './InitModal'
 import { USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN_LOCALSTORAGE } from "@/common/ParamsCommon/ParamsCommon"
 import { getDetailRoomApi } from '@/Services/NextProductServices'
+import ClientForceLogout from '@/tools/components/ClientForceLogout/ClientForceLogout'
 // import ImgFrame from '@/app/room-detail/[id]/ImgFrame'
 import styles from './RoomDetail.module.scss'
 // import ImgGallery from './ImgGallery'
@@ -21,12 +22,18 @@ async function page(props: { params: Promise<{ id: string }> }) {
     const expired_time = cookieStore.get(EXPIRED_TIME_TOKEN)
     const refreshToken = cookieStore.get(REFRESH_TOKEN_IN_LOCALSTORAGE)
     let isRefreshToken = false
-    const data = await getDetailRoomApi<responseGetDetailRooom>({
-        roomId: resolvedParams.id,
-        sessionToken: sessionToken?.value || '',
-        expired_time: expired_time ? expired_time.value : null,
-        refreshToken: refreshToken || '',
-    })
+    let forceLogout = false
+    let data: any = null
+    try {
+        data = await getDetailRoomApi<responseGetDetailRooom>({
+            roomId: resolvedParams.id,
+            sessionToken: sessionToken?.value || '',
+            expired_time: expired_time ? expired_time.value : null,
+            refreshToken: refreshToken || '',
+        })
+    } catch (error) {
+        console.error('[RoomDetail] Failed to fetch room detail:', error)
+    }
 
     const {
         id = '',
@@ -54,6 +61,9 @@ async function page(props: { params: Promise<{ id: string }> }) {
     if (data?.options?.isRefreshToken) {
         isRefreshToken = true
     }
+    if (data?.options?.forceLogout) {
+        forceLogout = true
+    }
     const newAccessToken = data?.options?.newTokenInfo?.access_token || ""
     const newRefreshToken = data?.options?.newTokenInfo?.refresh_token || ""
     const newExpiredTime = data?.options?.newTokenInfo?.expired_time || ""
@@ -76,6 +86,8 @@ async function page(props: { params: Promise<{ id: string }> }) {
                     num_bathroom={num_bathroom}
                     max_guests={max_guests}
                     furnitures={furnitures}
+                    lat={lat}
+                    lon={lon}
                     hasLike = {hasLike}
                 />
             </div>
@@ -122,6 +134,7 @@ async function page(props: { params: Promise<{ id: string }> }) {
                 newRefreshToken={newRefreshToken}
                 newExpiredTime={newExpiredTime}
             /> */}
+            {forceLogout && <ClientForceLogout />}
         </div>
     )
 }

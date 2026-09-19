@@ -88,8 +88,8 @@ export interface RoomDetail {
     bathroom_type: null;
     bed_size: string;
     description: string;
-    lat: null;
-    lon: null;
+    lat: number | null;
+    lon: number | null;
     status: null;
     max_guests: number;
     furnitures: string[];
