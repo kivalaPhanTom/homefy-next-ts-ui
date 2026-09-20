@@ -1,7 +1,7 @@
 import { all, put, call, takeEvery } from 'redux-saga/effects'
-import { createBooking, getBooking } from '../Actions/BookingAction'
+import { createBooking, getBooking, getBookingHistory } from '../Actions/BookingAction'
 import { Service } from '@/Services/BookingServices'
-import { setBookingDetail } from '../slices/BookingSlice'
+import { setBookingDetail, setBookingHistory } from '../slices/BookingSlice'
 import { getRefreshToken } from '../Actions/TokenAction'
 import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 import { Notification } from '@/common/FunctionCommon/Notification'
@@ -51,6 +51,20 @@ function* handleGetBookingApi(action: any): Generator<any, void, unknown> {
     }
 }
 
+function* handleGetBookingHistoryApi(action: any): Generator<any, void, unknown> {
+    const { status } = action.payload
+
+    try {
+        const res: any = yield call(Service.getBookingHistory, { status })
+        if (res.data.code === 200) {
+            yield put(setBookingHistory({ status, data: res.data.result.data }))
+        }
+    } catch (error) {
+        console.error('Failed to get booking history:', error)
+        yield put(setBookingHistory({ status, data: [] }))
+    }
+}
+
 function* handleEror(payloadError: any) {
     // const { error, functionDispatch, actionPayload, dispatchLoading } = payloadError
     // const isErrorAuthen = handleError(error)
@@ -74,10 +88,15 @@ function* getBookingSaga() {
     yield takeEvery(getBooking, handleGetBookingApi)
 }
 
+function* getBookingHistorySaga() {
+    yield takeEvery(getBookingHistory, handleGetBookingHistoryApi)
+}
+
 
 export function* bookingSagaList() {
     yield all([
         createBookingSaga(),
-        getBookingSaga()
+        getBookingSaga(),
+        getBookingHistorySaga()
     ])
 }

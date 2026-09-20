@@ -4,11 +4,13 @@ export const Service = {
     reservations,
     checkRoomInventory,
     getBooking,
+    getBookingHistory,
 }
 export const servicePattern = {
     booking: 'booking/reservations',
     checkRoomInventory:'room/room_inventory',
     getBooking: 'booking/get_booking',
+    bookingHistory: 'booking/history',
 }
 
 function reservations(data:any) {
@@ -19,4 +21,7 @@ function checkRoomInventory(data:any) {
 }
 function getBooking(bookingId: string) {
     return homefyInstance.get(`${servicePattern.getBooking}/${bookingId}`)
+}
+function getBookingHistory(data:any) {
+    return homefyInstance.post(servicePattern.bookingHistory, data)
 }

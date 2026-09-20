@@ -12,6 +12,19 @@ export interface BookingData {
   description?: string;
 }
 
+export interface BookingHistoryItem {
+  bookingId: string;
+  roomId: string;
+  roomName: string;
+  address: string;
+  numGuest: number;
+  checkin: string;
+  checkout: string;
+  numNight: number;
+  totalPrice: number;
+  imgUrl?: string;
+}
+
 export interface BookingDetail {
   bookingId: string | number;
   bookingCode: string;

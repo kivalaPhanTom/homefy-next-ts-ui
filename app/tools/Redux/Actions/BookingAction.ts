@@ -3,3 +3,4 @@ import * as ACTION_TYPES from '../ActionTypes/BookingType'
 
 export const createBooking: ReturnType<typeof createAction> = createAction(ACTION_TYPES.CREATE_BOOKING)
 export const getBooking: ReturnType<typeof createAction> = createAction(ACTION_TYPES.GET_BOOKING)
+export const getBookingHistory: ReturnType<typeof createAction> = createAction(ACTION_TYPES.GET_BOOKING_HISTORY)

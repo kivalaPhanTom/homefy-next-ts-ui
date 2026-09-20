@@ -1,55 +1,55 @@
 'use client'
 
-import { useState } from 'react'
-import Image, { type StaticImageData } from 'next/image'
+import { useEffect, useMemo, useState } from 'react'
+import Image from 'next/image'
+import { useDispatch } from 'react-redux'
 import { CiLocationOn, CiUser } from 'react-icons/ci'
 import { IoBedOutline, IoMoonOutline } from 'react-icons/io5'
 import { AiFillCheckCircle } from 'react-icons/ai'
 import styles from './page.module.scss'
 
-import room1 from '@/assets/demo-room.jpeg'
-import room2 from '@/assets/demo-room2.jpg'
-import room3 from '@/assets/demo-room3.jpg'
+import noImage from '@/assets/empty.webp'
+import { formatNumber } from '@/common/FunctionCommon/FunctionCommon'
+import { getBookingHistory } from '@/Redux/Actions/BookingAction'
+import { useAppSelector } from '@/Redux/store'
+import type { BookingHistoryItem } from '@/tools/common/types/BookingType'
 
 interface BookingBadge {
   label: string
   date?: string
 }
 
-interface BookingBase {
+interface Booking {
   id: string
   name: string
   location: string
-  image: StaticImageData
+  image: string
   price: string
   status: string
+  checkIn: string
+  checkOut: string
+  numNight: number
+  meta: string[]
   badge?: BookingBadge
 }
-
-interface StackedDateBooking extends BookingBase {
-  layout: 'stacked'
-  checkInLabel: string
-  dateLines: string[]
-  meta: string[]
-}
-
-interface SplitDateBooking extends BookingBase {
-  layout: 'split'
-  columns: {
-    label: string
-    value: string
-  }[]
-}
-
-type Booking = StackedDateBooking | SplitDateBooking
 
 const TABS = ['Sắp tới', 'Đã hoàn thành', 'Đã hủy'] as const
 
 type Tab = (typeof TABS)[number]
 
-const TAB_BADGES: Partial<Record<Tab, number>> = {
-  'Sắp tới': 3,
+const TAB_STATUS: Record<Tab, string> = {
+  'Sắp tới': 'UPCOMING',
+  'Đã hoàn thành': 'COMPLETED',
+  'Đã hủy': 'CANCELLED',
 }
+
+const TAB_STATUS_LABEL: Record<Tab, string> = {
+  'Sắp tới': 'Đã xác nhận',
+  'Đã hoàn thành': 'Hoàn thành',
+  'Đã hủy': 'Đã hủy',
+}
+
+const WEEKDAYS = ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy']
 
 const META_ICONS = [
   <CiUser key='guest' />,
@@ -57,54 +57,38 @@ const META_ICONS = [
   <IoMoonOutline key='night' />,
 ]
 
-const BOOKINGS: Booking[] = [
-  {
-    id: 'BK-001',
-    name: 'Room 4',
-    location: 'Nha Trang, Việt Nam',
-    image: room1,
-    price: '1.130.000đ',
-    status: 'Đã xác nhận - Miễn phí hủy trước 02/10/2026',
-    layout: 'stacked',
-    checkInLabel: 'Check-in',
-    dateLines: ['05/10/2026 (Thứ Bảy)', '06/10/2026 (Chủ Nhật)'],
-    meta: ['1 khách', '1 phòng', '1 đêm'],
-  },
-  {
-    id: 'BK-002',
-    name: 'Ocean View Suite',
-    location: 'Đà Nẵng, Việt Nam',
-    image: room2,
-    price: '3.400.000đ',
-    status: 'Đã xác nhận',
-    badge: { label: 'Upcoming', date: '25/10/2025' },
-    layout: 'split',
-    columns: [
-      { label: 'Check-in', value: '25/10/2026' },
-      { label: 'Check-out', value: '27/10/2026 (2 đêm)' },
-    ],
-  },
-  {
-    id: 'BK-003',
-    name: 'Deluxe King Room',
-    location: 'Hà Nội, Việt Nam',
-    image: room3,
-    price: '1.850.000đ',
-    status: 'Đã xác nhận - Thanh toán khi nhận phòng',
-    badge: { label: 'Upcoming' },
-    layout: 'split',
-    columns: [
-      { label: 'Check-in', value: '15/11/2026' },
-      { label: 'Check-out', value: '16/11/2026 (1 đêm)' },
-    ],
-  },
-]
+function formatDateWithWeekday(date: string): string {
+  const [day, month, year] = date.split('/').map(Number)
+  if (!day || !month || !year) return date
+  const weekday = WEEKDAYS[new Date(Date.UTC(year, month - 1, day)).getUTCDay()]
+  return `${date} (${weekday})`
+}
 
-function BookingCard({ booking }: { booking: Booking }) {
+function formatPrice(price: number): string {
+  return `${formatNumber(price).replace(/,/g, '.')}đ`
+}
+
+function mapBooking(booking: BookingHistoryItem, tab: Tab): Booking {
+  return {
+    id: booking.bookingId,
+    name: booking.roomName,
+    location: booking.address,
+    image: booking.imgUrl && booking.imgUrl.trim() ? booking.imgUrl : noImage.src,
+    price: formatPrice(booking.totalPrice),
+    status: TAB_STATUS_LABEL[tab],
+    checkIn: booking.checkin,
+    checkOut: booking.checkout,
+    numNight: booking.numNight,
+    meta: [`${booking.numGuest} khách`, '1 phòng', `${booking.numNight} đêm`],
+    badge: tab === 'Sắp tới' ? { label: 'Upcoming', date: booking.checkin } : undefined,
+  }
+}
+
+function BookingCard({ booking, showCancel }: { booking: Booking; showCancel: boolean }) {
   return (
     <div className={styles.card}>
       <div className={styles.imageWrap}>
-        <Image src={booking.image} alt={booking.name} fill className={styles.image} sizes='200px' />
+        <Image src={booking.image} alt={booking.name} fill className={styles.image} sizes='200px' unoptimized />
         {booking.badge && (
           <div className={styles.badges}>
             <span className={styles.badgeUpcoming}>{booking.badge.label}</span>
@@ -122,35 +106,27 @@ function BookingCard({ booking }: { booking: Booking }) {
               {booking.location}
             </p>
 
-            {booking.layout === 'stacked' ? (
-              <>
-                <div className={styles.dateRow}>
-                  <span className={styles.dateLabel}>{booking.checkInLabel}</span>
-                  <div className={styles.dateLines}>
-                    {booking.dateLines.map((line) => (
-                      <strong key={line}>{line}</strong>
-                    ))}
-                  </div>
-                </div>
-                <div className={styles.meta}>
-                  {booking.meta.map((item, index) => (
-                    <span key={item}>
-                      {META_ICONS[index]}
-                      {item}
-                    </span>
-                  ))}
-                </div>
-              </>
-            ) : (
-              <div className={styles.dateRow}>
-                {booking.columns.map((col) => (
-                  <div key={col.label}>
-                    <span className={styles.dateLabel}>{col.label}</span>
-                    <strong className={styles.dateValue}>{col.value}</strong>
-                  </div>
-                ))}
+            <div className={styles.dateRow}>
+              <div>
+                <span className={styles.dateLabel}>Check-in</span>
+                <strong className={styles.dateValue}>{formatDateWithWeekday(booking.checkIn)}</strong>
               </div>
-            )}
+              <div>
+                <span className={styles.dateLabel}>Check-out</span>
+                <strong className={styles.dateValue}>
+                  {formatDateWithWeekday(booking.checkOut)} ({booking.numNight} đêm)
+                </strong>
+              </div>
+            </div>
+
+            <div className={styles.meta}>
+              {booking.meta.map((item, index) => (
+                <span key={item}>
+                  {META_ICONS[index]}
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
 
           <div className={styles.price}>{booking.price}</div>
@@ -162,7 +138,7 @@ function BookingCard({ booking }: { booking: Booking }) {
             <span>{booking.status}</span>
           </div>
           <button className={styles.detailBtn}>Xem chi tiết</button>
-          <button className={styles.cancelBtn}>Hủy phòng</button>
+          {showCancel && <button className={styles.cancelBtn}>Hủy phòng</button>}
         </div>
       </div>
     </div>
@@ -170,7 +146,33 @@ function BookingCard({ booking }: { booking: Booking }) {
 }
 
 function Page() {
+  const dispatch = useDispatch()
   const [activeTab, setActiveTab] = useState<Tab>('Sắp tới')
+  const bookingHistory = useAppSelector((state) => state.bookingSlice?.bookingHistory ?? {})
+
+  useEffect(() => {
+    TABS.forEach((tab) => {
+      dispatch(getBookingHistory({ status: TAB_STATUS[tab] }))
+    })
+  }, [dispatch])
+
+  const statusKey = TAB_STATUS[activeTab]
+  const tabData = bookingHistory[statusKey]
+  const tabBookings = useMemo(() => (Array.isArray(tabData) ? tabData : []), [tabData])
+
+  const mappedBookings = useMemo(
+    () => tabBookings.map((booking) => mapBooking(booking, activeTab)),
+    [tabBookings, activeTab]
+  )
+
+  const tabBadges = useMemo(() => {
+    const badges: Partial<Record<Tab, number>> = {}
+    TABS.forEach((tab) => {
+      const count = bookingHistory[TAB_STATUS[tab]]?.length ?? 0
+      if (count > 0) badges[tab] = count
+    })
+    return badges
+  }, [bookingHistory])
 
   return (
     <main className={styles.page}>
@@ -185,15 +187,15 @@ function Page() {
             onClick={() => setActiveTab(tab)}
           >
             {tab}
-            {TAB_BADGES[tab] && <span className={styles.tabBadge}>{TAB_BADGES[tab]}</span>}
+            {tabBadges[tab] && <span className={styles.tabBadge}>{tabBadges[tab]}</span>}
           </button>
         ))}
       </div>
 
-      {activeTab === 'Sắp tới' ? (
+      {tabData === undefined ? null : mappedBookings.length > 0 ? (
         <div className={styles.cardList}>
-          {BOOKINGS.map((booking) => (
-            <BookingCard key={booking.id} booking={booking} />
+          {mappedBookings.map((booking) => (
+            <BookingCard key={booking.id} booking={booking} showCancel={activeTab === 'Sắp tới'} />
           ))}
         </div>
       ) : (
