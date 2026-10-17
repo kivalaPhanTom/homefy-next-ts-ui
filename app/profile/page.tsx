@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   HiOutlineUser,
   HiOutlineCamera,
@@ -10,6 +10,10 @@ import {
 } from 'react-icons/hi2'
 import { CiMail, CiPhone } from 'react-icons/ci'
 import { useAppSelector } from '@/Redux/store'
+import { Service } from '@/Services/UserServices'
+import { Notification } from '@/common/FunctionCommon/Notification'
+import { handleCheckUserTokenExits } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
+import DeletePopup from '@/components/DeletePopup/DeletePopup'
 import styles from './page.module.scss'
 
 interface ProfileForm {
@@ -24,14 +28,38 @@ interface ProfileForm {
 
 const GENDERS = ['Nam', 'Nữ', 'Khác']
 
+const GENDER_API_MAP: Record<string, string> = {
+  Nam: 'MALE',
+  Nữ: 'FEMALE',
+  Khác: 'OTHER',
+}
+
+const GENDER_LABEL_MAP: Record<string, string> = {
+  MALE: 'Nam',
+  FEMALE: 'Nữ',
+  OTHER: 'Khác',
+}
+
+const formatDateForApi = (date: string) => {
+  const [year, month, day] = date.split('-')
+  return year && month && day ? `${day}-${month}-${year}` : date
+}
+
+const parseDateFromApi = (date: string) => {
+  const [day, month, year] = (date ?? '').split('-')
+  return day && month && year ? `${year}-${month}-${day}` : ''
+}
+
+const PASSWORD_DEBOUNCE_MS = 2000
+
 const INITIAL_FORM: ProfileForm = {
-  lastName: 'Nguyễn Văn',
-  firstName: 'An',
-  email: 'nguyenvanan@gmail.com',
-  phone: '0912 345 678',
-  dateOfBirth: '1998-06-15',
+  lastName: '',
+  firstName: '',
+  email: '',
+  phone: '',
+  dateOfBirth: '',
   gender: 'Nam',
-  address: 'Quận 1, TP. Hồ Chí Minh',
+  address: '',
 }
 
 type ProfileTab = 'personal' | 'password'
@@ -61,6 +89,20 @@ function Page() {
   const [passwords, setPasswords] = useState({ current: '', next: '', confirm: '' })
   const [activeTab, setActiveTab] = useState<ProfileTab>('personal')
   const [notice, setNotice] = useState<Notice>(null)
+  const [isSaving, setIsSaving] = useState(false)
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true)
+  const [isOpenConfirmPassword, setIsOpenConfirmPassword] = useState(false)
+  const [isChangingPassword, setIsChangingPassword] = useState(false)
+  const [touchedPasswords, setTouchedPasswords] = useState({
+    current: false,
+    next: false,
+    confirm: false,
+  })
+  const [debouncedPasswords, setDebouncedPasswords] = useState({ next: '', confirm: '' })
+
+  const isPasswordsSettled =
+    passwords.next === debouncedPasswords.next &&
+    passwords.confirm === debouncedPasswords.confirm
 
   const fullName = useMemo(
     () => `${form.lastName} ${form.firstName}`.trim(),
@@ -68,35 +110,132 @@ function Page() {
   )
   const displayName = usernameLogin || fullName || 'Người dùng HOMEFY'
 
+  const currentPasswordError =
+    touchedPasswords.current && !passwords.current
+      ? 'Vui lòng nhập mật khẩu hiện tại.'
+      : ''
+  const newPasswordError =
+    touchedPasswords.next && !passwords.next ? 'Vui lòng nhập mật khẩu mới.' : ''
+  const confirmPasswordError = !touchedPasswords.confirm
+    ? ''
+    : !passwords.confirm
+      ? 'Vui lòng xác nhận mật khẩu mới.'
+      : isPasswordsSettled && passwords.confirm !== passwords.next
+        ? 'Mật khẩu xác nhận không khớp.'
+        : ''
+
   const handleFormChange = (key: keyof ProfileForm, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }))
   }
 
   const handlePasswordChange = (key: keyof typeof passwords, value: string) => {
     setPasswords((prev) => ({ ...prev, [key]: value }))
+    setTouchedPasswords((prev) => ({ ...prev, [key]: true }))
   }
 
-  const handlePersonalSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedPasswords({ next: passwords.next, confirm: passwords.confirm })
+    }, PASSWORD_DEBOUNCE_MS)
+    return () => clearTimeout(timer)
+  }, [passwords.next, passwords.confirm])
+
+  useEffect(() => {
+    let cancelled = false
+    const fetchProfile = async () => {
+      if (!handleCheckUserTokenExits()) {
+        setIsLoadingProfile(false)
+        return
+      }
+      try {
+        const res = await Service.getUserProfileApi()
+        const profile = res?.data?.result
+        if (!profile || cancelled) return
+        const nextForm: ProfileForm = {
+          lastName: profile.lastName ?? '',
+          firstName: profile.firstName ?? '',
+          email: profile.email ?? '',
+          phone: profile.phoneNumber ?? '',
+          dateOfBirth: parseDateFromApi(profile.birthdate),
+          gender: GENDER_LABEL_MAP[profile.gender ?? ''] ?? 'Nam',
+          address: profile.address ?? '',
+        }
+        setForm(nextForm)
+        setSavedForm(nextForm)
+      } catch {
+        if (!cancelled) {
+          Notification.openNotificationError('Không thể tải thông tin hồ sơ người dùng.')
+        }
+      } finally {
+        if (!cancelled) setIsLoadingProfile(false)
+      }
+    }
+    fetchProfile()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  const handlePersonalSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setNotice(null)
-    setSavedForm(form)
-    setNotice({ type: 'success', message: 'Thông tin cá nhân đã được cập nhật.' })
+    setIsSaving(true)
+    try {
+      await Service.updateUserProfileApi({
+        email: form.email,
+        lastName: form.lastName,
+        firstName: form.firstName,
+        birthDate: formatDateForApi(form.dateOfBirth),
+        phoneNumber: form.phone,
+        gender: GENDER_API_MAP[form.gender] ?? 'OTHER',
+        address: form.address,
+      })
+      setSavedForm(form)
+      Notification.openNotificationSuccess('Thông tin cá nhân đã được cập nhật.')
+    } catch (error) {
+      const message =
+        (error as { response?: { data?: { message?: string } } })?.response?.data?.message
+      Notification.openNotificationError(message || 'Cập nhật thông tin cá nhân thất bại.')
+    } finally {
+      setIsSaving(false)
+    }
   }
 
   const handlePasswordSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     setNotice(null)
-    if (passwords.next.length < 8) {
-      setNotice({ type: 'error', message: 'Mật khẩu mới cần có ít nhất 8 ký tự.' })
+    if (!passwords.current.trim() || !passwords.next.trim() || !passwords.confirm.trim()) {
+      setNotice({ type: 'error', message: 'Vui lòng nhập đầy đủ các trường mật khẩu.' })
       return
     }
     if (passwords.next !== passwords.confirm) {
       setNotice({ type: 'error', message: 'Mật khẩu xác nhận không khớp.' })
       return
     }
+    setIsOpenConfirmPassword(true)
+  }
 
-    setPasswords({ current: '', next: '', confirm: '' })
-    setNotice({ type: 'success', message: 'Mật khẩu đã được thay đổi.' })
+  const handleConfirmChangePassword = async () => {
+    setIsChangingPassword(true)
+    try {
+      await Service.changePasswordApi({
+        current_password: passwords.current,
+        new_password: passwords.next,
+      })
+      setIsOpenConfirmPassword(false)
+      setPasswords({ current: '', next: '', confirm: '' })
+      setTouchedPasswords({ current: false, next: false, confirm: false })
+      Notification.openNotificationSuccess('Mật khẩu đã được thay đổi.')
+    } catch (error) {
+      setIsOpenConfirmPassword(false)
+      const data = (error as { response?: { data?: { code?: number; message?: string } } })
+        ?.response?.data
+      const message =
+        data?.code === 1006 ? 'Mật khẩu hiện tại chưa đúng' : data?.message
+      Notification.openNotificationError(message || 'Đổi mật khẩu thất bại.')
+    } finally {
+      setIsChangingPassword(false)
+    }
   }
 
   return (
@@ -268,8 +407,8 @@ function Page() {
           <button className={styles.cancelBtn} type='button' onClick={() => setForm(savedForm)}>
             Hủy
           </button>
-          <button className={styles.saveBtn} type='submit'>
-            Lưu thông tin
+          <button className={styles.saveBtn} type='submit' disabled={isSaving || isLoadingProfile}>
+            {isSaving ? 'Đang lưu...' : 'Lưu thông tin'}
           </button>
         </div>
         </form>
@@ -287,35 +426,42 @@ function Page() {
           <div className={styles.formGrid}>
             <Field label='Mật khẩu hiện tại' fullWidth>
               <input
-                className={styles.input}
+                className={`${styles.input} ${currentPasswordError ? styles.inputError : ''}`}
                 type='password'
                 value={passwords.current}
                 required
                 onChange={(e) => handlePasswordChange('current', e.target.value)}
                 placeholder='Nhập mật khẩu hiện tại'
               />
+              {currentPasswordError && (
+                <p className={styles.fieldErrorText}>{currentPasswordError}</p>
+              )}
             </Field>
 
             <Field label='Mật khẩu mới'>
               <input
-                className={styles.input}
+                className={`${styles.input} ${newPasswordError ? styles.inputError : ''}`}
                 type='password'
                 value={passwords.next}
                 required
                 onChange={(e) => handlePasswordChange('next', e.target.value)}
                 placeholder='Nhập mật khẩu mới'
               />
+              {newPasswordError && <p className={styles.fieldErrorText}>{newPasswordError}</p>}
             </Field>
 
             <Field label='Xác nhận mật khẩu mới'>
               <input
-                className={styles.input}
+                className={`${styles.input} ${confirmPasswordError ? styles.inputError : ''}`}
                 type='password'
                 value={passwords.confirm}
                 required
                 onChange={(e) => handlePasswordChange('confirm', e.target.value)}
                 placeholder='Nhập lại mật khẩu mới'
               />
+              {confirmPasswordError && (
+                <p className={styles.fieldErrorText}>{confirmPasswordError}</p>
+              )}
             </Field>
           </div>
 
@@ -325,7 +471,14 @@ function Page() {
           </div>
         </section>
         <div className={styles.actionBar}>
-          <button className={styles.cancelBtn} type='button' onClick={() => setPasswords({ current: '', next: '', confirm: '' })}>
+          <button
+            className={styles.cancelBtn}
+            type='button'
+            onClick={() => {
+              setPasswords({ current: '', next: '', confirm: '' })
+              setTouchedPasswords({ current: false, next: false, confirm: false })
+            }}
+          >
             Xóa nội dung
           </button>
           <button className={styles.saveBtn} type='submit'>
@@ -334,6 +487,16 @@ function Page() {
         </div>
         </form>
       )}
+
+      <DeletePopup
+        isOpen={isOpenConfirmPassword}
+        title='Bạn có chắc muốn đổi mật khẩu?'
+        subtitle='Sau khi đổi mật khẩu thành công, bạn sẽ dùng mật khẩu mới cho các lần đăng nhập tiếp theo.'
+        setOpenPopup={setIsOpenConfirmPassword}
+        handleOk={handleConfirmChangePassword}
+        isLoading={isChangingPassword}
+        textOk='Xác nhận'
+      />
     </main>
   )
 }

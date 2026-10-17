@@ -10,10 +10,11 @@ interface DeletePopupType {
     subtitle: string | null,
     setOpenPopup: (value: boolean) => void,
     handleOk: () => void,
-    isLoading: boolean
+    isLoading: boolean,
+    textOk?: string
 }
 function DeletePopup(props: DeletePopupType) {
-    const { isOpen, title, subtitle, setOpenPopup, handleOk, isLoading } = props
+    const { isOpen, title, subtitle, setOpenPopup, handleOk, isLoading, textOk = 'Delete' } = props
     const handleCancel = () => {
         setOpenPopup(false)
     }
@@ -47,7 +48,7 @@ function DeletePopup(props: DeletePopupType) {
                             <div className={styles['listBtnAction']}>
                                 <div className={styles['listBtnActionContainer']}>
                                     <Button className={styles['btnItem'] + ' ' + styles['cancelBtn']} onClick={handleCancel}>Cancel</Button>
-                                    <Button onClick={handleOk} className={styles['btnItem'] + ' ' + styles['saveAndBackBtn']}> {isLoading ? <WavyLoading /> : 'Delete'}</Button>
+                                    <Button onClick={handleOk} className={styles['btnItem'] + ' ' + styles['saveAndBackBtn']}> {isLoading ? <WavyLoading /> : textOk}</Button>
                                 </div>
                             </div>
                         </div>

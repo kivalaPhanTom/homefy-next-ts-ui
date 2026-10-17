@@ -7,8 +7,9 @@ import { Service } from '@/Services/UserServices'
 import { saveLocalStorage, calculateExpiredTime } from '@/common/FunctionCommon/FunctionCommon'
 import { USER_NAME_IN_LOCALSTORAGE, TOKEN_IN_LOCALSTORAGE, REFRESH_TOKEN_IN_LOCALSTORAGE } from '@/common/ParamsCommon/ParamsCommon'
 import { Notification } from '@/common/FunctionCommon/Notification'
-import { handleError } from '@/common/FunctionCommon/FunctionCommon'
 import { authenNextServer } from '@/Services/NextAuthenServer'
+
+const LOGIN_ERROR_MESSAGE = 'Thông tin đăng nhập không chính xác. Vui lòng kiểm tra lại!'
 
 function* handleLoginApi(action:any):SagaIterator {
   const { data, router } = action.payload
@@ -36,29 +37,17 @@ function* handleLoginApi(action:any):SagaIterator {
       yield put(setIsLogin(true))
     } else {
       yield put(setLoading(false))
-      Notification.openNotificationError(res.data.message)
+      Notification.openNotificationError(LOGIN_ERROR_MESSAGE)
       yield put(setIsLogin(false))
     }
-  } catch (error) {
-    const payloadError = {
-      error: error,
-      functionDispatch: null,
-      actionPayload: null,
-      dispatchLoading: setLoading
-    }
-    yield* handleEror(payloadError)
-    // yield put(setLoading(false))
-    // yield put(setIsLogin(false))
+  } catch {
+    Notification.openNotificationError(LOGIN_ERROR_MESSAGE)
+    yield put(setLoading(false))
   }
 }
 
 function* loginSaga() {
   yield takeLatest(loginAction, handleLoginApi)
-}
-function* handleEror(payloadError:any) {
-  const { error } = payloadError
-  handleError(error)
-  yield put(setLoading(false))
 }
 export function* loginSagaList() {
   yield all([
