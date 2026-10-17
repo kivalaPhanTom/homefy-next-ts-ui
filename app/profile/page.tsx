@@ -11,6 +11,7 @@ import {
 import { CiMail, CiPhone } from 'react-icons/ci'
 import { useAppSelector } from '@/Redux/store'
 import { Service } from '@/Services/UserServices'
+import { Service as BookingService } from '@/Services/BookingServices'
 import { Notification } from '@/common/FunctionCommon/Notification'
 import { handleCheckUserTokenExits } from '@/common/FunctionCommon/FunctionCommonForClientComponent'
 import DeletePopup from '@/components/DeletePopup/DeletePopup'
@@ -99,6 +100,8 @@ function Page() {
     confirm: false,
   })
   const [debouncedPasswords, setDebouncedPasswords] = useState({ next: '', confirm: '' })
+  const [memberSince, setMemberSince] = useState('')
+  const [bookingStats, setBookingStats] = useState({ upcoming: 0, completed: 0 })
 
   const isPasswordsSettled =
     passwords.next === debouncedPasswords.next &&
@@ -162,6 +165,7 @@ function Page() {
         }
         setForm(nextForm)
         setSavedForm(nextForm)
+        setMemberSince(profile.createdDate ?? '')
       } catch {
         if (!cancelled) {
           Notification.openNotificationError('Không thể tải thông tin hồ sơ người dùng.')
@@ -171,6 +175,32 @@ function Page() {
       }
     }
     fetchProfile()
+    return () => {
+      cancelled = true
+    }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const fetchBookingStats = async () => {
+      if (!handleCheckUserTokenExits()) return
+      try {
+        const [upcomingRes, completedRes] = await Promise.all([
+          BookingService.getBookingHistory({ status: 'UPCOMING' }),
+          BookingService.getBookingHistory({ status: 'COMPLETED' }),
+        ])
+        if (cancelled) return
+        const upcoming = upcomingRes?.data?.result?.data
+        const completed = completedRes?.data?.result?.data
+        setBookingStats({
+          upcoming: Array.isArray(upcoming) ? upcoming.length : 0,
+          completed: Array.isArray(completed) ? completed.length : 0,
+        })
+      } catch {
+        if (!cancelled) setBookingStats({ upcoming: 0, completed: 0 })
+      }
+    }
+    fetchBookingStats()
     return () => {
       cancelled = true
     }
@@ -271,18 +301,20 @@ function Page() {
               <HiOutlineShieldCheck />
               Đã xác minh
             </span>
-            <span className={styles.memberSince}>Thành viên từ 10/2024</span>
+            <span className={styles.memberSince}>
+              {memberSince ? `Thành viên từ ${memberSince}` : 'Thành viên HOMEFY'}
+            </span>
           </div>
         </div>
 
         <div className={styles.summaryStats}>
           <div className={styles.statItem}>
-            <strong>8</strong>
+            <strong>{bookingStats.upcoming}</strong>
             <span>Đặt phòng</span>
           </div>
           <div className={styles.statDivider} />
           <div className={styles.statItem}>
-            <strong>3</strong>
+            <strong>{bookingStats.completed}</strong>
             <span>Đã hoàn thành</span>
           </div>
         </div>
