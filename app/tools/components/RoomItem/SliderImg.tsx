@@ -1,93 +1,79 @@
 'use client'
-import { Carousel } from 'react-responsive-carousel';
+
+import { useState } from 'react'
+import { Carousel } from 'react-responsive-carousel'
 import Image from 'next/image'
 import Link from 'next/link'
-import { IoIosArrowBack } from "react-icons/io";
-import { IoIosArrowForward } from "react-icons/io";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io'
+import 'react-responsive-carousel/lib/styles/carousel.min.css'
 import styles from './RoomItem.module.scss'
-import img1 from '@/assets/demo-room.jpeg'
-import img2 from '@/assets/demo-room2.jpg'
-import img3 from '@/assets/demo-room3.jpg'
 import noImage from '@/assets/empty.webp'
 
-interface dataObbj {
-    id: string;
-    path: string;
+interface RoomImage {
+    id: string
+    path: string
 }
+
 interface SliderImgProps {
-    data: dataObbj[];
+    data: RoomImage[]
+    href?: string
+    alt?: string
 }
 
-function SliderImg(props: SliderImgProps) {
-    const { data } = props
-  
+function RoomPhoto({ path, alt }: { path: string; alt: string }) {
+    const source = typeof path === 'string' ? path.trim() : ''
+    const [failedSource, setFailedSource] = useState<string | null>(null)
+    const hasSource = Boolean(source) && failedSource !== source
+
     return (
-        <Carousel
-            renderIndicator={() => null}
-            showStatus={false}
-            showIndicators={false}
-            infiniteLoop
-            showArrows={data.length > 1}
-            renderArrowNext={(clickHandler) => {
-                if (data.length > 1) {
-                    return (
-                        <div className={styles.next}>
-                            <IoIosArrowForward
-                                onClick={clickHandler}
-                                className={styles.iconSlide}
-                            />
-                        </div>
-                    );
-                }
+        <Image
+            src={hasSource ? source : noImage}
+            alt={hasSource ? alt : 'Chưa có ảnh phòng'}
+            fill
+            sizes='(max-width: 768px) 100vw, 33vw'
+            unoptimized
+            className={styles.roomimg}
+            onError={hasSource ? () => setFailedSource(source) : undefined}
+        />
+    )
+}
 
-                return null;
-            }}
-            renderArrowPrev={(clickHandler) => {
-                if (data.length > 1) {
-                    return (
-                        <div className={styles.prev}>
-                            <IoIosArrowBack
-                                onClick={clickHandler}
-                                className={styles.iconSlide}
-                            />
-                        </div>
-                    );
-                }
+function SliderImg({ data, href, alt = 'Ảnh phòng' }: SliderImgProps) {
+    const images = data.length > 0 ? data : [{ id: 'empty', path: '' }]
 
-                return null;
-            }}
-        >
-            {data.length > 0
-                ? data.map((e) => {
-                    const imageSrc = e.path && e.path.trim() ? e.path : noImage;
-
-                    return (
-                        <div key={e.id} className={styles.carouselItem}>
-                            <Image
-                                src={imageSrc}
-                                alt="room img"
-                                fill
-                                sizes="(max-width: 768px) 100vw, 33vw"
-                                unoptimized
-                                className={styles.roomimg}
-                            />
-                        </div>
-                    );
-                })
-                : [
-                    <div key="empty" className={styles.carouselItem}>
-                        <Image
-                            src={noImage}
-                            alt="room img"
-                            fill
-                            sizes="(max-width: 768px) 100vw, 33vw"
-                            unoptimized
-                            className={styles.roomimg}
-                        />
-                    </div>,
-                ]}
-        </Carousel>
+    return (
+        <div className={styles.photoSlider}>
+            <Carousel
+                showStatus={false}
+                showIndicators={false}
+                showThumbs={false}
+                infiniteLoop
+                showArrows={images.length > 1}
+                labels={{ leftArrow: 'Ảnh trước', rightArrow: 'Ảnh tiếp theo', item: 'Ảnh phòng' }}
+                renderArrowNext={(clickHandler) => images.length > 1 ? (
+                    <button type='button' className={styles.next} aria-label='Ảnh tiếp theo' onClick={clickHandler}>
+                        <IoIosArrowForward className={styles.iconSlide} />
+                    </button>
+                ) : null}
+                renderArrowPrev={(clickHandler) => images.length > 1 ? (
+                    <button type='button' className={styles.prev} aria-label='Ảnh trước' onClick={clickHandler}>
+                        <IoIosArrowBack className={styles.iconSlide} />
+                    </button>
+                ) : null}
+            >
+                {images.map((image, index) => (
+                    <div key={image.id} className={styles.carouselItem}>
+                        {href ? (
+                            <Link href={href} className={styles.photoLink} aria-label={alt}>
+                                <RoomPhoto path={image.path} alt={`${alt} - ảnh ${index + 1}`} />
+                            </Link>
+                        ) : (
+                            <RoomPhoto path={image.path} alt={`${alt} - ảnh ${index + 1}`} />
+                        )}
+                    </div>
+                ))}
+            </Carousel>
+        </div>
     )
 }
 

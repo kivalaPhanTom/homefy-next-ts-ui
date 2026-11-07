@@ -263,3 +263,42 @@
         height: 15rem;
     }
 }
+.photoSlider {
+    width: 100%;
+    height: 100%;
+    border-radius: 0 0 28px;
+    overflow: hidden;
+
+    :global(.carousel-root),
+    :global(.carousel.carousel-slider),
+    :global(.slider-wrapper),
+    :global(.slider),
+    :global(.slide) {
+        height: 100%;
+    }
+
+    .next,
+    .prev {
+        border: none;
+        padding: 0;
+        background: transparent;
+        opacity: 1;
+        z-index: 5;
+
+        &:focus-visible {
+            outline: 2px solid common.$main-color4;
+            outline-offset: -4px;
+        }
+    }
+
+    .iconSlide {
+        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.4));
+    }
+}
+
+.photoLink {
+    display: block;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}

@@ -1,41 +1,31 @@
 'use client'
 
 import { Suspense, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import { ConfigProvider, InputNumber, Select, Slider } from 'antd'
+import { useRouter, useSearchParams } from 'next/navigation'
+import dynamic from 'next/dynamic'
+import SliderImg from '@/components/RoomItem/SliderImg'
+import Link from 'next/link'
+import dayjs, { type Dayjs } from 'dayjs'
+import viVN from 'antd/locale/vi_VN'
+import 'dayjs/locale/vi'
+import { Alert, ConfigProvider, DatePicker, InputNumber, Modal, Pagination, Popover, Select, Slider, Spin } from 'antd'
 import { CiLocationOn, CiUser, CiCalendar, CiSettings } from 'react-icons/ci'
-import { HiOutlineHome, HiOutlineArrowsUpDown, HiChevronDown, HiCheck } from 'react-icons/hi2'
+import { HiOutlineArrowsUpDown, HiChevronDown, HiCheck } from 'react-icons/hi2'
 import { LiaBathSolid } from 'react-icons/lia'
 import { IoHeart, IoHeartOutline } from 'react-icons/io5'
 import { useGetFurnituresQuery } from '@/RTK_Query/Listing_Query'
+import { useSearchRoomsQuery } from '@/RTK_Query/RoomSearch_Query'
+import { REGIONS } from '@/common/destinations'
+import { buildRoomSearchRequest, type RoomSearchRequest, type SearchRoom } from '@/Services/RoomSearchService'
+import { bathroom_type, bed_size } from '@/common/ParamsCommon/ParamsCommon'
 import styles from './page.module.scss'
 
-interface SearchRoom {
-  id: number
-  gradient: string
-  emoji: string
-  typeBadge: string
-  price: number
-  bed: string
-  address: string
-  available: string
-  type: string
-  bath: string
-  sleeps: number
-  bedrooms: number
-  bathrooms: number
-}
+const SearchResultsMap = dynamic(() => import('./SearchResultsMap'), {
+  ssr: false,
+  loading: () => <div className={styles.mapEmpty} role='status'><Spin /><p>Đang tải bản đồ...</p></div>,
+})
 
-const ROOMS: SearchRoom[] = [
-  { id: 1, gradient: 'g1', emoji: '🏖️', typeBadge: 'Homestay', price: 1250000, bed: 'King bed', address: 'Sơn Trà, Đà Nẵng', available: '24/10', type: 'homestay', bath: 'Private bath', sleeps: 2, bedrooms: 2, bathrooms: 2 },
-  { id: 2, gradient: 'g2', emoji: '🏢', typeBadge: 'Căn hộ', price: 980000, bed: 'Queen bed', address: 'Mỹ An, Ngũ Hành Sơn', available: '24/10', type: 'apartment', bath: 'Private bath', sleeps: 2, bedrooms: 1, bathrooms: 1 },
-  { id: 3, gradient: 'g3', emoji: '🛏️', typeBadge: 'Nhà riêng', price: 750000, bed: 'Double bed', address: 'Hải Châu, Đà Nẵng', available: '25/10', type: 'private house', bath: 'Private bath', sleeps: 2, bedrooms: 1, bathrooms: 1 },
-  { id: 4, gradient: 'g4', emoji: '🌴', typeBadge: 'Biệt thự', price: 1690000, bed: 'King bed', address: 'An Thượng, Sơn Trà', available: '24/10', type: 'private villa', bath: 'Private bath', sleeps: 4, bedrooms: 2, bathrooms: 2 },
-  { id: 5, gradient: 'g5', emoji: '🏡', typeBadge: 'Homestay', price: 620000, bed: 'Single bed', address: 'Hội An, Quảng Nam', available: '26/10', type: 'homestay', bath: 'Shared bath', sleeps: 1, bedrooms: 1, bathrooms: 1 },
-  { id: 6, gradient: 'g6', emoji: '🌇', typeBadge: 'Căn hộ', price: 2400000, bed: 'King bed', address: 'Bắc Mỹ An, Ngũ Hành Sơn', available: '24/10', type: 'apartment', bath: 'Private bath', sleeps: 3, bedrooms: 2, bathrooms: 2 },
-]
-
-const BEDROOM_OPTIONS = ['1+', '2+', '3+', '4+']
+const BED_OPTIONS = ['1+', '2+', '3+', '4+']
 // const RATING_OPTIONS = ['★ 5', '★ 4+', '★ 3+']
 const DEFAULT_CITY = 'Đà Nẵng'
 
@@ -43,12 +33,14 @@ const GUEST_OPTIONS = [
   { label: '1+', min: 1 },
   { label: '2+', min: 2 },
   { label: '3+', min: 3 },
+  { label: '4+', min: 4 },
   { label: '5+', min: 5 },
 ]
 const GUEST_LABEL_BY_PARAM: Record<string, string> = {
   '1': '1+',
   '2': '2+',
   '3': '3+',
+  '4': '4+',
   '5': '5+',
 }
 
@@ -84,70 +76,112 @@ function toggleInSet(set: Set<string>, value: string): Set<string> {
 function SearchCard({ room, liked, onToggleLike }: { room: SearchRoom; liked: boolean; onToggleLike: () => void }) {
   return (
     <div className={styles.card}>
-      <div className={`${styles.img} ${styles[room.gradient]}`}>
-        {room.emoji}
-        <button
-          type='button'
-          aria-label='Yêu thích'
-          className={`${styles.heart} ${liked ? styles.heartOn : ''}`}
-          onClick={onToggleLike}
-        >
+      <div className={styles.img}>
+        <div className={styles.roomSlider}>
+          <SliderImg data={room.images ?? []} href={`/room-detail/${room.id}`} alt={room.name || 'Ảnh phòng'} />
+        </div>
+        <button type='button' aria-label='Yêu thích' aria-pressed={liked} className={`${styles.heart} ${liked ? styles.heartOn : ''}`} onClick={onToggleLike}>
           {liked ? <IoHeart /> : <IoHeartOutline />}
         </button>
-        <span className={styles.typeBadge}>{room.typeBadge}</span>
       </div>
-
       <div className={styles.cbody}>
-        <div className={styles.pr}>
-          {formatPrice(room.price)} <span>/ đêm</span>
-        </div>
-        <div className={styles.bed}>{room.bed}</div>
-        <div className={styles.addr}>
-          <CiLocationOn />
-          {room.address}
-        </div>
+        <Link href={`/room-detail/${room.id}`} className={styles.roomName}>{room.name}</Link>
+        <div className={styles.pr}>{formatPrice(room.price)} <span>/ đêm</span></div>
+        <div className={styles.bed}>{bed_size.find((item) => item.code === room.bed_size)?.name ?? room.bed_size}</div>
+        <div className={styles.addr}><CiLocationOn />{room.address}</div>
         <div className={styles.hr} />
         <div className={styles.meta}>
-          <span className={styles.mi}>
-            <CiCalendar />
-            available {room.available}
-          </span>
-          <span className={styles.mi}>
-            <HiOutlineHome />
-            {room.type}
-          </span>
-          <span className={styles.mi}>
-            <LiaBathSolid />
-            {room.bath}
-          </span>
-          <span className={styles.mi}>
-            <CiUser />
-            sleeps max {room.sleeps}
-          </span>
+          {room.date_available != null && <span className={styles.mi}><CiCalendar />Có từ {dayjs(room.date_available).format('DD/MM/YYYY')}</span>}
+          {room.num_bed != null && <span className={styles.mi}>{room.num_bed} giường ngủ</span>}
+          {room.bathroom_type && <span className={styles.mi}><LiaBathSolid />{bathroom_type.find((item) => item.code === room.bathroom_type)?.name ?? room.bathroom_type}</span>}
+          <span className={styles.mi}><CiUser />Tối đa {room.max_guests} khách</span>
         </div>
         <div className={styles.hr} />
-        <div className={styles.house}>
-          <b>Nhà:</b> {room.bedrooms} phòng ngủ · {room.bathrooms} phòng tắm
-        </div>
+        <div className={styles.house}><b>Nhà:</b> {room.num_bedroom} phòng ngủ · {room.num_bathroom} phòng tắm</div>
       </div>
     </div>
   )
 }
 
 function SearchContent() {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const city = searchParams.get('city') || DEFAULT_CITY
   const guestsParam = searchParams.get('guests') || ''
 
-  const [hearts, setHearts] = useState<Set<number>>(() => new Set([1]))
-  const [bedrooms, setBedrooms] = useState('2+')
+  const [hearts, setHearts] = useState<Record<string, boolean>>({})
+  const [beds, setBeds] = useState('1+')
+  const [isGuestPickerOpen, setIsGuestPickerOpen] = useState(false)
+  const [isMapOpen, setIsMapOpen] = useState(false)
+  const [stayDates, setStayDates] = useState<[Dayjs | null, Dayjs | null] | null>(() => {
+    const today = dayjs().startOf('day')
+    return [today, today.add(1, 'day')]
+  })
+  const stayLabel = stayDates?.[0] && stayDates?.[1]
+    ? `${stayDates[0].format('DD/MM')} – ${stayDates[1].format('DD/MM')}`
+    : 'Chọn ngày nhận – trả phòng'
   const [priceSort, setPriceSort] = useState<'asc' | 'desc'>('asc')
   const { data: furnitureData, isLoading: isLoadingFurniture, isError: isFurnitureError, refetch: refetchFurniture } = useGetFurnituresQuery()
   const furnitureOptions = furnitureData?.result ?? []
   const [amenities, setAmenities] = useState<Set<string>>(() => new Set())
-  const [guests, setGuests] = useState(GUEST_LABEL_BY_PARAM[guestsParam] || '2+')
+  const [guests, setGuests] = useState(GUEST_LABEL_BY_PARAM[guestsParam] || '1+')
   // const [rating, setRating] = useState('★ 4+')
   const [priceRange, setPriceRange] = useState<[number, number]>([200000, 2500000])
+
+  const [submittedSearch, setSubmittedSearch] = useState<RoomSearchRequest>(() => buildRoomSearchRequest({
+    location: city,
+    checkIn: stayDates![0]!.format('DD-MM-YYYY'),
+    checkOut: stayDates![1]!.format('DD-MM-YYYY'),
+    minPrice: priceRange[0],
+    maxPrice: priceRange[1],
+    guests,
+    beds,
+    amenities: Array.from(amenities),
+    sort: priceSort,
+  }, 1, 100))
+  const { data: cachedResult, currentData: searchResult, isFetching: isSearching, error: apiSearchError, refetch } = useSearchRoomsQuery(submittedSearch)
+  const [validationError, setValidationError] = useState('')
+  const rooms = searchResult?.data ?? []
+  const totalRooms = searchResult?.count ?? cachedResult?.count ?? 0
+  const pageSize = submittedSearch.pageSize
+  const appliedSearch = submittedSearch
+  const hasSearched = Boolean(cachedResult)
+  const lastRequest = validationError ? null : submittedSearch
+  const searchError = validationError || (apiSearchError
+    ? 'status' in apiSearchError && apiSearchError.status === 401
+      ? 'Vui lòng đăng nhập để tìm kiếm phòng.'
+      : 'Không thể tải kết quả tìm kiếm. Vui lòng thử lại.'
+    : '')
+  const resultSummary = `${appliedSearch.checkIn.replaceAll('-', '/')} – ${appliedSearch.checkOut.replaceAll('-', '/')} · ${Math.abs(appliedSearch.numGuests)}+ khách`
+
+  const executeSearch = (request: RoomSearchRequest, preferCacheValue = true) => {
+    setValidationError('')
+    if (!preferCacheValue && request === submittedSearch) {
+      void refetch()
+    } else {
+      setSubmittedSearch(request)
+    }
+  }
+
+  const handleSearch = () => {
+    const [checkIn, checkOut] = stayDates ?? []
+    if (!checkIn || !checkOut || !checkIn.isValid() || !checkOut.isValid() ||
+        checkIn.isBefore(dayjs().startOf('day'), 'day') || !checkOut.isAfter(checkIn, 'day')) {
+      setValidationError('Vui lòng chọn ngày nhận phòng và trả phòng hợp lệ (ít nhất 1 đêm).')
+      return
+    }
+    void executeSearch(buildRoomSearchRequest({
+      location: city,
+      checkIn: checkIn.format('DD-MM-YYYY'),
+      checkOut: checkOut.format('DD-MM-YYYY'),
+      minPrice: priceRange[0],
+      maxPrice: priceRange[1],
+      guests,
+      beds,
+      amenities: Array.from(amenities),
+      sort: priceSort,
+    }, 1, pageSize))
+  }
 
   const handlePriceChange = (index: 0 | 1, value: number | null): void => {
     if (value === null) return
@@ -159,39 +193,129 @@ function SearchContent() {
     })
   }
 
-  const minGuests = GUEST_OPTIONS.find((option) => option.label === guests)?.min ?? 1
-  const visibleRooms = ROOMS.filter(
-    (room) =>
-      room.sleeps >= minGuests && room.price >= priceRange[0] && room.price <= priceRange[1]
-  ).sort((a, b) => priceSort === 'asc' ? a.price - b.price : b.price - a.price)
 
   return (
     <main className={styles.page}>
       <div className={styles.searchbar}>
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>Điểm đến</span>
-          <span className={styles.fieldValue}>
-            <CiLocationOn />
-            {city}, Việt Nam
-          </span>
+        <div className={`${styles.field} ${styles.destinationField}`}>
+          <label htmlFor='search-destination' className={styles.fieldLabel}>Điểm đến</label>
+          <ConfigProvider locale={viVN} theme={{ token: { colorPrimary: PRIMARY, borderRadius: 12 } }}>
+            <Select
+              id='search-destination'
+              aria-label='Chọn điểm đến'
+              className={styles.destinationSelect}
+              variant='borderless'
+              showSearch={{
+                optionFilterProp: 'label',
+                filterOption: (input, option) => {
+                  const normalize = (value: string) => value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/đ/g, 'd').replace(/Đ/g, 'D').toLowerCase()
+                  return normalize(String(option?.label ?? '')).includes(normalize(input))
+                },
+              }}
+              value={city}
+              prefix={<CiLocationOn aria-hidden='true' />}
+              suffixIcon={<HiChevronDown />}
+              onChange={(value: string) => {
+                const params = new URLSearchParams(searchParams.toString())
+                params.set('city', value)
+                router.replace(`/search?${params.toString()}`, { scroll: false })
+              }}
+              options={REGIONS.map((group) => ({
+                label: group.region,
+                options: group.destinations.map((destination) => ({
+                  value: destination.value,
+                  label: destination.value,
+                })),
+              }))}
+              notFoundContent='Không tìm thấy địa điểm'
+              classNames={{ popup: { root: styles.sortMenu } }}
+            />
+          </ConfigProvider>
         </div>
         <div className={styles.sep} />
-        <div className={styles.field} style={{ flex: 1.25 }}>
-          <span className={styles.fieldLabel}>Nhận phòng — Trả phòng</span>
-          <span className={styles.fieldValue}>
-            <CiCalendar />
-            24/10/2026 <span style={{ color: '#616066' }}>→</span> 27/10/2026
-          </span>
+        <div className={`${styles.field} ${styles.dateField}`}>
+          <label htmlFor='stay-check-in' className={styles.fieldLabel}>Nhận phòng — Trả phòng</label>
+          <ConfigProvider locale={viVN} theme={{ token: { colorPrimary: PRIMARY, borderRadius: 12 } }}>
+            <DatePicker.RangePicker
+              id={{ start: 'stay-check-in', end: 'stay-check-out' }}
+              className={styles.datePicker}
+              value={stayDates}
+              onChange={setStayDates}
+              format='DD/MM/YYYY'
+              placeholder={['Ngày nhận phòng', 'Ngày trả phòng']}
+              variant='borderless'
+              suffixIcon={<CiCalendar />}
+              separator={<span aria-hidden='true'>→</span>}
+              disabledDate={(current, { from }) =>
+                current.isBefore(dayjs().startOf('day'), 'day') ||
+                Boolean(from && current.isBefore(from.add(1, 'day'), 'day'))
+              }
+            />
+          </ConfigProvider>
         </div>
         <div className={styles.sep} />
-        <div className={styles.field}>
-          <span className={styles.fieldLabel}>Khách và phòng</span>
-          <span className={styles.fieldValue}>
-            <CiUser />
-            {guests.replace('+', '')} khách · 1 phòng
-          </span>
-        </div>
-        <button type='button' className={styles.cta}>Tìm kiếm</button>
+        <ConfigProvider locale={viVN} theme={{ token: { colorPrimary: PRIMARY, borderRadius: 14 } }}>
+          <Popover
+            trigger='click'
+            placement='bottomRight'
+            arrow={false}
+            open={isGuestPickerOpen}
+            onOpenChange={setIsGuestPickerOpen}
+            content={
+              <div id='search-guest-picker' className={styles.guestPicker}>
+                <div className={styles.guestPickerGroup} role='group' aria-label='Số khách'>
+                  <h3>Số khách</h3>
+                  <div className={styles.chips}>
+                    {GUEST_OPTIONS.map((option) => (
+                      <button
+                        key={option.label}
+                        type='button'
+                        aria-pressed={guests === option.label}
+                        className={`${styles.chip} ${guests === option.label ? styles.chipOn : ''}`}
+                        onClick={() => setGuests(option.label)}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className={styles.guestPickerGroup} role='group' aria-label='Số giường ngủ'>
+                  <h3>Số giường ngủ</h3>
+                  <div className={styles.chips}>
+                    {BED_OPTIONS.map((option) => (
+                      <button
+                        key={option}
+                        type='button'
+                        aria-pressed={beds === option}
+                        className={`${styles.chip} ${beds === option ? styles.chipOn : ''}`}
+                        onClick={() => setBeds(option)}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <button type='button' className={styles.guestPickerDone} onClick={() => setIsGuestPickerOpen(false)}>Xong</button>
+              </div>
+            }
+          >
+            <button
+              type='button'
+              className={`${styles.field} ${styles.guestField}`}
+              aria-label='Chọn số khách và số giường ngủ'
+              aria-expanded={isGuestPickerOpen}
+              aria-controls='search-guest-picker'
+            >
+              <span className={styles.fieldLabel}>Khách và giường ngủ</span>
+              <span className={styles.fieldValue}>
+                <CiUser aria-hidden='true' />
+                {guests} khách · {beds} giường
+                <HiChevronDown className={styles.guestChevron} aria-hidden='true' />
+              </span>
+            </button>
+          </Popover>
+        </ConfigProvider>
+        <button type='button' className={styles.cta} disabled={isSearching} onClick={handleSearch}>{isSearching ? 'Đang tìm...' : 'Tìm kiếm'}</button>
       </div>
 
       <div className={styles.mPill}>
@@ -200,7 +324,7 @@ function SearchContent() {
             <CiLocationOn />
             {city}
           </div>
-          <div className={styles.mPillT2}>24 – 27/10 · {guests.replace('+', '')} khách · 1 phòng</div>
+          <div className={styles.mPillT2}>{stayLabel} · {guests} khách · {beds} giường</div>
         </div>
         <div className={styles.mFBtn}>
           <CiSettings />
@@ -282,14 +406,14 @@ function SearchContent() {
           </div>
 
           <div className={styles.sec}>
-            <h3>Số phòng ngủ</h3>
+            <h3>Số giường ngủ</h3>
             <div className={styles.chips}>
-              {BEDROOM_OPTIONS.map((option) => (
+              {BED_OPTIONS.map((option) => (
                 <button
                   key={option}
                   type='button'
-                  className={`${styles.chip} ${bedrooms === option ? styles.chipOn : ''}`}
-                  onClick={() => setBedrooms(option)}
+                  className={`${styles.chip} ${beds === option ? styles.chipOn : ''}`}
+                  onClick={() => setBeds(option)}
                 >
                   {option}
                 </button>
@@ -369,14 +493,14 @@ function SearchContent() {
           </div>
           */}
 
-          <button type='button' className={styles.apply}>Áp dụng bộ lọc</button>
+          <button type='button' className={styles.apply} disabled={isSearching} onClick={handleSearch}>Áp dụng bộ lọc</button>
         </aside>
 
         <div className={styles.main}>
           <div className={styles.toolbar}>
             <div>
-              <h2>{visibleRooms.length} chỗ nghỉ tại {city}</h2>
-              <div className={styles.sub}>24/10 – 27/10 · {guests.replace('+', '')} khách · 3 đêm</div>
+              <h2>{hasSearched ? `${totalRooms} chỗ nghỉ tại ${appliedSearch?.location || 'mọi điểm đến'}` : 'Tìm chỗ nghỉ phù hợp'}</h2>
+              <div className={styles.sub}>{resultSummary}</div>
             </div>
             <ConfigProvider theme={{ token: { colorPrimary: PRIMARY, borderRadius: 12, fontFamily: 'inherit' } }}>
               <div className={styles.sort}>
@@ -388,7 +512,11 @@ function SearchContent() {
                   className={styles.sortSelect}
                   variant='borderless'
                   value={priceSort}
-                  onChange={(value: 'asc' | 'desc') => setPriceSort(value)}
+                  disabled={isSearching}
+                  onChange={(value: 'asc' | 'desc') => {
+                    setPriceSort(value)
+                    if (appliedSearch) void executeSearch({ ...appliedSearch, page: 1, sort: value === 'asc' ? 'PRICE_ASC' : 'PRICE_DESC' })
+                  }}
                   suffixIcon={<HiChevronDown />}
                   options={[
                     { value: 'asc', label: 'Giá từ thấp đến cao' },
@@ -407,47 +535,61 @@ function SearchContent() {
             </ConfigProvider>
           </div>
 
-          <div className={styles.grid}>
-            {visibleRooms.map((room) => (
+          {searchError && <Alert className={styles.searchAlert} type='error' showIcon title={searchError} action={lastRequest && <button type='button' onClick={() => { if (lastRequest) void executeSearch(lastRequest, false) }} disabled={isSearching}>Thử lại</button>} />}
+          <div className={styles.grid} aria-busy={isSearching}>
+            {isSearching ? (
+              <div className={styles.empty} role='status'><Spin /><p>Đang tìm phòng...</p></div>
+            ) : searchError ? null : rooms.map((room) => (
               <SearchCard
                 key={room.id}
                 room={room}
-                liked={hearts.has(room.id)}
-                onToggleLike={() =>
-                  setHearts((prev) => {
-                    const next = new Set(prev)
-                    if (next.has(room.id)) {
-                      next.delete(room.id)
-                    } else {
-                      next.add(room.id)
-                    }
-                    return next
-                  })
-                }
+                liked={hearts[room.id] ?? room.hasLike ?? false}
+                onToggleLike={() => setHearts((prev) => ({ ...prev, [room.id]: !(prev[room.id] ?? room.hasLike ?? false) }))}
               />
             ))}
-            {visibleRooms.length === 0 && (
-              <p className={styles.empty}>Không có chỗ nghỉ nào phù hợp bộ lọc số khách</p>
+            {!isSearching && !searchError && rooms.length === 0 && (
+              <p className={styles.empty}>{hasSearched ? 'Không có chỗ nghỉ phù hợp với bộ lọc đã chọn.' : 'Chọn ngày và bộ lọc, sau đó bấm Tìm kiếm để xem phòng.'}</p>
             )}
           </div>
 
-          <div className={styles.pageNav}>
-            <span className={styles.pg}>←</span>
-            <span className={`${styles.pg} ${styles.pgOn}`}>1</span>
-            <span className={styles.pg}>2</span>
-            <span className={styles.pg}>3</span>
-            <span className={styles.pg}>4</span>
-            <span className={styles.dots}>…</span>
-            <span className={styles.pg}>42</span>
-            <span className={styles.pg}>→</span>
-          </div>
+          {appliedSearch && (
+            <ConfigProvider locale={viVN} theme={{ token: { colorPrimary: PRIMARY, borderRadius: 10 } }}>
+              <div className={styles.pageNav}>
+                <Pagination
+                  current={appliedSearch.page}
+                  pageSize={appliedSearch.pageSize}
+                  total={totalRooms}
+                  showSizeChanger
+                  pageSizeOptions={[12, 24, 48, 100]}
+                  disabled={isSearching}
+                  showTotal={(total) => `Tổng ${total} chỗ nghỉ`}
+                  onChange={(page, size) => void executeSearch({ ...appliedSearch, page: size === appliedSearch.pageSize ? page : 1, pageSize: size })}
+                />
+              </div>
+            </ConfigProvider>
+          )}
 
-          <button type='button' className={styles.mapBtn}>🗺️ Bản đồ</button>
+          <button type='button' className={styles.mapBtn} aria-haspopup='dialog' onClick={() => setIsMapOpen(true)}>🗺️ Bản đồ</button>
+          <Modal
+            title='Bản đồ chỗ nghỉ'
+            open={isMapOpen}
+            onCancel={() => setIsMapOpen(false)}
+            footer={null}
+            width={1000}
+            centered
+            destroyOnHidden
+          >
+            {isSearching ? (
+              <div className={styles.mapEmpty} role='status'><Spin /><p>Đang tải vị trí phòng...</p></div>
+            ) : searchError ? (
+              <Alert type='error' showIcon title={searchError} />
+            ) : isMapOpen && <SearchResultsMap rooms={rooms} />}
+          </Modal>
         </div>
       </div>
 
       <div className={styles.mBottom}>
-        <button type='button'>Hiện {visibleRooms.length} kết quả</button>
+        <button type='button' disabled={isSearching} onClick={handleSearch}>{isSearching ? 'Đang tìm...' : 'Tìm kiếm'}</button>
       </div>
     </main>
   )
