@@ -2,11 +2,12 @@
 
 import { Suspense, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { ConfigProvider, InputNumber, Slider } from 'antd'
+import { ConfigProvider, InputNumber, Select, Slider } from 'antd'
 import { CiLocationOn, CiUser, CiCalendar, CiSettings } from 'react-icons/ci'
-import { HiOutlineHome } from 'react-icons/hi2'
+import { HiOutlineHome, HiOutlineArrowsUpDown, HiChevronDown, HiCheck } from 'react-icons/hi2'
 import { LiaBathSolid } from 'react-icons/lia'
 import { IoHeart, IoHeartOutline } from 'react-icons/io5'
+import { useGetFurnituresQuery } from '@/RTK_Query/Listing_Query'
 import styles from './page.module.scss'
 
 interface SearchRoom {
@@ -34,9 +35,8 @@ const ROOMS: SearchRoom[] = [
   { id: 6, gradient: 'g6', emoji: '🌇', typeBadge: 'Căn hộ', price: 2400000, bed: 'King bed', address: 'Bắc Mỹ An, Ngũ Hành Sơn', available: '24/10', type: 'apartment', bath: 'Private bath', sleeps: 3, bedrooms: 2, bathrooms: 2 },
 ]
 
-const AMENITIES = ['Wifi', 'Điều hòa', 'Bếp đầy đủ', 'Máy giặt', 'Chỗ đậu xe', 'TV', 'Hồ bơi', 'Thang máy']
 const BEDROOM_OPTIONS = ['1+', '2+', '3+', '4+']
-const RATING_OPTIONS = ['★ 5', '★ 4+', '★ 3+']
+// const RATING_OPTIONS = ['★ 5', '★ 4+', '★ 3+']
 const DEFAULT_CITY = 'Đà Nẵng'
 
 const GUEST_OPTIONS = [
@@ -141,9 +141,12 @@ function SearchContent() {
 
   const [hearts, setHearts] = useState<Set<number>>(() => new Set([1]))
   const [bedrooms, setBedrooms] = useState('2+')
-  const [amenities, setAmenities] = useState<Set<string>>(() => new Set(['Wifi', 'Điều hòa']))
+  const [priceSort, setPriceSort] = useState<'asc' | 'desc'>('asc')
+  const { data: furnitureData, isLoading: isLoadingFurniture, isError: isFurnitureError, refetch: refetchFurniture } = useGetFurnituresQuery()
+  const furnitureOptions = furnitureData?.result ?? []
+  const [amenities, setAmenities] = useState<Set<string>>(() => new Set())
   const [guests, setGuests] = useState(GUEST_LABEL_BY_PARAM[guestsParam] || '2+')
-  const [rating, setRating] = useState('★ 4+')
+  // const [rating, setRating] = useState('★ 4+')
   const [priceRange, setPriceRange] = useState<[number, number]>([200000, 2500000])
 
   const handlePriceChange = (index: 0 | 1, value: number | null): void => {
@@ -160,7 +163,7 @@ function SearchContent() {
   const visibleRooms = ROOMS.filter(
     (room) =>
       room.sleeps >= minGuests && room.price >= priceRange[0] && room.price <= priceRange[1]
-  )
+  ).sort((a, b) => priceSort === 'asc' ? a.price - b.price : b.price - a.price)
 
   return (
     <main className={styles.page}>
@@ -207,9 +210,17 @@ function SearchContent() {
       <div className={styles.mChips}>
         <span className={`${styles.mChip} ${styles.mChipOn}`}>Giá {shortPrice(priceRange[0])} – {shortPrice(priceRange[1])} ✕</span>
         <span className={`${styles.mChip} ${styles.mChipOn}`}>Số khách {guests} ✕</span>
-        <span className={`${styles.mChip} ${styles.mChipOn}`}>Wifi ✕</span>
-        <span className={`${styles.mChip} ${styles.mChipOn}`}>Điều hòa ✕</span>
-        <span className={styles.mChip}>+2</span>
+        {furnitureOptions.filter((item) => amenities.has(item.id)).map((item) => (
+          <button
+            key={item.id}
+            type='button'
+            className={`${styles.mChip} ${styles.mChipOn}`}
+            aria-label={`Bỏ chọn ${item.name}`}
+            onClick={() => setAmenities((prev) => toggleInSet(prev, item.id))}
+          >
+            {item.name} ✕
+          </button>
+        ))}
       </div>
 
       <div className={styles.body}>
@@ -288,20 +299,40 @@ function SearchContent() {
 
           <div className={styles.sec}>
             <h3>Tiện ích</h3>
-            <div className={styles.checks}>
-              {AMENITIES.map((item) => (
-                <span
-                  key={item}
-                  className={styles.ck}
-                  onClick={() => setAmenities((prev) => toggleInSet(prev, item))}
-                >
-                  <span className={`${styles.box} ${amenities.has(item) ? styles.boxOn : ''}`}>
-                    {amenities.has(item) ? '✓' : ''}
+            {isLoadingFurniture ? (
+              <p role='status'>Đang tải tiện ích...</p>
+            ) : isFurnitureError ? (
+              <div role='alert'>
+                <p>Không thể tải danh sách tiện ích.</p>
+                <button type='button' onClick={() => refetchFurniture()}>Thử lại</button>
+              </div>
+            ) : furnitureOptions.length === 0 ? (
+              <p>Chưa có tiện ích.</p>
+            ) : (
+              <div className={styles.checks}>
+                {furnitureOptions.map((item) => (
+                  <span
+                    key={item.id}
+                    role='checkbox'
+                    aria-checked={amenities.has(item.id)}
+                    tabIndex={0}
+                    className={styles.ck}
+                    onClick={() => setAmenities((prev) => toggleInSet(prev, item.id))}
+                    onKeyDown={(event) => {
+                      if (event.key === ' ' || event.key === 'Enter') {
+                        event.preventDefault()
+                        setAmenities((prev) => toggleInSet(prev, item.id))
+                      }
+                    }}
+                  >
+                    <span aria-hidden='true' className={`${styles.box} ${amenities.has(item.id) ? styles.boxOn : ''}`}>
+                      {amenities.has(item.id) ? '✓' : ''}
+                    </span>
+                    {item.name}
                   </span>
-                  {item}
-                </span>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
 
           <div className={styles.sec}>
@@ -320,6 +351,7 @@ function SearchContent() {
             </div>
           </div>
 
+          {/*
           <div className={styles.sec}>
             <h3>Đánh giá</h3>
             <div className={styles.chips}>
@@ -335,6 +367,7 @@ function SearchContent() {
               ))}
             </div>
           </div>
+          */}
 
           <button type='button' className={styles.apply}>Áp dụng bộ lọc</button>
         </aside>
@@ -345,9 +378,33 @@ function SearchContent() {
               <h2>{visibleRooms.length} chỗ nghỉ tại {city}</h2>
               <div className={styles.sub}>24/10 – 27/10 · {guests.replace('+', '')} khách · 3 đêm</div>
             </div>
-            <div className={styles.sort}>
-              Sắp xếp: <b>Đề xuất</b> ▾
-            </div>
+            <ConfigProvider theme={{ token: { colorPrimary: PRIMARY, borderRadius: 12, fontFamily: 'inherit' } }}>
+              <div className={styles.sort}>
+                <HiOutlineArrowsUpDown className={styles.sortIcon} aria-hidden='true' />
+                <label htmlFor='price-sort' className={styles.sortLabel}>Sắp xếp</label>
+                <Select
+                  id='price-sort'
+                  aria-label='Sắp xếp theo giá'
+                  className={styles.sortSelect}
+                  variant='borderless'
+                  value={priceSort}
+                  onChange={(value: 'asc' | 'desc') => setPriceSort(value)}
+                  suffixIcon={<HiChevronDown />}
+                  options={[
+                    { value: 'asc', label: 'Giá từ thấp đến cao' },
+                    { value: 'desc', label: 'Giá từ cao đến thấp' },
+                  ]}
+                  classNames={{ popup: { root: styles.sortMenu } }}
+                  optionRender={(option) => (
+                    <span className={styles.sortOption}>
+                      {option.label}
+                      {option.value === priceSort && <HiCheck aria-hidden='true' />}
+                    </span>
+                  )}
+                  placement='bottomRight'
+                />
+              </div>
+            </ConfigProvider>
           </div>
 
           <div className={styles.grid}>

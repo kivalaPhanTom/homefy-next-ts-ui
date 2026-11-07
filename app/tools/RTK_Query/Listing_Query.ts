@@ -8,6 +8,15 @@ import { TOKEN_IN_LOCALSTORAGE, USER_TOKEN, EXPIRED_TIME_TOKEN, REFRESH_TOKEN_IN
 import { authenNextServer } from '@/Services/NextAuthenServer'
 import { checkExpiredToken } from '@/common/FunctionCommon/FunctionCommon'
 
+export interface FurnitureOption {
+    id: string
+    name: string
+}
+
+interface FurnituresResponse {
+    result: FurnitureOption[]
+}
+
 interface ListingDetailResponse {
     result: any
 }
@@ -42,7 +51,7 @@ export const listingApi = createApi({
             keepUnusedDataFor: CACHE_TIME,
             providesTags: () => [{ type: 'getListingDetail', id: 'GET_LISTING_DETAIL' }],
         }),
-        getFurnitures: builder.query<unknown, void>({
+        getFurnitures: builder.query<FurnituresResponse, void>({
             query: () => ({
                 url: servicePattern.getFurnitures,
                 method: 'GET'
