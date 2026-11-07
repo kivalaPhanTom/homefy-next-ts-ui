@@ -22,7 +22,7 @@ function* handleCreateBookingApi(action: any): Generator<any, void, unknown> {
         }
 
         // yield put(setLoadingAboutMe(false))
-    } catch (error) {
+    } catch (error: any) {
         if (error?.response?.data?.code === 1008 && error?.response?.status === 400) {
             Notification.openNotificationError("Phòng này không còn trống để đặt")
         } else {

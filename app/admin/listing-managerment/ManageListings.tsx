@@ -56,6 +56,7 @@ function ManageListings(props: ManageListingsType) {
     // console.log('queryString.offset:', queryString.offset)
     const { push } = useRouter()
     const [isReset, setIsRest] = useState(false)
+    const [currentPage, setCurrentPage] = useState(pageIndex)
     const [trigger, result] = useLazyGetRoomsQuery()
     const { data, isFetching, error } = result
     // useEffect(() => {
@@ -139,20 +140,20 @@ function ManageListings(props: ManageListingsType) {
 
     const handleLoadMore = (): void => {
         setIsRest(false)
-        setLoadingState(prev => prev + 1)
         setLoadingMoreBtn(true)
-        const newOffset = offset + limit
-        const newPageIndex = pageIndex + 1
-        let filterData = {
-            limitParams: limit,
-            offsetParams: newOffset,
+        const newPageIndex = currentPage + 1
+        setCurrentPage(newPageIndex)
+        let filterData: filterDataQueryType = {
+            currentPage: newPageIndex,
+            pageSize: limit,
         }
-        // queryToCallAPi(filterData, true)
-        // push(`?limit=${limit}&&offset=${newOffset}&&pageIndex=${newPageIndex}`, { scroll: false })
+        queryToCallAPi(filterData, true)
+        // push(`?limit=${limit}&&offset=${offset + limit}&&pageIndex=${newPageIndex}`, { scroll: false })
     }
 
     const handleTriggerQueryData = (isCache: boolean): void => {
         setIsRest(true)
+        setCurrentPage(pageIndex)
         let filterData: filterDataQueryType = {
             currentPage: 1,
             pageSize: DEFAULT_LIMIT

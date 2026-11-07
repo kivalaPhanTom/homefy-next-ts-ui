@@ -68,7 +68,8 @@
     animation-delay:1;
     animation: titleAnimation 0.7s ease;
     font-size: common.$font18px;
-    font-family: 'Theseasons Regular', sans-serif;
+    font-weight: 600;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 @keyframes titleAnimation{
     0% { 
@@ -89,7 +90,7 @@
     animation: subTitleAnimation 1s ease;
     text-align: center;
     font-size: common.$font15px;
-    font-family: "Hind Mysuru", sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 @keyframes subTitleAnimation{
     0% { 
@@ -150,7 +151,8 @@
     text-decoration: none;
     color: common.$text-color4;
     font-size: common.$font14px;
-    font-family: "Hind Mysuru", sans-serif;
+    font-weight: 500;
+    font-family: 'Be Vietnam Pro', sans-serif;
 }
 
 .allPropertiesBtn {
@@ -205,7 +207,7 @@
 
 .filterLabel {
     margin: 0 5px;
-    font-family: "Hind Mysuru", sans-serif;
+    font-family: 'Be Vietnam Pro', sans-serif;
     font-size: common.$font14px;
 }
 
@@ -224,12 +226,39 @@
     transition: 1.5s;
 }
 
+.popoverGroups {
+    display: flex;
+    gap: 28px;
+}
+
+.optionGroup {
+    min-width: 150px;
+}
+
+.optionGroupTitle {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #8a8a8a;
+    margin-bottom: 6px;
+    cursor: default;
+}
+
 .optionItem {
     transition: 0.4s;
     cursor: pointer;
     >p{
-        font-family: "Hind Mysuru", sans-serif;
-        font-size: common.$font14px; 
+        font-family: 'Be Vietnam Pro', sans-serif;
+        font-size: common.$font14px;
+    }
+}
+
+.optionItemActive {
+    >p{
+        color: common.$main-color13;
+        font-weight: 600;
     }
 }
 

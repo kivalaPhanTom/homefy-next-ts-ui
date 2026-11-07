@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>HOMEFY — /search mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'Theseasons'; src: url('app/tools/fonts/fonnts.com-Classica-Pro-.otf'); }
+@font-face { font-family: 'Theseasons LT'; src: url('app/tools/fonts/Fontspring-DEMO-theseasons-lt.otf'); }
+@font-face { font-family: 'Thicccboi'; src: url('app/tools/fonts/THICCCBOI-Light.ttf'); }
+
+:root{
+  --cream:#fbf6ee; --teal:#4c1d95; --ink:#172b2f; --orange:#5b21b6; --orange-strong:#4c1d95;
+  --gray:#616066; --line:#b7b7b7; --line-soft:#ececed; --badge:#f6f6f6;
+  --shadow:0 3px 20px rgba(8,15,52,.08);
+  --r:0 0 20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#ece6d9;font-family:'Be Vietnam Pro','Be Vietnam Pro','Thicccboi','Segoe UI',Arial,sans-serif;padding:36px 44px 52px;}
+img{display:block}
+
+.canvasTitle{margin:0 auto 26px;max-width:1900px;color:var(--ink)}
+.canvasTitle h1{font-family:'Prata','Theseasons',Georgia,serif;font-size:24px;font-weight:400}
+.canvasTitle h1 span{color:var(--orange-strong)}
+.canvasTitle p{font-size:12.5px;color:var(--gray);margin-top:6px;line-height:1.6}
+.canvasTitle b{color:var(--teal);font-weight:400}
+
+.boards{display:flex;align-items:flex-start;gap:52px}
+.boardWrap{caption-side:bottom}
+.boardCap{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:14px}
+.board{background:var(--cream);border:1px solid #d8d1c1;box-shadow:0 24px 70px rgba(23,43,47,.14);overflow:hidden}
+
+/* ============ DESKTOP 1440 ============ */
+.desktop{width:1440px}
+.d-header{display:flex;align-items:center;justify-content:space-between;padding:18px 6.5% 14px}
+.d-logo{height:52px;width:auto}
+.d-menu{display:flex;list-style:none;gap:32px}
+.d-menu li{font-family:'Prata','Theseasons',Georgia,serif;font-size:14px;color:var(--ink);cursor:pointer}
+.d-menu li.active{color:var(--orange-strong)}
+.d-login{border:1px solid var(--ink);border-radius:var(--r);padding:10px 26px;font-family:'Prata','Theseasons',Georgia,serif;font-size:15px;color:var(--ink)}
+
+.d-searchbar{display:flex;align-items:stretch;gap:0;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);margin:6px 6.5% 0;padding:10px 12px}
+.d-field{flex:1;padding:8px 18px;display:flex;flex-direction:column;justify-content:center;gap:3px;cursor:pointer}
+.d-field:hover{background:#faf7f1;border-radius:14px}
+.d-field .lb{font-size:11px;color:var(--gray);letter-spacing:.4px}
+.d-field .vl{font-size:14.5px;color:var(--ink);display:flex;align-items:center;gap:7px}
+.d-sep{width:1px;background:var(--line-soft);margin:6px 0}
+.d-cta{align-self:center;background:var(--orange);color:#fff;border:none;border-radius:var(--r);
+  font-family:'Prata','Theseasons',Georgia,serif;font-size:16px;padding:19px 30px;cursor:pointer;margin-left:10px}
+.d-cta:hover{background:var(--orange-strong)}
+
+.d-body{display:flex;gap:26px;padding:26px 6.5% 8px;align-items:flex-start}
+
+/* sidebar */
+.d-side{width:278px;flex-shrink:0;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);padding:20px 18px 22px;position:sticky;top:16px}
+.d-sideHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.d-sideHead h2{font-family:'Prata','Theseasons',Georgia,serif;font-size:21px;font-weight:400;color:var(--ink)}
+.d-clear{font-size:12.5px;color:var(--orange-strong);text-decoration:underline;cursor:pointer}
+.d-sec{border-top:1px solid var(--line-soft);padding:15px 0 13px}
+.d-sec h3{font-family:'Prata','Theseasons',Georgia,serif;font-size:14.5px;font-weight:400;color:var(--ink);margin-bottom:12px}
+.d-track{position:relative;height:4px;background:var(--line-soft);border-radius:4px;margin:8px 2px 14px}
+.d-fill{position:absolute;left:22%;right:28%;top:0;bottom:0;background:var(--orange);border-radius:4px}
+.d-knob{position:absolute;top:50%;width:16px;height:16px;background:#fff;border:2px solid var(--orange);border-radius:50%;transform:translateY(-50%);box-shadow:0 1px 4px rgba(0,0,0,.18)}
+.d-priceIn{display:flex;gap:8px}
+.d-priceIn span{flex:1;border:1px solid var(--line-soft);border-radius:8px;padding:7px 9px;font-size:12.5px;color:var(--ink);text-align:center}
+.d-chips{display:flex;gap:8px;flex-wrap:wrap}
+.d-chip{border:1px solid var(--line);border-radius:50px;padding:7px 14px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.d-chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.d-checks{display:grid;grid-template-columns:1fr 1fr;gap:10px 8px}
+.d-ck{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--ink);cursor:pointer}
+.d-box{width:17px;height:17px;border:1.5px solid var(--line);border-radius:5px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff}
+.d-box.on{background:var(--orange);border-color:var(--orange)}
+.d-ckFull{display:flex;flex-direction:column;gap:11px}
+.d-apply{width:100%;background:var(--orange);color:#fff;border:none;border-radius:var(--r);padding:13px 0;
+  font-family:'Prata','Theseasons',Georgia,serif;font-size:15px;margin-top:16px;cursor:pointer}
+.d-apply:hover{background:var(--orange-strong)}
+
+/* results */
+.d-main{flex:1;min-width:0}
+.d-toolbar{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:18px}
+.d-toolbar h2{font-family:'Prata','Theseasons',Georgia,serif;font-size:23px;font-weight:400;color:var(--ink)}
+.d-toolbar .sub{font-size:12.5px;color:var(--gray);margin-top:4px}
+.d-sort{background:#fff;border:1px solid var(--line-soft);border-radius:0 0 12px;box-shadow:var(--shadow);padding:10px 16px;font-size:13px;color:var(--ink);cursor:pointer}
+.d-sort b{font-weight:400;color:var(--teal)}
+.d-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+
+.card{background:#fff;box-shadow:var(--shadow);padding-bottom:6px}
+.card .img{position:relative;height:150px;border-radius:0 0 28px;display:flex;align-items:center;justify-content:center;font-size:40px}
+.g1{background:linear-gradient(135deg,#f8dfc0,#f0b98a)}
+.g2{background:linear-gradient(135deg,#e8e3d5,#cfc6ad)}
+.g3{background:linear-gradient(135deg,#d5e6e9,#a9ccd3)}
+.g4{background:linear-gradient(135deg,#dcead8,#b3d1ab)}
+.g5{background:linear-gradient(135deg,#f3dcd8,#e0aea8)}
+.g6{background:linear-gradient(135deg,#dbe4f0,#aec3dd)}
+.card .heart{position:absolute;top:10px;left:10px;width:30px;height:30px;background:#fffffff2;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--gray)}
+.card .heart.on{color:var(--orange-strong)}
+.card .badge{position:absolute;top:10px;right:0;background:#f6f6f6f0;border-radius:50px 0 0 50px;padding:7px 13px;
+  font-family:'Prata','Theseasons',Georgia,serif;font-size:12px;color:var(--teal)}
+.card .cbody{padding:11px 13px 4px}
+.card .pr{font-family:'Prata','Theseasons',Georgia,serif;font-size:16px;color:var(--ink)}
+.card .pr span{font-family:'Be Vietnam Pro','Thicccboi','Segoe UI',Arial,sans-serif;font-size:11.5px;color:var(--gray)}
+.card .bed{font-family:'Prata','Theseasons',Georgia,serif;font-size:12px;color:var(--teal);margin-top:3px}
+.card .addr{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink);margin:5px 0 9px}
+.card .hr{height:1px;background:var(--line-soft);margin:8px 0}
+.card .meta{display:grid;grid-template-columns:1fr 1fr;gap:6px 8px}
+.card .mi{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--gray);white-space:nowrap;overflow:hidden}
+.card .mi i{font-style:normal;font-size:12px}
+.card .house{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--gray)}
+.card .house b{font-weight:400;color:var(--ink)}
+
+.d-page{display:flex;align-items:center;justify-content:center;gap:8px;margin:26px 0 10px}
+.d-page .pg{min-width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line-soft);
+  border-radius:0 0 12px;background:#fff;font-family:'Prata','Theseasons',Georgia,serif;font-size:14px;color:var(--ink);cursor:pointer}
+.d-page .pg.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.d-page .dots{color:var(--gray);padding:0 2px}
+.d-map{position:absolute;right:24px;bottom:24px;background:#fff;border-radius:var(--r);box-shadow:0 6px 24px rgba(8,15,52,.18);
+  padding:13px 20px;font-size:13.5px;color:var(--ink);cursor:pointer}
+.d-relative{position:relative}
+
+/* ============ MOBILE 390 ============ */
+.mobile{width:390px}
+.m-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
+.m-logo{height:38px;width:auto}
+.m-right{display:flex;align-items:center;gap:12px}
+.m-avatar{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;
+  font-family:'Prata','Theseasons',Georgia,serif;font-size:14px}
+.m-burger{display:flex;flex-direction:column;gap:4px}
+.m-burger i{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px}
+.m-pill{margin:6px 12px 0;background:#fff;border-radius:var(--r);box-shadow:var(--shadow);display:flex;align-items:center;padding:11px 12px;gap:10px}
+.m-pill .txt{flex:1}
+.m-pill .t1{font-size:13.5px;color:var(--ink)}
+.m-pill .t2{font-size:11px;color:var(--gray);margin-top:2px}
+.m-fbtn{width:40px;height:40px;background:var(--orange);border-radius:0 0 12px;display:flex;align-items:center;justify-content:center;font-size:16px;color:#fff}
+.m-chips{display:flex;gap:8px;padding:12px 12px 2px;overflow:hidden}
+.m-chip{flex-shrink:0;border:1px solid var(--line);border-radius:50px;padding:6px 12px;font-size:11.5px;color:var(--ink);background:#fff}
+.m-chip.on{background:var(--teal);border-color:var(--teal);color:#fff}
+.m-tool{display:flex;align-items:center;justify-content:space-between;padding:12px 16px 10px}
+.m-tool h2{font-family:'Prata','Theseasons',Georgia,serif;font-size:17px;font-weight:400;color:var(--ink)}
+.m-tool span{font-size:11.5px;color:var(--gray)}
+.m-list{display:flex;flex-direction:column;gap:16px;padding:0 12px}
+.m-list .card .img{height:190px;font-size:46px}
+.m-bottom{position:sticky;bottom:0;margin-top:18px;padding:14px 12px 16px;background:linear-gradient(180deg,#fbf6ee00,#fbf6ee 40%)}
+.m-bottom button{width:100%;background:var(--orange);color:#fff;border:none;border-radius:var(--r);padding:15px 0;
+  font-family:'Prata','Theseasons',Georgia,serif;font-size:15px;box-shadow:0 8px 22px rgba(91,33,182,.45)}
+</style>
+</head>
+<body>
+
+<div class="canvasTitle">
+  <h1>HOMEFY <span>·</span> Trang tìm kiếm <span>/search</span> — mockup để review</h1>
+  <p>Theo style màu <b>tím #5b21b6 → #4c1d95</b> (đồng bộ /booking-list & /profile có sẵn), nền cream <b>#fbf6ee</b>, bo góc đặc trưng <b>0 0 20px</b>, badge pill <b>50px 0 0 50px</b>. Mockup dùng font tương đồng <b>Prata / Be Vietnam Pro</b> (đủ dấu tiếng Việt) — production sẽ dùng <b>Theseasons / Thicccboi</b> thật.
+  &nbsp;·&nbsp; Desktop: sidebar bộ lọc + grid 3 cột &nbsp;·&nbsp; Mobile: search pill + chips + bottom CTA   &nbsp;·&nbsp; Card tái dùng style <b>RoomItem</b>, ♡ = favorites (mục 5 improve_ui) &nbsp;·&nbsp; Filter đẩy lên URL: <b>/search?city=...&amp;guests=...&amp;checkin=...</b> &nbsp;·&nbsp; Data demo đồng bộ với mockup booking: <b>24 – 27/10/2026</b>, homestay <b>Biển Emerald 1.250.000đ/đêm</b> (card đầu tiên có ♥) = phòng được đặt trong booking_detail_mockup.png</p>
+</div>
+
+<div class="boards">
+
+  <!-- ================= DESKTOP ================= -->
+  <div class="boardWrap">
+    <div class="board desktop">
+
+      <div class="d-header">
+        <img class="d-logo" src="app/tools/assets/Homefy-logo.webp" alt="HOMEFY">
+        <ul class="d-menu">
+          <li>Home</li><li class="active">Properties</li><li>Book an Inspection</li><li>FAQs</li><li>Our partners</li>
+        </ul>
+        <div class="d-login">Login</div>
+      </div>
+
+      <div class="d-searchbar">
+        <div class="d-field">
+          <span class="lb">Điểm đến</span>
+          <span class="vl">📍 Đà Nẵng, Việt Nam</span>
+        </div>
+        <div class="d-sep"></div>
+        <div class="d-field" style="flex:1.25">
+          <span class="lb">Nhận phòng — Trả phòng</span>
+          <span class="vl">📅 24/10/2026 <span style="color:var(--gray)">→</span> 27/10/2026</span>
+        </div>
+        <div class="d-sep"></div>
+        <div class="d-field">
+          <span class="lb">Khách và phòng</span>
+          <span class="vl">👤 2 khách · 1 phòng</span>
+        </div>
+        <button class="d-cta">Tìm kiếm</button>
+      </div>
+
+      <div class="d-body">
+
+        <!-- SIDEBAR -->
+        <div class="d-side">
+          <div class="d-sideHead">
+            <h2>Bộ lọc</h2>
+            <span class="d-clear">Xóa tất cả</span>
+          </div>
+
+          <div class="d-sec" style="border-top:none;padding-top:0">
+            <h3>Khoảng giá (mỗi đêm)</h3>
+            <div class="d-track"><div class="d-fill"></div><div class="d-knob" style="left:22%"></div><div class="d-knob" style="right:28%"></div></div>
+            <div class="d-priceIn"><span>200.000đ</span><span>2.500.000đ</span></div>
+          </div>
+
+          <div class="d-sec">
+            <h3>Số phòng ngủ</h3>
+            <div class="d-chips">
+              <span class="d-chip">1+</span><span class="d-chip on">2+</span><span class="d-chip">3+</span><span class="d-chip">4+</span>
+            </div>
+          </div>
+
+          <div class="d-sec">
+            <h3>Tiện ích</h3>
+            <div class="d-checks">
+              <span class="d-ck"><span class="d-box on">✓</span>Wifi</span>
+              <span class="d-ck"><span class="d-box on">✓</span>Điều hòa</span>
+              <span class="d-ck"><span class="d-box"></span>Bếp đầy đủ</span>
+              <span class="d-ck"><span class="d-box"></span>Máy giặt</span>
+              <span class="d-ck"><span class="d-box"></span>Chỗ đậu xe</span>
+              <span class="d-ck"><span class="d-box"></span>TV</span>
+              <span class="d-ck"><span class="d-box"></span>Hồ bơi</span>
+              <span class="d-ck"><span class="d-box"></span>Thang máy</span>
+            </div>
+          </div>
+
+          <div class="d-sec">
+            <h3>Loại chỗ nghỉ</h3>
+            <div class="d-ckFull">
+              <span class="d-ck"><span class="d-box"></span>Căn hộ</span>
+              <span class="d-ck"><span class="d-box on">✓</span>Nhà riêng</span>
+              <span class="d-ck"><span class="d-box"></span>Biệt thự</span>
+              <span class="d-ck"><span class="d-box"></span>Homestay</span>
+            </div>
+          </div>
+
+          <div class="d-sec">
+            <h3>Đánh giá</h3>
+            <div class="d-chips">
+              <span class="d-chip">★ 5</span><span class="d-chip on">★ 4+</span><span class="d-chip">★ 3+</span>
+            </div>
+          </div>
+
+          <button class="d-apply">Áp dụng bộ lọc</button>
+        </div>
+
+        <!-- RESULTS -->
+        <div class="d-main d-relative">
+          <div class="d-toolbar">
+            <div>
+              <h2>248 chỗ nghỉ tại Đà Nẵng</h2>
+              <div class="sub">24/10 – 27/10 · 2 khách · 3 đêm</div>
+            </div>
+            <div class="d-sort">Sắp xếp: <b>Đề xuất</b> ▾</div>
+          </div>
+
+          <div class="d-grid">
+
+            <div class="card">
+              <div class="img g1">🏖️<span class="heart on">♥</span><span class="badge">Homestay</span></div>
+              <div class="cbody">
+                <div class="pr">1.250.000đ <span>/ đêm</span></div>
+                <div class="bed">King bed</div>
+                <div class="addr">📍 Sơn Trà, Đà Nẵng</div>
+                <div class="hr"></div>
+                <div class="meta">
+                  <span class="mi"><i>📅</i>available 24/10</span>
+                  <span class="mi"><i>🏠</i>homestay</span>
+                  <span class="mi"><i>🚿</i>Private bath</span>
+                  <span class="mi"><i>👤</i>sleeps max 2</span>
+                </div>
+                <div class="hr"></div>
+                <div class="house"><b>Nhà:</b> 2 phòng ngủ · 2 phòng tắm</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="img g2">🏢<span class="heart">♡</span><span class="badge">Căn hộ</span></div>
+              <div class="cbody">
+                <div class="pr">980.000đ <span>/ đêm</span></div>
+                <div class="bed">Queen bed</div>
+                <div class="addr">📍 Mỹ An, Ngũ Hành Sơn</div>
+                <div class="hr"></div>
+                <div class="meta">
+                  <span class="mi"><i>📅</i>available 24/10</span>
+                  <span class="mi"><i>🏠</i>apartment</span>
+                  <span class="mi"><i>🚿</i>Private bath</span>
+                  <span class="mi"><i>👤</i>sleeps max 2</span>
+                </div>
+                <div class="hr"></div>
+                <div class="house"><b>Nhà:</b> 1 phòng ngủ · 1 phòng tắm</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="img g3">🛏️<span class="heart">♡</span><span class="badge">Nhà riêng</span></div>
+              <div class="cbody">
+                <div class="pr">750.000đ <span>/ đêm</span></div>
+                <div class="bed">Double bed</div>
+                <div class="addr">📍 Hải Châu, Đà Nẵng</div>
+                <div class="hr"></div>
+                <div class="meta">
+                  <span class="mi"><i>📅</i>available 25/10</span>
+                  <span class="mi"><i>🏠</i>private house</span>
+                  <span class="mi"><i>🚿</i>Private bath</span>
+                  <span class="mi"><i>👤</i>sleeps max 2</span>
+                </div>
+                <div class="hr"></div>
+                <div class="house"><b>Nhà:</b> 1 phòng ngủ · 1 phòng tắm</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="img g4">🌴<span class="heart">♡</span><span class="badge">Biệt thự</span></div>
+              <div class="cbody">
+                <div class="pr">1.690.000đ <span>/ đêm</span></div>
+                <div class="bed">King bed</div>
+                <div class="addr">📍 An Thượng, Sơn Trà</div>
+                <div class="hr"></div>
+                <div class="meta">
+                  <span class="mi"><i>📅</i>available 24/10</span>
+                  <span class="mi"><i>🏠</i>private villa</span>
+                  <span class="mi"><i>🚿</i>Private bath</span>
+                  <span class="mi"><i>👤</i>sleeps max 4</span>
+                </div>
+                <div class="hr"></div>
+                <div class="house"><b>Nhà:</b> 2 phòng ngủ · 2 phòng tắm</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="img g5">🏡<span class="heart">♡</span><span class="badge">Homestay</span></div>
+              <div class="cbody">
+                <div class="pr">620.000đ <span>/ đêm</span></div>
+                <div class="bed">Single bed</div>
+                <div class="addr">📍 Hội An, Quảng Nam</div>
+                <div class="hr"></div>
+                <div class="meta">
+                  <span class="mi"><i>📅</i>available 26/10</span>
+                  <span class="mi"><i>🏠</i>homestay</span>
+                  <span class="mi"><i>🚿</i>Shared bath</span>
+                  <span class="mi"><i>👤</i>sleeps max 1</span>
+                </div>
+                <div class="hr"></div>
+                <div class="house"><b>Nhà:</b> 1 phòng ngủ · 1 phòng tắm</div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="img g6">🌇<span class="heart">♡</span><span class="badge">Căn hộ</span></div>
+              <div class="cbody">
+                <div class="pr">2.400.000đ <span>/ đêm</span></div>
+                <div class="bed">King bed</div>
+                <div class="addr">📍 Bắc Mỹ An, Ngũ Hành Sơn</div>
+                <div class="hr"></div>
+                <div class="meta">
+                  <span class="mi"><i>📅</i>available 24/10</span>
+                  <span class="mi"><i>🏠</i>apartment</span>
+                  <span class="mi"><i>🚿</i>Private bath</span>
+                  <span class="mi"><i>👤</i>sleeps max 3</span>
+                </div>
+                <div class="hr"></div>
+                <div class="house"><b>Nhà:</b> 2 phòng ngủ · 2 phòng tắm</div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="d-page">
+            <span class="pg">←</span><span class="pg on">1</span><span class="pg">2</span><span class="pg">3</span><span class="pg">4</span><span class="dots">…</span><span class="pg">42</span><span class="pg">→</span>
+          </div>
+
+          <div class="d-map">🗺️ Bản đồ</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="boardCap">Desktop — 1440px</div>
+  </div>
+
+  <!-- ================= MOBILE ================= -->
+  <div class="boardWrap">
+    <div class="board mobile">
+
+      <div class="m-header">
+        <img class="m-logo" src="app/tools/assets/Homefy-logo.webp" alt="HOMEFY">
+        <div class="m-right">
+          <div class="m-avatar">D</div>
+          <div class="m-burger"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <div class="m-pill">
+        <div class="txt">
+          <div class="t1">📍 Đà Nẵng</div>
+          <div class="t2">24 – 27/10 · 2 khách · 1 phòng</div>
+        </div>
+        <div class="m-fbtn">⚙</div>
+      </div>
+
+      <div class="m-chips">
+        <span class="m-chip on">Giá 200k – 2,5tr ✕</span>
+        <span class="m-chip on">Nhà riêng ✕</span>
+        <span class="m-chip on">Wifi ✕</span>
+        <span class="m-chip on">Điều hòa ✕</span>
+        <span class="m-chip">+2</span>
+      </div>
+
+      <div class="m-tool">
+        <h2>248 chỗ nghỉ</h2>
+        <span>Sắp xếp: Đề xuất ▾</span>
+      </div>
+
+      <div class="m-list">
+
+        <div class="card">
+          <div class="img g1">🏖️<span class="heart on">♥</span><span class="badge">Homestay</span></div>
+          <div class="cbody">
+            <div class="pr">1.250.000đ <span>/ đêm</span></div>
+            <div class="bed">King bed</div>
+            <div class="addr">📍 Sơn Trà, Đà Nẵng</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><i>📅</i>available 24/10</span>
+              <span class="mi"><i>🏠</i>homestay</span>
+              <span class="mi"><i>🚿</i>Private bath</span>
+              <span class="mi"><i>👤</i>sleeps max 2</span>
+            </div>
+            <div class="hr"></div>
+            <div class="house"><b>Nhà:</b> 2 phòng ngủ · 2 phòng tắm</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="img g4">🌴<span class="heart">♡</span><span class="badge">Biệt thự</span></div>
+          <div class="cbody">
+            <div class="pr">1.690.000đ <span>/ đêm</span></div>
+            <div class="bed">King bed</div>
+            <div class="addr">📍 An Thượng, Sơn Trà</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><i>📅</i>available 24/10</span>
+              <span class="mi"><i>🏠</i>private villa</span>
+              <span class="mi"><i>🚿</i>Private bath</span>
+              <span class="mi"><i>👤</i>sleeps max 4</span>
+            </div>
+            <div class="hr"></div>
+            <div class="house"><b>Nhà:</b> 2 phòng ngủ · 2 phòng tắm</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="m-bottom">
+        <button>Hiện 248 kết quả</button>
+      </div>
+
+    </div>
+    <div class="boardCap">Mobile — 390px</div>
+  </div>
+
+</div>
+
+</body>
+</html>

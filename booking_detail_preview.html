@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>HOMEFY — /booking-list/[id] mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Prata&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+@font-face { font-family: 'Theseasons'; src: url('app/tools/fonts/fonnts.com-Classica-Pro-.otf'); }
+@font-face { font-family: 'Thicccboi'; src: url('app/tools/fonts/THICCCBOI-Light.ttf'); }
+
+:root{
+  --cream:#fbf6ee; --teal:#4c1d95; --ink:#172b2f; --orange:#5b21b6; --orange-strong:#4c1d95;
+  --gray:#616066; --line:#b7b7b7; --line-soft:#ececed; --badge:#f6f6f6;
+  --green:#137044; --green-bg:#e4f6ea; --red:#dc2626; --red-bg:#fdecec;
+  --shadow:0 3px 20px rgba(8,15,52,.08);
+  --r:0 0 20px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#ece6d9;font-family:'Be Vietnam Pro','Thicccboi','Segoe UI',Arial,sans-serif;padding:36px 44px 52px;}
+img{display:block}
+
+.canvasTitle{margin:0 auto 26px;max-width:1900px;color:var(--ink)}
+.canvasTitle h1{font-family:'Prata','Theseasons',Georgia,serif;font-size:24px;font-weight:400}
+.canvasTitle h1 span{color:var(--orange-strong)}
+.canvasTitle p{font-size:12.5px;color:var(--gray);margin-top:6px;line-height:1.6}
+.canvasTitle b{color:var(--teal);font-weight:400}
+
+.boards{display:flex;flex-wrap:wrap;align-items:flex-start;gap:52px}
+.boardWrap{}
+.boardCap{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--gray);margin-top:14px}
+.board{background:var(--cream);border:1px solid #d8d1c1;box-shadow:0 24px 70px rgba(23,43,47,.14);overflow:hidden}
+
+/* ============ shared ============ */
+.desktop{width:1440px}
+.mobile{width:390px}
+.logo{height:52px;width:auto}
+.menu{display:flex;list-style:none;gap:32px}
+.menu li{font-family:'Prata','Theseasons',Georgia,serif;font-size:14px;color:var(--ink);cursor:pointer}
+.menu li.active{color:var(--orange-strong)}
+.loginBtn{border:1px solid var(--ink);border-radius:var(--r);padding:10px 26px;font-family:'Prata','Theseasons',Georgia,serif;font-size:15px;color:var(--ink)}
+.avatar{width:34px;height:34px;border-radius:50%;background:var(--teal);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Prata','Theseasons',Georgia,serif;font-size:14px}
+.burger{display:flex;flex-direction:column;gap:4px}
+.burger i{display:block;width:20px;height:2px;background:var(--ink);border-radius:2px}
+
+.backBar{display:flex;align-items:center;justify-content:space-between;padding:0 6.5% 4px}
+.back{font-size:13px;color:var(--teal);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.crumb{font-size:12px;color:var(--gray)}
+.crumb b{font-weight:400;color:var(--ink)}
+
+.pill{display:inline-flex;align-items:center;gap:7px;border-radius:50px;padding:7px 14px;font-size:12.5px;font-weight:500}
+.pill.ok{background:var(--green-bg);color:var(--green)}
+.pill.bad{background:var(--red-bg);color:var(--red)}
+
+.card{background:#fff;box-shadow:var(--shadow);border-radius:var(--r)}
+.card h3{font-family:'Prata','Theseasons',Georgia,serif;font-size:15.5px;font-weight:400;color:var(--ink);margin-bottom:13px}
+.hr{height:1px;background:var(--line-soft);margin:11px 0}
+
+.btn{border:none;cursor:pointer;font-family:'Prata','Theseasons',Georgia,serif;border-radius:var(--r);transition:background .2s}
+.btn.primary{background:var(--orange);color:#fff;padding:13px 26px;font-size:15px}
+.btn.primary:hover{background:var(--orange-strong)}
+.btn.outline{background:#fff;border:1px solid var(--line);color:var(--ink);padding:12px 22px;font-size:14px;border-radius:0 0 12px}
+.btn.outline:hover{background:#f6f6f6}
+.btn.danger{background:#fff;border:1px solid #fca5a5;color:var(--red);padding:12px 22px;font-size:14px;border-radius:0 0 12px}
+.btn.danger:hover{background:#fef2f2}
+
+.infoRow{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink);padding:5px 0}
+.infoRow i{font-style:normal;font-size:15px}
+.infoRow span{color:var(--gray);min-width:66px}
+
+.priceRow{display:flex;justify-content:space-between;font-size:13.5px;color:var(--gray);padding:4px 0}
+.priceRow b{font-weight:400;color:var(--ink)}
+.priceRow.discount b{color:var(--green)}
+.priceRow.refund b{color:var(--red)}
+.totalRow{display:flex;justify-content:space-between;align-items:baseline}
+.totalRow span{font-size:14px;color:var(--ink)}
+.totalRow b{font-family:'Prata','Theseasons',Georgia,serif;font-size:19px;font-weight:400;color:var(--orange-strong)}
+
+.dateBoxes{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.dateBox{border:1px solid var(--line-soft);border-radius:0 0 12px;padding:11px 14px;background:#fff}
+.dateBox .lb{font-size:11px;color:var(--gray);letter-spacing:.4px;text-transform:uppercase}
+.dateBox .vl{font-size:15px;color:var(--ink);margin-top:4px;font-weight:500}
+.dateBox .sub{font-size:11.5px;color:var(--gray);margin-top:2px}
+
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:50px;padding:6px 13px;font-size:12px;color:var(--ink)}
+
+.policyBox{background:var(--green-bg);border-radius:0 0 12px;padding:13px 15px;font-size:12.5px;color:var(--green);line-height:1.55}
+.policyBox.warn{background:#fdecec;color:var(--red)}
+.policyBox p{margin-top:5px;color:var(--gray);font-size:12.5px;line-height:1.55}
+.policyLink{display:inline-block;margin-top:10px;font-size:12.5px;color:var(--teal);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* ============ DESKTOP ============ */
+.d-header{display:flex;align-items:center;justify-content:space-between;padding:18px 6.5% 14px}
+
+.d-top{display:flex;gap:24px;padding:22px 6.5% 0;align-items:stretch}
+.d-gallery{flex:1.15;min-width:0}
+.d-mainImg{position:relative;height:300px;border-radius:0 0 20px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;font-size:64px}
+.g1{background:linear-gradient(135deg,#f8dfc0,#f0b98a)}
+.g2{background:linear-gradient(135deg,#e8e3d5,#cfc6ad)}
+.g3{background:linear-gradient(135deg,#d5e6e9,#a9ccd3)}
+.g4{background:linear-gradient(135deg,#dcead8,#b3d1ab)}
+.g5{background:linear-gradient(135deg,#dbe4f0,#aec3dd)}
+.d-thumbs{display:flex;gap:10px;margin-top:10px}
+.d-thumb{width:92px;height:64px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;opacity:.85}
+.d-thumb.on{outline:2px solid var(--orange);opacity:1}
+
+.d-info{flex:1;min-width:0;align-self:flex-start}
+.d-infoCard{padding:22px 24px}
+.d-infoCard h1{font-family:'Prata','Theseasons',Georgia,serif;font-size:25px;font-weight:400;color:var(--ink);margin-top:12px;line-height:1.3}
+.d-codeRow{display:flex;align-items:center;gap:9px;margin-top:12px}
+.d-codePill{display:inline-flex;align-items:center;gap:9px;background:var(--badge);border-radius:50px;padding:6px 14px}
+.d-codePill .lb{font-size:10.5px;letter-spacing:1.2px;text-transform:uppercase;color:var(--gray)}
+.d-codePill .vl{font-size:12.5px;color:var(--teal);font-weight:500;letter-spacing:.8px}
+.d-copy{font-size:12px;color:var(--teal);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.d-addr{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--ink);margin-top:12px}
+.d-meta{display:flex;gap:16px;margin-top:11px;font-size:12.5px;color:var(--gray)}
+.d-meta span{display:inline-flex;align-items:center;gap:6px}
+.d-dates{margin-top:16px}
+
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:22px 6.5% 0}
+
+.d-support{margin:20px 6.5% 0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.d-support p{font-size:13px;color:var(--gray);line-height:1.6}
+.d-support b{display:block;font-weight:400;color:var(--ink);font-size:14px;margin-bottom:3px}
+
+.d-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:26px 6.5% 34px}
+.d-cancelNote{margin-right:auto;font-size:12.5px;color:var(--gray)}
+
+/* ============ MOBILE ============ */
+.m-header{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px}
+.m-logo{height:38px;width:auto}
+.m-back{font-size:12.5px;color:var(--teal);padding:0 16px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.m-mainImg{position:relative;height:210px;border-radius:0 0 28px;box-shadow:var(--shadow);margin:12px 12px 0;display:flex;align-items:center;justify-content:center;font-size:52px}
+.m-thumbs{display:flex;gap:8px;margin:10px 12px 0;overflow:hidden}
+.m-thumb{width:66px;height:48px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;opacity:.85}
+.m-thumb.on{outline:2px solid var(--orange);opacity:1}
+.m-info{padding:16px 16px 0}
+.m-info h1{font-family:'Prata','Theseasons',Georgia,serif;font-size:19px;font-weight:400;color:var(--ink);margin-top:10px;line-height:1.35}
+.m-cards{display:flex;flex-direction:column;gap:14px;padding:16px 12px 0}
+.m-cards .card{padding:17px 16px}
+.m-bottom{position:sticky;bottom:0;margin-top:20px;padding:14px 12px 16px;background:linear-gradient(180deg,#fbf6ee00,#fbf6ee 40%);display:flex;gap:10px}
+.m-bottom .btn{flex:1;padding:14px 0;font-size:14px}
+.m-bottom .btn.outline,.m-bottom .btn.danger{border-radius:var(--r)}
+</style>
+</head>
+<body>
+
+<div class="canvasTitle">
+  <h1>HOMEFY <span>·</span> Trang Chi tiết đặt phòng <span>/booking-list/[id]</span> — mockup để review</h1>
+  <p>Nút <b>"Xem chi tiết"</b> trên /booking-list sẽ trỏ tới trang này. Data thật từ <b>booking/get_booking/{id}</b> (API + saga + slice đã có sẵn, tái dùng pattern PaymentUISuccess). Theo style màu <b>tím #5b21b6 → #4c1d95</b> (đồng bộ /booking-list & /profile có sẵn), success <b>#137044</b>, danger <b>#dc2626</b>, nền cream <b>#fbf6ee</b> — font tương đồng <b>Prata / Be Vietnam Pro</b> (production dùng Theseasons / Thicccboi thật).
+  &nbsp;·&nbsp; Board 1+2: trạng thái <b>Sắp tới — Đã xác nhận</b> &nbsp;·&nbsp; Board 3: biến thể <b>Đã hủy</b> (pill đỏ, ẩn nút Hủy/Thay đổi ngày, thêm hàng hoàn tiền + CTA "Đặt lại phòng")</p>
+</div>
+
+<div class="boards">
+
+  <!-- ================= DESKTOP — UPCOMING ================= -->
+  <div class="boardWrap">
+    <div class="board desktop">
+
+      <div class="d-header">
+        <img class="logo" src="app/tools/assets/Homefy-logo.webp" alt="HOMEFY">
+        <ul class="menu">
+          <li>Home</li><li class="active">Properties</li><li>Book an Inspection</li><li>FAQs</li><li>Our partners</li>
+        </ul>
+        <div class="loginBtn">Login</div>
+      </div>
+
+      <div class="backBar">
+        <span class="back">← Quay lại danh sách đặt phòng</span>
+        <span class="crumb">Booking của tôi <b>/ BK-20261024-000123</b></span>
+      </div>
+
+      <div class="d-top">
+        <div class="d-gallery">
+          <div class="d-mainImg g1">🏖️</div>
+          <div class="d-thumbs">
+            <div class="d-thumb g1 on">🏖️</div>
+            <div class="d-thumb g2">🛏️</div>
+            <div class="d-thumb g3">🛁</div>
+            <div class="d-thumb g4">🌴</div>
+            <div class="d-thumb g5">🏊</div>
+          </div>
+        </div>
+
+        <div class="d-info">
+          <div class="card d-infoCard">
+            <span class="pill ok">✓ Đã xác nhận · Đã thanh toán</span>
+            <h1>Homestay Biển Emerald — Đà Nẵng</h1>
+            <div class="d-codeRow">
+              <span class="d-codePill"><span class="lb">Mã đặt phòng</span><span class="vl">BK-20261024-000123</span></span>
+              <span class="d-copy">Sao chép</span>
+            </div>
+            <div class="d-addr">📍 Sơn Trà, Đà Nẵng, Việt Nam</div>
+            <div class="d-meta">
+              <span>👤 2 khách</span>
+              <span>🛏️ 1 phòng</span>
+              <span>🌙 3 đêm</span>
+              <span>💰 1.250.000đ / đêm</span>
+            </div>
+            <div class="d-dates dateBoxes">
+              <div class="dateBox">
+                <span class="lb">Nhận phòng</span>
+                <div class="vl">24/10/2026</div>
+                <div class="sub">Thứ Bảy · sau 14:00</div>
+              </div>
+              <div class="dateBox">
+                <span class="lb">Trả phòng</span>
+                <div class="vl">27/10/2026</div>
+                <div class="sub">Thứ Ba · trước 12:00</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-grid">
+        <div class="card" style="padding:20px 24px">
+          <h3>Thông tin liên hệ</h3>
+          <div class="infoRow"><i>👤</i><span>Khách</span>Nguyễn Văn A</div>
+          <div class="infoRow"><i>📞</i><span>Điện thoại</span>0901 234 567</div>
+          <div class="infoRow"><i>✉️</i><span>Email</span>nguyenvana@gmail.com</div>
+          <div class="infoRow"><i>📝</i><span>Ghi chú</span>Check-in muộn ~20:00</div>
+        </div>
+
+        <div class="card" style="padding:20px 24px">
+          <h3>Chi tiết thanh toán</h3>
+          <div class="priceRow">Giá phòng <span style="color:var(--ink)">3 đêm × 1.250.000đ</span><b>3.750.000đ</b></div>
+          <div class="priceRow">Phí dịch vụ<b>150.000đ</b></div>
+          <div class="priceRow discount">Mã giảm giá — HOMEFY10<b>−200.000đ</b></div>
+          <div class="hr"></div>
+          <div class="priceRow">Phương thức<b>VNPAY <span class="pill ok" style="padding:3px 10px;font-size:11px;margin-left:6px">Đã thanh toán</span></b></div>
+          <div class="hr"></div>
+          <div class="totalRow"><span>Tổng cộng</span><b>3.700.000đ</b></div>
+        </div>
+
+        <div class="card" style="padding:20px 24px">
+          <h3>Chính sách hủy</h3>
+          <div class="policyBox">✓ Miễn phí hủy trước <b>21/10/2026 23:59</b>
+            <p>Hủy sau thời điểm này sẽ bị tính phí 30% tổng giá trị đặt phòng. Hoàn tiền qua phương thức thanh toán ban đầu trong 3–5 ngày làm việc.</p>
+          </div>
+          <span class="policyLink">Xem chi tiết chính sách</span>
+        </div>
+
+        <div class="card" style="padding:20px 24px">
+          <h3>Tiện ích phòng</h3>
+          <div class="chips">
+            <span class="chip">📶 Wifi tốc độ cao</span>
+            <span class="chip">❄️ Điều hòa</span>
+            <span class="chip">🏊 Hồ bơi</span>
+            <span class="chip">🍳 Bếp đầy đủ</span>
+            <span class="chip">📺 TV thông minh</span>
+            <span class="chip">🚗 Chỗ đậu xe</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card d-support">
+        <div>
+          <b>Bạn cần hỗ trợ?</b>
+          <p>Nếu bạn cần hỗ trợ hoặc có yêu cầu đặc biệt, đừng ngần ngại liên hệ với chúng tôi — Hotline <b style="display:inline;color:var(--teal)">1900 6868</b> · support@homefy.vn</p>
+        </div>
+        <button class="btn outline">📞 Liên hệ hỗ trợ</button>
+      </div>
+
+      <div class="d-actions">
+        <span class="d-cancelNote">Miễn phí hủy đến 21/10/2026 23:59</span>
+        <button class="btn outline">⬇ Tải hóa đơn (PDF)</button>
+        <button class="btn outline">📅 Thay đổi ngày</button>
+        <button class="btn danger">✕ Hủy đặt phòng</button>
+      </div>
+
+    </div>
+    <div class="boardCap">Desktop — 1440px · trạng thái: Sắp tới (Đã xác nhận)</div>
+  </div>
+
+  <!-- ================= MOBILE — UPCOMING ================= -->
+  <div class="boardWrap">
+    <div class="board mobile">
+
+      <div class="m-header">
+        <img class="m-logo" src="app/tools/assets/Homefy-logo.webp" alt="HOMEFY">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar">D</div>
+          <div class="burger"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <span class="m-back">← Quay lại danh sách đặt phòng</span>
+
+      <div class="m-mainImg g1">🏖️</div>
+      <div class="m-thumbs">
+        <div class="m-thumb g1 on">🏖️</div>
+        <div class="m-thumb g2">🛏️</div>
+        <div class="m-thumb g3">🛁</div>
+        <div class="m-thumb g4">🌴</div>
+        <div class="m-thumb g5">🏊</div>
+      </div>
+
+      <div class="m-info">
+        <span class="pill ok">✓ Đã xác nhận · Đã thanh toán</span>
+        <h1>Homestay Biển Emerald — Đà Nẵng</h1>
+        <div class="d-codeRow" style="margin-top:10px">
+          <span class="d-codePill"><span class="lb">Mã đặt phòng</span><span class="vl">BK-20261024-000123</span></span>
+        </div>
+        <div class="d-addr">📍 Sơn Trà, Đà Nẵng</div>
+        <div class="d-meta">
+          <span>👤 2 khách</span>
+          <span>🛏️ 1 phòng</span>
+          <span>🌙 3 đêm</span>
+        </div>
+        <div class="d-dates dateBoxes">
+          <div class="dateBox">
+            <span class="lb">Nhận phòng</span>
+            <div class="vl">24/10/2026</div>
+            <div class="sub">Thứ Bảy · sau 14:00</div>
+          </div>
+          <div class="dateBox">
+            <span class="lb">Trả phòng</span>
+            <div class="vl">27/10/2026</div>
+            <div class="sub">Thứ Ba · trước 12:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-cards">
+        <div class="card">
+          <h3>Chi tiết thanh toán</h3>
+          <div class="priceRow">Giá phòng (3 đêm)<b>3.750.000đ</b></div>
+          <div class="priceRow">Phí dịch vụ<b>150.000đ</b></div>
+          <div class="priceRow discount">Giảm giá HOMEFY10<b>−200.000đ</b></div>
+          <div class="hr"></div>
+          <div class="priceRow">Phương thức<b>VNPAY</b></div>
+          <div class="hr"></div>
+          <div class="totalRow"><span>Tổng cộng</span><b>3.700.000đ</b></div>
+        </div>
+
+        <div class="card">
+          <h3>Thông tin liên hệ</h3>
+          <div class="infoRow"><i>👤</i><span>Khách</span>Nguyễn Văn A</div>
+          <div class="infoRow"><i>📞</i><span>Điện thoại</span>0901 234 567</div>
+          <div class="infoRow"><i>✉️</i><span>Email</span>nguyenvana@gmail.com</div>
+        </div>
+
+        <div class="card">
+          <h3>Chính sách hủy</h3>
+          <div class="policyBox">✓ Miễn phí hủy trước <b>21/10/2026 23:59</b>
+            <p>Hủy sau thời điểm này sẽ bị tính phí 30%.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Tiện ích phòng</h3>
+          <div class="chips">
+            <span class="chip">📶 Wifi</span>
+            <span class="chip">❄️ Điều hòa</span>
+            <span class="chip">🏊 Hồ bơi</span>
+            <span class="chip">🍳 Bếp</span>
+            <span class="chip">📺 TV</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="m-bottom">
+        <button class="btn danger">✕ Hủy phòng</button>
+        <button class="btn primary">⬇ Tải hóa đơn</button>
+      </div>
+
+    </div>
+    <div class="boardCap">Mobile — 390px</div>
+  </div>
+
+  <!-- ================= DESKTOP — CANCELLED ================= -->
+  <div class="boardWrap">
+    <div class="board desktop">
+
+      <div class="d-header">
+        <img class="logo" src="app/tools/assets/Homefy-logo.webp" alt="HOMEFY">
+        <ul class="menu">
+          <li>Home</li><li class="active">Properties</li><li>Book an Inspection</li><li>FAQs</li><li>Our partners</li>
+        </ul>
+        <div class="loginBtn">Login</div>
+      </div>
+
+      <div class="backBar">
+        <span class="back">← Quay lại danh sách đặt phòng</span>
+        <span class="crumb">Booking của tôi <b>/ BK-20261024-000123</b></span>
+      </div>
+
+      <div class="d-top">
+        <div class="d-gallery">
+          <div class="d-mainImg g1" style="filter:grayscale(.55)">🏖️</div>
+          <div class="d-thumbs">
+            <div class="d-thumb g1 on" style="filter:grayscale(.55)">🏖️</div>
+            <div class="d-thumb g2" style="filter:grayscale(.55)">🛏️</div>
+            <div class="d-thumb g3" style="filter:grayscale(.55)">🛁</div>
+            <div class="d-thumb g4" style="filter:grayscale(.55)">🌴</div>
+            <div class="d-thumb g5" style="filter:grayscale(.55)">🏊</div>
+          </div>
+        </div>
+
+        <div class="d-info">
+          <div class="card d-infoCard">
+            <span class="pill bad">✕ Đã hủy</span>
+            <h1>Homestay Biển Emerald — Đà Nẵng</h1>
+            <div class="d-codeRow">
+              <span class="d-codePill"><span class="lb">Mã đặt phòng</span><span class="vl">BK-20261024-000123</span></span>
+              <span class="d-copy">Sao chép</span>
+            </div>
+            <div class="d-addr">📍 Sơn Trà, Đà Nẵng, Việt Nam</div>
+            <div class="d-meta">
+              <span>👤 2 khách</span>
+              <span>🛏️ 1 phòng</span>
+              <span>🌙 3 đêm</span>
+            </div>
+            <div class="d-dates dateBoxes">
+              <div class="dateBox">
+                <span class="lb">Ngày nhận phòng (đã hủy)</span>
+                <div class="vl" style="color:var(--gray);text-decoration:line-through">24/10/2026</div>
+                <div class="sub">Thứ Bảy</div>
+              </div>
+              <div class="dateBox">
+                <span class="lb">Ngày trả phòng</span>
+                <div class="vl" style="color:var(--gray);text-decoration:line-through">27/10/2026</div>
+                <div class="sub">Thứ Ba</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-grid">
+        <div class="card" style="padding:20px 24px">
+          <h3>Thông tin liên hệ</h3>
+          <div class="infoRow"><i>👤</i><span>Khách</span>Nguyễn Văn A</div>
+          <div class="infoRow"><i>📞</i><span>Điện thoại</span>0901 234 567</div>
+          <div class="infoRow"><i>✉️</i><span>Email</span>nguyenvana@gmail.com</div>
+        </div>
+
+        <div class="card" style="padding:20px 24px">
+          <h3>Chi tiết thanh toán</h3>
+          <div class="priceRow">Đã thanh toán qua VNPAY<b>3.900.000đ</b></div>
+          <div class="priceRow refund">Hoàn tiền (70%)<b>−2.730.000đ</b></div>
+          <div class="priceRow">Đã khấu trừ phí hủy (30%)<b>1.170.000đ</b></div>
+          <div class="hr"></div>
+          <div class="priceRow">Trạng thái hoàn tiền<b><span class="pill ok" style="padding:3px 10px;font-size:11px">Đã chuyển — dự kiến 22/10</span></b></div>
+        </div>
+
+        <div class="card" style="padding:20px 24px">
+          <h3>Thông tin hủy phòng</h3>
+          <div class="policyBox warn">✕ Bạn đã hủy vào 19/10/2026 14:32
+            <p>Lý do: Thay đổi kế hoạch chuyến đi. Vì hủy sau thời điểm miễn phí (21/10) nên áp dụng phí 30% theo chính sách.</p>
+          </div>
+          <span class="policyLink">Xem chi tiết chính sách</span>
+        </div>
+
+        <div class="card" style="padding:20px 24px">
+          <h3>Tiện ích phòng</h3>
+          <div class="chips">
+            <span class="chip">📶 Wifi tốc độ cao</span>
+            <span class="chip">❄️ Điều hòa</span>
+            <span class="chip">🏊 Hồ bơi</span>
+            <span class="chip">🍳 Bếp đầy đủ</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card d-support">
+        <div>
+          <b>Cần hỗ trợ về đặt phòng này?</b>
+          <p>Liên hệ Hotline <b style="display:inline;color:var(--teal)">1900 6868</b> · support@homefy.vn nếu bạn có câu hỏi về hoàn tiền hoặc muốn đặt lại phòng.</p>
+        </div>
+        <button class="btn outline">📞 Liên hệ hỗ trợ</button>
+      </div>
+
+      <div class="d-actions">
+        <span class="d-cancelNote">Mã đặt phòng này không thể chỉnh sửa</span>
+        <button class="btn outline">⬇ Tải hóa đơn (PDF)</button>
+        <button class="btn primary">🔍 Tìm & đặt lại phòng</button>
+      </div>
+
+    </div>
+    <div class="boardCap">Desktop — biến thể trạng thái: Đã hủy</div>
+  </div>
+
+</div>
+
+</body>
+</html>

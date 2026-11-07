@@ -1,10 +1,7 @@
 import Image from 'next/image'
-import { CiLocationOn } from "react-icons/ci";
-import Link from 'next/link'
 import banner from '@/assets/banner.webp'
 import styles from './Banner.module.scss'
-import LocationFilter from './LocationFilter';
-import SizeFilter from './SizeFilter';
+import BannerSearch from './BannerSearch';
 
 const Banner = () => {
     return (
@@ -19,30 +16,12 @@ const Banner = () => {
                     </div>
                     <div className={styles['content']}>
                         <div>
-                            <h1 className={styles['title']}>thoughtfully designed, move in ready homes</h1>
+                            <h1 className={styles['title']}>Nơi dừng chân lý tưởng cho mọi hành trình</h1>
                             <div className={styles['divSubTitle']}>
-                                <p className={styles['subTitle']}>The easiest renting experience for those looking for good design, flexibility and a seamless service.</p>
+                                <p className={styles['subTitle']}>Đặt phòng khách sạn, resort, homestay trên khắp Việt Nam — nhanh gọn, minh bạch, giá tốt.</p>
                             </div>
 
-                            <div className={styles['action']}>
-                                <div className={styles['filterLeft']}>
-                                    <div className={styles['locationFilter']}>
-                                        <LocationFilter />
-                                    </div>
-                                    <div className={styles['sizeFilter']}>
-                                        <SizeFilter />
-                                    </div>
-                                </div>
-                                <div className={styles['filterRight']}>
-                                    <div >
-                                        <div className={styles['allPropertiesBtn']}>
-                                            <Link href={'/filter'} className={styles['allPropertiesBtnLink']}>
-                                                All properties
-                                            </Link>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <BannerSearch />
                         </div>
                     </div>
                 </div>

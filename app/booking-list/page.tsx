@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 import { useDispatch } from 'react-redux'
 import { CiLocationOn, CiUser } from 'react-icons/ci'
 import { IoBedOutline, IoMoonOutline } from 'react-icons/io5'
@@ -85,6 +86,7 @@ function mapBooking(booking: BookingHistoryItem, tab: Tab): Booking {
 }
 
 function BookingCard({ booking, showCancel }: { booking: Booking; showCancel: boolean }) {
+  const router = useRouter()
   return (
     <div className={styles.card}>
       <div className={styles.imageWrap}>
@@ -137,7 +139,9 @@ function BookingCard({ booking, showCancel }: { booking: Booking; showCancel: bo
             <AiFillCheckCircle className={styles.statusIcon} />
             <span>{booking.status}</span>
           </div>
-          <button className={styles.detailBtn}>Xem chi tiết</button>
+          <button className={styles.detailBtn} onClick={() => router.push(`/booking-list/${booking.id}`)}>
+            Xem chi tiết
+          </button>
           {showCancel && <button className={styles.cancelBtn}>Hủy phòng</button>}
         </div>
       </div>
