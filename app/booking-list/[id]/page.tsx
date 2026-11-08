@@ -1,12 +1,10 @@
 import BookingDetailView from './BookingDetailView'
 
 export default async function Page({
-  searchParams,
+  params,
 }: {
-  searchParams: Promise<Record<string, string | string[] | undefined>>
+  params: Promise<{ id: string }>
 }) {
-  const resolved = await searchParams
-  const statusParam = Array.isArray(resolved.status) ? resolved.status[0] : resolved.status
-  const status = statusParam === 'cancelled' ? 'cancelled' : 'upcoming'
-  return <BookingDetailView status={status} />
+  const { id: bookingCode } = await params
+  return <BookingDetailView key={bookingCode} bookingCode={bookingCode} />
 }

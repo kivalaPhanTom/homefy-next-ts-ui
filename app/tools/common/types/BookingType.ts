@@ -1,3 +1,5 @@
+import type { RoomDetail } from './RoomTypes';
+
 export interface BookingData {
   roomId: string;
   code: string;
@@ -14,6 +16,7 @@ export interface BookingData {
 
 export interface BookingHistoryItem {
   bookingId: string;
+  bookingCode: string;
   roomId: string;
   roomName: string;
   address: string;
@@ -41,4 +44,30 @@ export interface BookingDetail {
   status?: string;
   roomId: string;
   totalPrice: number;
+}
+
+export interface BookingDetailResult {
+  booking: BookingDetail;
+  user: {
+    id: string;
+    username: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+    phoneNumber: string;
+    birthdate: string;
+    address: string;
+    gender: string;
+    createdDate: string;
+  } | null;
+  room: Omit<RoomDetail, 'date_available' | 'bathroom_type' | 'status'> & {
+    bathroom_type: string | null;
+    status: string;
+  };
+}
+
+export interface BookingDetailResponse {
+  code: number;
+  message: string;
+  result: BookingDetailResult | null;
 }

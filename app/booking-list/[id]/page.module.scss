@@ -13,9 +13,16 @@ $redBg: #fdecec;
 $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 
 .page {
+  --page-gutter: 6.5%;
   background: $cream;
   min-height: 100vh;
   padding-bottom: 40px;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  &, * {
+    box-sizing: border-box;
+  }
 }
 
 .backBar {
@@ -23,7 +30,7 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding: 20px 6.5% 4px;
+  padding: 20px var(--page-gutter) 4px;
 }
 
 .back {
@@ -34,6 +41,8 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 }
 
 .crumb {
+  min-width: 0;
+  text-align: right;
   font-size: 12px;
   color: $gray;
 
@@ -44,9 +53,10 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 }
 
 .top {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   gap: 24px;
-  padding: 22px 6.5% 0;
+  padding: 22px var(--page-gutter) 0;
   align-items: stretch;
 }
 
@@ -64,6 +74,40 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   align-items: center;
   justify-content: center;
   font-size: 64px;
+  overflow: hidden;
+}
+
+.roomImage {
+  object-fit: cover;
+}
+
+.stateCard {
+  margin: 24px var(--page-gutter);
+  padding: 32px 24px;
+  background: #fff;
+  border-radius: 0 0 20px;
+  color: $ink;
+
+  p { margin: 12px 0; }
+
+  h1 {
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.4;
+  }
+}
+
+.description {
+  margin-top: 12px;
+  color: $gray;
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.pillNeutral {
+  background: $badgeBg;
+  color: $gray;
 }
 
 .g1 { background: linear-gradient(135deg, #f8dfc0, #f0b98a); }
@@ -78,11 +122,17 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 
 .thumbs {
   display: flex;
+  overflow-x: auto;
   gap: 10px;
   margin-top: 10px;
+  padding: 3px;
+  scroll-snap-type: x proximity;
 }
 
 .thumb {
+  position: relative;
+  overflow: hidden;
+  flex-shrink: 0;
   width: 92px;
   height: 64px;
   border-radius: 8px;
@@ -94,6 +144,7 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   cursor: pointer;
   opacity: 0.85;
   padding: 0;
+  scroll-snap-align: start;
 
   &:hover {
     opacity: 1;
@@ -112,10 +163,12 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 }
 
 .infoCard {
+  min-width: 0;
   padding: 22px 24px;
 }
 
 .pill {
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   gap: 7px;
@@ -158,9 +211,13 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   background: $badgeBg;
   border-radius: 50px;
   padding: 6px 14px;
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
 }
 
 .codeLabel {
+  flex-shrink: 0;
   font-size: 10.5px;
   letter-spacing: 1.2px;
   text-transform: uppercase;
@@ -168,6 +225,7 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 }
 
 .codeValue {
+  min-width: 0;
   font-size: 12.5px;
   color: $primaryDark;
   font-weight: 500;
@@ -182,12 +240,19 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   text-underline-offset: 3px;
   background: none;
   border: none;
-  padding: 0;
+  padding: 8px 4px;
+  min-width: 44px;
+  min-height: 44px;
+
+  &:focus-visible {
+    outline: 2px solid $primary;
+    outline-offset: 2px;
+  }
 }
 
 .address {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 6px;
   font-size: 13px;
   color: $ink;
@@ -195,7 +260,10 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 
   svg {
     flex-shrink: 0;
+    margin-top: 2px;
   }
+
+  span { min-width: 0; }
 }
 
 .meta {
@@ -210,21 +278,25 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
     display: inline-flex;
     align-items: center;
     gap: 6px;
+    min-width: 0;
+    max-width: 100%;
 
     svg {
       font-size: 15px;
+      flex-shrink: 0;
     }
   }
 }
 
 .dateBoxes {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   margin-top: 16px;
 }
 
 .dateBox {
+  min-width: 0;
   border: 1px solid $lineSoft;
   border-radius: 0 0 12px;
   padding: 11px 14px;
@@ -259,12 +331,13 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 20px;
-  padding: 22px 6.5% 0;
+  padding: 22px var(--page-gutter) 0;
 }
 
 .card {
+  min-width: 0;
   background: #fff;
   box-shadow: $shadow;
   border-radius: 0 0 20px;
@@ -279,37 +352,47 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 }
 
 .infoRow {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 18px 78px minmax(0, 1fr);
+  align-items: start;
+  gap: 4px 10px;
   font-size: 13.5px;
   color: $ink;
   padding: 5px 0;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
 
   svg {
     font-size: 16px;
     color: $gray;
     flex-shrink: 0;
-  }
-
-  span {
-    color: $gray;
-    min-width: 66px;
+    margin-top: 3px;
   }
 }
 
+.infoLabel {
+  color: $gray;
+}
+
+.infoValue {
+  min-width: 0;
+  white-space: pre-wrap;
+}
+
 .priceRow {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
   font-size: 13.5px;
   color: $gray;
   padding: 4px 0;
+  line-height: 1.6;
 
   b {
     font-weight: 400;
     color: $ink;
-    white-space: nowrap;
+    min-width: 0;
+    text-align: right;
   }
 }
 
@@ -339,6 +422,8 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   display: flex;
   justify-content: space-between;
   align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px 16px;
 
   span {
     font-size: 14px;
@@ -401,6 +486,7 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 }
 
 .amenity {
+  max-width: 100%;
   border: 1px solid $line;
   border-radius: 50px;
   padding: 6px 13px;
@@ -505,13 +591,44 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1100px) {
   .page {
-    padding-bottom: 0;
+    --page-gutter: 24px;
+  }
+
+  .top {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+
+  .mainImg {
+    height: clamp(260px, 45vw, 420px);
+  }
+
+  .infoCard {
+    background: #fff;
+    border: 1px solid $lineSoft;
+    border-radius: 0 0 20px;
+  }
+
+  .grid {
+    gap: 16px;
+    align-items: start;
+  }
+
+  .card {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 767px) {
+  .page {
+    --page-gutter: 16px;
+    padding-bottom: 24px;
   }
 
   .backBar {
-    padding: 16px 16px 0;
+    padding: 16px var(--page-gutter) 0;
   }
 
   .crumb {
@@ -519,12 +636,12 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   }
 
   .top {
-    display: block;
-    padding: 12px 12px 0;
+    gap: 16px;
+    padding-top: 16px;
   }
 
   .mainImg {
-    height: 210px;
+    height: clamp(200px, 58vw, 340px);
     border-radius: 0 0 28px;
     font-size: 52px;
   }
@@ -546,7 +663,7 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   }
 
   .info {
-    padding: 16px 4px 0;
+    padding: 0;
   }
 
   .infoCard {
@@ -556,19 +673,54 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   }
 
   .roomName {
-    font-size: 19px;
+    font-size: clamp(20px, 4vw, 24px);
+  }
+
+  .codeRow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .codePill {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    border-radius: 12px;
+    padding: 10px 12px;
+  }
+
+  .codeRow > [role='status'] {
+    grid-column: 1 / -1;
+  }
+
+  .meta {
+    gap: 10px 16px;
+    line-height: 1.5;
+  }
+
+  .dateBoxes {
+    gap: 10px;
+  }
+
+  .dateBox {
+    padding: 12px 10px;
   }
 
   .grid {
-    display: block;
-    padding: 16px 12px 0;
+    grid-template-columns: minmax(0, 1fr);
+    padding-top: 16px;
   }
 
   .card {
     padding: 17px 16px;
-    margin-bottom: 14px;
+    margin-bottom: 0;
     box-shadow: none;
     border: 1px solid $lineSoft;
+  }
+
+  .stateCard {
+    margin-top: 16px;
+    padding: 24px 16px;
   }
 
   .support {
@@ -600,5 +752,22 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
       font-size: 14px;
       border-radius: 0 0 20px;
     }
+  }
+}
+
+@media (max-width: 479px) {
+  .infoRow {
+    grid-template-columns: 18px minmax(0, 1fr);
+    padding: 8px 0;
+  }
+
+  .infoValue {
+    grid-column: 2;
+  }
+}
+
+@media (max-width: 359px) {
+  .dateBoxes {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

@@ -22,6 +22,7 @@ interface BookingBadge {
 
 interface Booking {
   id: string
+  bookingCode: string
   name: string
   location: string
   image: string
@@ -72,6 +73,7 @@ function formatPrice(price: number): string {
 function mapBooking(booking: BookingHistoryItem, tab: Tab): Booking {
   return {
     id: booking.bookingId,
+    bookingCode: booking.bookingCode,
     name: booking.roomName,
     location: booking.address,
     image: booking.imgUrl && booking.imgUrl.trim() ? booking.imgUrl : noImage.src,
@@ -139,7 +141,12 @@ function BookingCard({ booking, showCancel }: { booking: Booking; showCancel: bo
             <AiFillCheckCircle className={styles.statusIcon} />
             <span>{booking.status}</span>
           </div>
-          <button className={styles.detailBtn} onClick={() => router.push(`/booking-list/${booking.id}`)}>
+          <button
+            className={styles.detailBtn}
+            disabled={!booking.bookingCode}
+            title={!booking.bookingCode ? 'Chưa có mã đặt phòng' : undefined}
+            onClick={() => router.push(`/booking-list/${encodeURIComponent(booking.bookingCode)}`)}
+          >
             Xem chi tiết
           </button>
           {showCancel && <button className={styles.cancelBtn}>Hủy phòng</button>}
