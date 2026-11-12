@@ -450,7 +450,8 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 340px));
+  align-items: start;
   gap: 20px;
 }
 
@@ -683,9 +684,57 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   display: none;
 }
 
-@media (max-width: 992px) {
-  .grid {
-    grid-template-columns: repeat(2, 1fr);
+@media (min-width: 769px) {
+  .card {
+    min-width: 0;
+    padding-bottom: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .img {
+    height: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .cbody {
+    padding: 16px;
+  }
+
+  .roomName {
+    font-size: 16px;
+    line-height: 1.4;
+    text-decoration: none;
+
+    &:hover {
+      color: $primary;
+      text-decoration: underline;
+    }
+  }
+
+  .pr {
+    font-size: 18px;
+  }
+
+  .meta {
+    gap: 8px;
+  }
+
+  .mi {
+    min-width: 0;
+    white-space: normal;
+  }
+
+  .hr {
+    margin: 12px 0;
+  }
+
+  .meta + .hr {
+    display: none;
+  }
+
+  .house {
+    display: block;
+    margin-top: 12px;
   }
 }
 
