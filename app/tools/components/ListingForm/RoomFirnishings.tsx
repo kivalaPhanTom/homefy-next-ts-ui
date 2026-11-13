@@ -1,5 +1,5 @@
 'use client'
-import { JSX, memo } from 'react'
+import { memo } from 'react'
 import IconAirConditionAdmin from "@/common/IconSvg/IconAirConditionAdmin"
 import IconCarAdmin from "@/common/IconSvg/IconCarAdmin"
 import IconChairAdmin from "@/common/IconSvg/IconChairAdmin"
@@ -8,14 +8,8 @@ import IconDoorLock from "@/common/IconSvg/IconDoorLock"
 import IconDrawerAdmin from "@/common/IconSvg/IconDrawerAdmin"
 import IconLamp from "@/common/IconSvg/IconLamp"
 import IconWardrobeAdmin from "@/common/IconSvg/IconWardrobeAdmin"
-import { useGetFurnituresQuery } from '@/RTK_Query/Listing_Query'
+import { useGetFurnituresQuery, type FurnitureOption } from '@/RTK_Query/Listing_Query'
 import styles from './ListingForm.module.scss'
-interface FunitureOption {
-    id: string,
-    name: string,
-    icon: JSX.Element | null
-}
-type funituresFromApiType = Pick<FunitureOption, "id" | "name">;
 interface RoomFirnishingsProps {
     listFirnishings: string[],
     handleSetListFirnishings: (funitureId: string) => void
@@ -23,53 +17,51 @@ interface RoomFirnishingsProps {
 
 function RoomFirnishings(props: RoomFirnishingsProps) {
     const { listFirnishings, handleSetListFirnishings } = props
-    const { data, isFetching, error, refetch } = useGetFurnituresQuery(undefined)
-    // const funitures: funituresFromApiType[] = data ? data.result : []
-    const funitures: funituresFromApiType[] = (data as any)?.result ?? [];
-    const funitureOptions: FunitureOption[] = []
-    const ROOM_FUNITURES = ["Bed", "Wardrobe", "Desk", "Chair", "Bedside drawer", "Lamp", "Air conditioner", "Door lock"]
+    const { data } = useGetFurnituresQuery(undefined)
+    const furnitures = data?.result ?? []
 
-    const renderIcon = (funitureItem: funituresFromApiType) => {
-        switch (funitureItem.name) {
-            case 'Bed':
+    const renderIcon = (funitureItem: FurnitureOption) => {
+        switch (funitureItem.name.normalize('NFC').trim().toLowerCase()) {
+            case 'bed':
+            case 'giường':
                 return <IconCarAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Wardrobe':
+            case 'wardrobe':
+            case 'tủ quần áo':
                 return <IconWardrobeAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Desk':
+            case 'desk':
+            case 'bàn':
                 return <IconDeskAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Chair':
+            case 'chair':
+            case 'ghế':
                 return <IconChairAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Bedside drawer':
+            case 'bedside drawer':
+            case 'ngăn kéo':
+            case 'ngắn kéo':
                 return <IconDrawerAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Lamp':
+            case 'lamp':
+            case 'đèn':
                 return <IconLamp className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Air conditioner':
+            case 'air conditioner':
+            case 'máy lạnh':
+            case 'điều hòa':
                 return <IconAirConditionAdmin className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
-            case 'Door lock':
+            case 'door lock':
+            case 'khóa cửa':
                 return <IconDoorLock className={styles['iconAdmin']} color={listFirnishings.includes(funitureItem.id) ? '#d47536' : null} />
             default:
                 return null
         }
     }
 
-    funitures.forEach((e: funituresFromApiType) => {
-        const findFuniture = ROOM_FUNITURES.find(item => item === e.name);
-        if (findFuniture) {
-            funitureOptions.push({
-                ...e,
-                icon: renderIcon(e)
-            })
-        }
-    })
 
     return (
         <div className={styles['listIconRoomFirnishing']}>
             {
-                funitureOptions.map((el, index) => (
-                    <div key={index} className={styles['iconItem']} onClick={() => { handleSetListFirnishings(el.id) }}>
+                furnitures.map((el) => (
+                    <div key={el.id} className={styles['iconItem']} onClick={() => { handleSetListFirnishings(el.id) }}>
                         <div>
                             <div className={styles['divIconItem']}>
-                                {el.icon}
+                                {renderIcon(el)}
                             </div>
                             <div>
                                 <p className={styles['iconItemTitle'] + ' ' + styles[listFirnishings.includes(el.id) ? 'selectedName' : '']}>{el.name}</p>
