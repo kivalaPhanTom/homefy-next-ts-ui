@@ -64,6 +64,8 @@ export default function BookingConfirm() {
       "totalPrice": bookingData?.totalPrice,
       "description": specialRequest
     })
+    // Omit paymentMethod from booking data saved by earlier versions.
+    Reflect.deleteProperty(data, 'paymentMethod')
 
     const payload = {
       data,

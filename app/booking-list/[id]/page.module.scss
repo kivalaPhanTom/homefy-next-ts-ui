@@ -188,6 +188,11 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
   color: $red;
 }
 
+.pillPending {
+  background: #fff7db;
+  color: #854d0e;
+}
+
 .roomName {
   margin: 12px 0 0;
   font-size: 25px;
@@ -398,6 +403,24 @@ $shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
 
 .priceNote {
   color: $ink;
+}
+
+.paymentRow {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+
+.paymentValue {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  min-width: 0;
+
+  .pillSm {
+    margin-left: 0;
+  }
 }
 
 .discount {

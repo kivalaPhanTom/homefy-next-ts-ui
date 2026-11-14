@@ -154,7 +154,6 @@ function Content(props: ContentProps) {
       "checkOut": checkOutDate ? checkOutDate.format('DD-MM-YYYY') : "",
       "numGuest": guestCount,
       "totalPrice": subtotal,
-      "paymentMethod": "CONFIRMED",
       "description": ""
     }
     setSessionStorage("BOOKING", payload)

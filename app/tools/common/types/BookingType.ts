@@ -41,6 +41,7 @@ export interface BookingDetail {
   isDeleted?: boolean;
   numGuest: number;
   paymentMethod?: string;
+  payment_method?: string | null;
   status?: string;
   roomId: string;
   totalPrice: number;

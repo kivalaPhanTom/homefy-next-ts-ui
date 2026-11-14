@@ -16,10 +16,12 @@ interface BookingDetailViewProps {
 }
 
 const STATUS_LABELS: Record<string, string> = {
-  PENDING: 'Chờ xác nhận',
+  PENDING: 'Đang chờ thanh toán',
+  CONFIRM: 'Đang chờ thanh toán',
   CONFIRMED: 'Đã xác nhận',
   UPCOMING: 'Sắp tới',
-  COMPLETED: 'Đã hoàn thành',
+  COMPLETED: 'Đã thanh toán',
+  CANCEL: 'Hủy thanh toán',
   CANCELLED: 'Đã hủy',
   CANCELED: 'Đã hủy',
   PAID: 'Đã thanh toán',
@@ -32,6 +34,13 @@ const STATUS_LABELS: Record<string, string> = {
 
 const BATHROOM_LABELS: Record<string, string> = {
   PRIVATE: 'Riêng', OWN: 'Riêng', SHARED: 'Dùng chung', ENSUITE: 'Khép kín',
+}
+
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  COMPLETED: 'Đã thanh toán',
+  PENDING: 'Đang chờ thanh toán',
+  CONFIRM: 'Đang chờ thanh toán',
+  CANCEL: 'Hủy thanh toán',
 }
 
 function parseBookingDate(value: string): Date | null {
@@ -60,7 +69,15 @@ function BookingContent({ detail }: { detail: BookingDetailResult }) {
   const images = room.images?.filter((image) => image.path?.trim()) ?? []
   const active = images[activeImage]
   const status = booking.status?.toUpperCase() ?? ''
-  const isCancelled = status === 'CANCELLED' || status === 'CANCELED'
+  const paymentStatusLabel = PAYMENT_STATUS_LABELS[status] || STATUS_LABELS[status] || booking.status || 'Chưa cập nhật trạng thái'
+  const paymentStatusStyle = status === 'COMPLETED'
+    ? styles.pillOk
+    : status === 'CANCEL'
+      ? styles.pillBad
+      : status === 'PENDING' || status === 'CONFIRM'
+        ? styles.pillPending
+        : styles.pillNeutral
+  const isCancelled = status === 'CANCEL' || status === 'CANCELLED' || status === 'CANCELED'
   const statusStyle = isCancelled || status === 'FAILED' || status === 'EXPIRED'
     ? styles.pillBad
     : ['CONFIRMED', 'COMPLETED', 'PAID', 'CHECKED_IN', 'CHECKED_OUT'].includes(status)
@@ -181,7 +198,14 @@ function BookingContent({ detail }: { detail: BookingDetailResult }) {
           <h3>Chi tiết thanh toán</h3>
           <div className={styles.priceRow}>Giá phòng / đêm<b>{formatPrice(room.price)}</b></div>
           {nights !== null && <div className={styles.priceRow}>Số đêm<b>{nights} đêm</b></div>}
-          <div className={styles.priceRow}>Phương thức<b>{booking.paymentMethod || 'Chưa cập nhật'}</b></div>
+          <div className={styles.hr} />
+          <div className={`${styles.priceRow} ${styles.paymentRow}`}>
+            <span>Phương thức</span>
+            <div className={styles.paymentValue}>
+              <b>{booking.payment_method || 'Chưa cập nhật'}</b>
+              <span className={`${styles.pill} ${styles.pillSm} ${paymentStatusStyle}`}>{paymentStatusLabel}</span>
+            </div>
+          </div>
           <div className={styles.hr} />
           <div className={styles.totalRow}><span>Tổng cộng</span><b>{formatPrice(booking.totalPrice)}</b></div>
         </div>
