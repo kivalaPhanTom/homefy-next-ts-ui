@@ -99,7 +99,7 @@ function ListingForm(props: ListingFormProps) {
         <>
             <div className={styles['addItem']}>
                 <div className={styles['addItemContainer']}>
-                    <p className={styles['titlePage']}>{modePage === "edit" ? "Update the" : "Create a"} listing</p>
+                    <p className={styles['titlePage']}>{modePage === "edit" ? "Cập nhật tin cho thuê" : "Tạo phòng"}</p>
                     <div>
                         <Form
                             onFinish={onFinish}
@@ -143,7 +143,7 @@ function ListingForm(props: ListingFormProps) {
                             {/* ROOM NAME */}
                             <div className={styles['inputItem']}>
                                 <TextInput
-                                    label={"Room name"}
+                                    label={"Tên phòng"}
                                     name='room_name'
                                     customClassname={styles['inputText']}
                                     rules={[
@@ -177,7 +177,7 @@ function ListingForm(props: ListingFormProps) {
 
                             {/*PROPERTY ADDRESS */}
                             <div className={styles['inputItem']}>
-                                <p className={styles['titleSection']}>Property address</p>
+                                <p className={styles['titleSection']}>Địa chỉ chỗ ở</p>
                                 <Form.Item
                                     style={{
                                         marginTop: 0,
@@ -212,7 +212,7 @@ function ListingForm(props: ListingFormProps) {
                             <div className={styles['inputItem']}>
                                 {/* <p className={styles['titleSection']}>Rent per week</p> */}
                                 <NumberInput
-                                    label="Price per night"
+                                    label="Giá thuê mỗi đêm"
                                     name='price'
                                     customClassName={styles['inputControl']}
                                     prefix="$"
@@ -248,7 +248,7 @@ function ListingForm(props: ListingFormProps) {
                             {/* DATE AVAILABLE  */}
                             <div className={styles['inputItem']}>
                                 <DateTimeInput
-                                    label="Date available"
+                                    label="Ngày có thể nhận phòng"
                                     name='date_available'
                                     customClassName={styles['inputTime']}
                                     rules={[
@@ -299,7 +299,7 @@ function ListingForm(props: ListingFormProps) {
                             {/* TOTAL BEDROOMS */}
                             <div className={styles['inputItem']}>
                                 <NumberInput
-                                    label="Total bedrooms in the property"
+                                    label="Tổng số phòng ngủ trong nhà"
                                     name='num_bedroom'
                                     customClassName={styles['inputControl']}
                                     rules={[
@@ -333,7 +333,7 @@ function ListingForm(props: ListingFormProps) {
                             {/* TOTAL BATHROOMS */}
                             <div className={styles['inputItem']}>
                                 <NumberInput
-                                    label="Total bathrooms in the property"
+                                    label="Tổng số phòng tắm trong nhà"
                                     name='num_bathroom'
                                     customClassName={styles['inputControl']}
                                     rules={[
@@ -371,7 +371,7 @@ function ListingForm(props: ListingFormProps) {
                             {/*  BATHROOM TYPE   */}
                             <div className={styles['inputItem']}>
                                 <SelectInput
-                                    label="Bathroom type"
+                                    label="Loại phòng tắm"
                                     name="bathroom_type"
                                     placeholder='Select'
                                     options={bathroomTypeOptions}
@@ -417,7 +417,7 @@ function ListingForm(props: ListingFormProps) {
                             <div className={styles['inputItem']}>
 
                                 <SelectInput
-                                    label="Bed size"
+                                    label="Kích thước giường"
                                     name="bed_size"
                                     placeholder='Select'
                                     options={bedSizeOptions}
@@ -461,7 +461,7 @@ function ListingForm(props: ListingFormProps) {
 
                             {/*  ROOM FIRNISHINGS */}
                             <div className={styles['inputItem']}>
-                                <p className={styles['titleSection']}>Room firnishings</p>
+                                <p className={styles['titleSection']}>Nội thất trong phòng</p>
                                 <RoomFirnishings
                                     listFirnishings={listFirnishings}
                                     handleSetListFirnishings={handleSetListFirnishings}
@@ -472,7 +472,7 @@ function ListingForm(props: ListingFormProps) {
                             {/* NUMBER OF HOUSEMATES */}
                             <div className={styles['inputItem']}>
                                 <NumberInput
-                                    label="Number of housemates"
+                                    label="Số người ở cùng"
                                     name='number_housemates'
                                     customClassName={styles['inputControl']}
                                     onChange={handleChangeNumberOfHousemates}
@@ -487,7 +487,7 @@ function ListingForm(props: ListingFormProps) {
 
                             {/* PROPERTY AND ROOM IMAGES */}
                             <div className={styles['inputItem']}>
-                                <p className={styles['titleSection']}>Property and room images</p>
+                                <p className={styles['titleSection']}>Hình ảnh nhà và phòng</p>
                                 <UploadImage
                                     fileList={fileList}
                                     setFileList={setFileList}
@@ -499,7 +499,7 @@ function ListingForm(props: ListingFormProps) {
 
                             {/* DESCRIPTION */}
                             <div className={styles['inputItem']}>
-                                <p className={styles['titleSection']}>Description</p>
+                                <p className={styles['titleSection']}>Mô tả</p>
                                 <CKEditorAny
                                     editor={ClassicEditor}
                                     data={description ? description : ""}
