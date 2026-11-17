@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import logo from '@/assets/Homefy-logo.webp'
 import LoginBtn from './LoginBtn'
+import NotificationBell from './NotificationBell'
 import MenuMobile from './MenuMobile'
 import LoginBtnMobile from './LoginBtnMobile'
 
@@ -49,8 +50,11 @@ const Header = () => {
                         </li>
                     </ul>
                 </div>
-                <LoginBtn />
-                <LoginBtnMobile />
+                <div className={styles['actionsGroup']}>
+                    <NotificationBell />
+                    <LoginBtn />
+                    <LoginBtnMobile />
+                </div>
             </div>
             <MenuMobile />
         </div>

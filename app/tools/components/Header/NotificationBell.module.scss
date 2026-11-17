@@ -1,0 +1,220 @@
+@use "../../common/commonStyles.scss" as common;
+
+.bellBtn {
+    position: relative;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: #0000;
+    color: common.$text-color1;
+    font-size: 21px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: common.$main-color14;
+    }
+}
+
+.badge {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 4px;
+    border-radius: 10px;
+    background-color: #e11d48;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: center;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.panel {
+    width: 350px;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+.panelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 10px;
+    border-bottom: 1px solid common.$main-color14;
+}
+
+.panelTitle {
+    margin: 0;
+    font-size: 15px;
+    font-weight: 600;
+    color: common.$text-color1;
+}
+
+.markAllBtn {
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 12px;
+    color: common.$text-color6;
+    cursor: pointer;
+    font-family: inherit;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.panelList {
+    max-height: 380px;
+    overflow-y: auto;
+    margin-top: 6px;
+
+    &::-webkit-scrollbar {
+        width: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: common.$main-color7;
+        border-radius: 4px;
+    }
+}
+
+.empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 36px 0;
+    color: common.$text-color6;
+
+    >svg {
+        font-size: 34px;
+    }
+
+    >p {
+        margin: 0;
+        font-size: 13px;
+    }
+}
+
+.item {
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    width: 100%;
+    padding: 10px 8px;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background-color: common.$text-color5;
+    }
+
+    &:not(:last-child) {
+        border-bottom: 1px solid common.$main-color14;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+}
+
+.itemUnread {
+    background-color: rgba(251, 246, 238, 0.7);
+
+    &:hover {
+        background-color: common.$text-color5;
+    }
+}
+
+.itemIcon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 18px;
+
+    >svg {
+        width: 19px;
+        height: 19px;
+    }
+}
+
+.icon_booking {
+    background-color: #e8f4ec;
+    color: #2e7d43;
+}
+
+.icon_payment {
+    background-color: #e9effb;
+    color: #3355b8;
+}
+
+.icon_promo {
+    background-color: #fdf0e3;
+    color: #c26a10;
+}
+
+.icon_system {
+    background-color: #f0edf6;
+    color: common.$text-color1;
+}
+
+.itemContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+    flex: 1;
+}
+
+.itemTitle {
+    font-size: 13px;
+    font-weight: 600;
+    color: common.$text-color1;
+    line-height: 1.4;
+}
+
+.itemDescription {
+    font-size: 12px;
+    color: common.$text-color6;
+    line-height: 1.45;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.itemTime {
+    font-size: 11px;
+    color: common.$text-color6;
+    margin-top: 2px;
+}
+
+.unreadDot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    margin-top: 6px;
+    border-radius: 50%;
+    background-color: #e11d48;
+}
+
+@media only screen and (min-width: 1024px) {
+    .bellBtn {
+        display: flex;
+    }
+}

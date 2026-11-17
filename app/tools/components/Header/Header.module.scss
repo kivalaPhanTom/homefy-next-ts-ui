@@ -87,6 +87,12 @@
     display: none;
 }
 
+.actionsGroup {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
 .linkMenu {
     text-decoration: none;
     color: common.$text-color1;
