@@ -116,20 +116,20 @@ function SignUpPopup() {
                             </div>
                         </div>
                         <div className={styles['headerPopup']}>
-                            <p className={styles['headerTitle']}>Sign up</p>
-                            <p className={styles['headerDescription']}>Create your account and start explore</p>
+                            <p className={styles['headerTitle']}>Đăng ký</p>
+                            <p className={styles['headerDescription']}>Tạo tài khoản và bắt đầu khám phá</p>
                         </div>
 
                         {/* USERNAME */}
                         <div className={styles['inputItem']}>
                             <TextInput
                                 name='username'
-                                placeholder='Username'
+                                placeholder='Tên người dùng'
                                 prefix={<LuUser className={styles['iconInputControl']} />}
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Username is required'
+                                        message: 'Vui lòng nhập tên người dùng'
                                     }
                                 ]}
                             />
@@ -140,12 +140,12 @@ function SignUpPopup() {
                         <div className={styles['inputItem']}>
                             <EmailInput
                                 name='email'
-                                placeholder='Email address'
+                                placeholder='Địa chỉ email'
                                 prefix={<MdMailOutline className={styles['iconInputControl']} />}
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Email is required'
+                                        message: 'Vui lòng nhập địa chỉ email'
                                     },
                                 ]}
                             />
@@ -186,12 +186,12 @@ function SignUpPopup() {
                         <div className={styles['inputItem']}>
                             <PasswordInput
                                 name='password'
-                                placeholder='Password'
+                                placeholder='Mật khẩu'
                                 prefix={<TfiLock className={styles['iconInputControl']} />}
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Password is required'
+                                        message: 'Vui lòng nhập mật khẩu'
                                     },
                                 ]}
                             />
@@ -203,19 +203,19 @@ function SignUpPopup() {
                         <div className={styles['inputItem']}>
                             <PasswordInput
                                 name='confirmPassword'
-                                placeholder='Confirm password'
+                                placeholder='Xác nhận mật khẩu'
                                 prefix={<TfiLock className={styles['iconInputControl']} />}
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Confirm password is required'
+                                        message: 'Vui lòng xác nhận mật khẩu'
                                     },
                                     ({ getFieldValue }: FormInstance) => ({
                                         validator(_: unknown, value: string) {
                                             if (!value || getFieldValue('password') === value) {
                                                 return Promise.resolve();
                                             }
-                                            return Promise.reject(new Error('The new password that you entered do not match!'));
+                                            return Promise.reject(new Error('Mật khẩu xác nhận không khớp!'));
                                         },
                                     }),
                                 ]}
@@ -226,10 +226,10 @@ function SignUpPopup() {
 
                         <div className={styles['loginBtnArea']}>
                             <div className={styles['loginBtn']}>
-                                <Button type='primary' htmlType='submit' onClick={() => { }}>{isLoading ? <WavyLoading /> : 'Create account'}</Button>
+                                <Button type='primary' htmlType='submit' onClick={() => { }}>{isLoading ? <WavyLoading /> : 'Tạo tài khoản'}</Button>
                             </div>
                         </div>
-                        <p className={styles['textNoAccount']}>Already have an account? <span onClick={handleOpenSignInPopup}> Sign in</span></p>
+                        <p className={styles['textNoAccount']}>Đã có tài khoản? <span onClick={handleOpenSignInPopup}> Đăng nhập</span></p>
                     </div>
                 </div>
             </Form>

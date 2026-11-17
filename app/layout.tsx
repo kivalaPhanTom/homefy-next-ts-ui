@@ -7,6 +7,7 @@ import Loading from './loading'
 import Header from '@/app/tools/components/Header/Header'
 import LoginPopup from '@/app/tools/components/LoginPopup/LoginPopup'
 import SignUpPopup from '@/app/tools/components/SignUpPopup/SignUpPopup'
+import ForgotPasswordPopup from '@/app/tools/components/ForgotPasswordPopup/ForgotPasswordPopup'
 
 import './globals.css'
 const geistSans = localFont({
@@ -45,6 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
             <LoginPopup />
             <SignUpPopup />
+            <ForgotPasswordPopup />
           </div>
         </StoreProvider>
       </body>

@@ -71,19 +71,19 @@ function LoginPopup() {
                             </div>
                         </div>
                         <div className={styles['headerPopup']}>
-                            <p className={styles['headerTitle']}>Sign in</p>
-                            <p className={styles['headerDescription']}>Sign in with your username and password</p>
+                            <p className={styles['headerTitle']}>Đăng nhập</p>
+                            <p className={styles['headerDescription']}>Đăng nhập bằng tên người dùng và mật khẩu của bạn</p>
                         </div>
 
                         {/* USERNAME */}
                         <TextInput
                             name='username'
-                            placeholder='Username'
+                            placeholder='Tên người dùng'
                             prefix={<MdMailOutline className={styles['iconInputControl']} />}
                             rules={[
                                 {
                                     required: true,
-                                    message: 'Username is required'
+                                    message: 'Vui lòng nhập tên người dùng'
                                 },
                             ]}
                         />
@@ -92,23 +92,23 @@ function LoginPopup() {
                         <div className={styles['passwordInput']}>
                             <PasswordInput
                                 name='password'
-                                placeholder='Password'
+                                placeholder='Mật khẩu'
                                 prefix={<TfiLock className={styles['iconInputControl']} />}
                                 rules={[
                                     {
                                         required: true,
-                                        message: 'Password is required'
+                                        message: 'Vui lòng nhập mật khẩu'
                                     },
                                 ]}
                             />
                         </div>
-                        <p className={styles['txtForgotPassword']} onClick={handleOpenForgotPasswordPopup}>Forgot your password ?</p>
+                        <p className={styles['txtForgotPassword']} onClick={handleOpenForgotPasswordPopup}>Quên mật khẩu ?</p>
 
                         <div className={styles['loginBtnArea']}>
                             <div className={styles['loginBtn']}>
-                                <Button type='primary' htmlType='submit'>{!isLoading ? 'Sign in' : <WavyLoading />}</Button >
+                                <Button type='primary' htmlType='submit'>{!isLoading ? 'Đăng nhập' : <WavyLoading />}</Button >
                             </div>
-                            <p className={styles['orTxt']}>Or</p>
+                            <p className={styles['orTxt']}>Hoặc</p>
                             <div className={styles['socialLoginBtn']}>
                                 <div className={styles['socialLoginBtnItem']}>
                                     <div>
@@ -127,7 +127,7 @@ function LoginPopup() {
                                 </div>
                             </div>
                         </div>
-                        <p className={styles['textNoAccount']}>Not have an account? <span onClick={handleOpenSignUpPopup}> Sign up</span></p>
+                        <p className={styles['textNoAccount']}>Chưa có tài khoản? <span onClick={handleOpenSignUpPopup}> Đăng ký</span></p>
                     </div>
                 </div>
             </Form>

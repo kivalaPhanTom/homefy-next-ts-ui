@@ -25,7 +25,7 @@ const EmailInput = (props: EmailInputProps) => {
                 rules={[
                     {
                         type: "email",
-                        message: "The input is not valid E-mail!",
+                        message: "Địa chỉ email không hợp lệ!",
                     },
                     ...rules
                 ]}

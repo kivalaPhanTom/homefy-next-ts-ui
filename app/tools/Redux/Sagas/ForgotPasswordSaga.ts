@@ -1,10 +1,9 @@
 import { all, takeLatest, put, call } from 'redux-saga/effects'
 import { forgotPassword } from '../Actions/UserAction'
 import { setLoading } from '../slices/LoadingSlice'
-// import { setOpenPopupSignIn } from '../slices/SignInSlice'
+import { setOpenPopup } from '../slices/ForgotPasswordSlice'
 import { Service } from '@/Services/UserServices'
 import { Notification } from '@/common/FunctionCommon/Notification'
-// import { setOpenPopup } from '../slices/SignUpSlice'
 
 function* handleForgotPasswordApi(action:any): Generator<any, void, unknown> {
   const { data } = action.payload
@@ -15,17 +14,15 @@ function* handleForgotPasswordApi(action:any): Generator<any, void, unknown> {
   try {
     const res:any = yield call(Service.forgotPasswordApi, payload);
     if (res.data.code === 200) {
-    //   yield put(setOpenPopup(false))
-    //   Notification.openNotificationSuccess('You have successfully registered an account')
-    //   yield put(setOpenPopup(false))
-    //   yield put(setOpenPopupSignIn(true))
-    //   yield put(setLoading(false))
+      yield put(setOpenPopup(false))
+      Notification.openNotificationSuccess('Liên kết đặt lại mật khẩu đã được gửi tới email của bạn')
+      yield put(setLoading(false))
     } else {
       Notification.openNotificationError(res.data.message)
       yield put(setLoading(false))
     }
   } catch (error) {
-    Notification.openNotificationError('Reset your password failed. Please try again')
+    Notification.openNotificationError('Gửi yêu cầu đặt lại mật khẩu thất bại. Vui lòng thử lại')
     yield put(setLoading(false))
   }
 }

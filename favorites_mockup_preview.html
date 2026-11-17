@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>HOMEFY — Mockup trang Phòng đã thích (/favorites)</title>
+<style>
+/* ===== Font thật của project (app/tools/common/commonStyles.scss) ===== */
+@font-face { font-family: 'Theseasons Regular'; src: url('app/tools/fonts/fonnts.com-Classica-Pro-.otf'); font-weight: normal; font-style: normal; }
+@font-face { font-family: 'Thicccboi'; src: url('app/tools/fonts/THICCCBOI-Light.ttf'); font-weight: normal; font-style: normal; }
+
+/* ===== Token đúng theo commonStyles.scss + search/page.module.scss ===== */
+:root {
+  --cream: #fbf6ee;        /* $main-color1 */
+  --teal-btn: #2a4f58;     /* $main-color5 — nút submit footer */
+  --ink: #172b2f;          /* $text-color1 */
+  --gray: #616066;         /* $text-color3 */
+  --line: #b7b7b7;         /* $main-color7 */
+  --line-soft: #ececed;    /* $main-color14 */
+  --primary: #5b21b6;      /* $primary (search page) */
+  --primary-dark: #4c1d95; /* $primaryDark */
+  --err: #ff4d4f;          /* $errorColor */
+  --shadow: 0 3px 20px rgba(8, 15, 52, 0.08);
+}
+* { box-sizing: border-box; margin: 0; }
+body { background: #dcd8d0; width: 1520px; padding: 34px 40px 46px; font-family: 'Hind Mysuru', Arial, sans-serif; color: var(--ink); }
+.ts { font-family: 'Theseasons Regular', sans-serif; }
+.caption { font: 600 13px/1.4 Arial, sans-serif; color: #5b5346; text-transform: uppercase; letter-spacing: .8px; margin: 0 0 10px 2px; }
+.board { background: var(--cream); box-shadow: 0 10px 34px rgba(0,0,0,.16); margin-bottom: 34px; overflow: hidden; }
+
+/* ===================== HEADER — copy Header.tsx / Header.module.scss ===================== */
+.hd { background: #fff; }
+.hd-c { width: 87%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: 1rem 0; }
+.hd-logo img { height: 60px; width: auto; display: block; }
+.hd-menu ul { list-style: none; display: flex; align-items: center; }
+.hd-menu li { margin-right: 32px; }
+.hd-menu a { text-decoration: none; color: var(--ink); font-size: 14px; font-family: 'Theseasons Regular', sans-serif; }
+.hd-login { border: .2px solid var(--ink); color: var(--ink); background: transparent; border-radius: 0 0 20px; padding: 10px 20px; font-family: 'Theseasons Regular', sans-serif; font-weight: 400; cursor: pointer; font-size: 16px; }
+.hd-login p { margin: 0 15px; font-size: 16px; line-height: 1.125em; font-family: 'Theseasons Regular', sans-serif; }
+/* mobile header: logo + ô vuông tối 45px (divLoginBtnMb) chứa hamburger trắng */
+.hd-mb { width: 87%; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; padding: .8rem 0; }
+.hd-mb-logo img { height: 48px; width: auto; display: block; }
+.hd-mb-burger { width: 45px; min-width: 45px; min-height: 45px; max-height: 45px; background: var(--ink); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; }
+.hd-mb-burger i { display: block; width: 20px; height: 2px; background: #fff; border-radius: 2px; }
+
+/* ===================== PAGE (favorites) ===================== */
+.page { background: var(--cream); padding-bottom: 40px; }
+.body { padding: 26px 6.5% 8px; }
+
+/* toolbar giống .toolbar của /search */
+.toolbar { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; gap: 12px; }
+.toolbar h2 { font-size: 23px; font-weight: 600; color: var(--ink); }
+.toolbar .sub { font-size: 12.5px; color: var(--gray); margin-top: 4px; }
+.sort { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: #fff; border: 1px solid var(--line-soft); border-radius: 14px; box-shadow: 0 4px 16px rgba(38,22,66,.04); white-space: nowrap; }
+.sort svg { width: 18px; height: 18px; color: var(--primary); flex-shrink: 0; }
+.sort .lb { font-size: 12px; color: var(--gray); }
+.sort .val { font-size: 13px; font-weight: 500; color: var(--primary-dark); display: flex; align-items: center; gap: 4px; }
+.sort .val svg { width: 14px; height: 14px; color: var(--primary); }
+
+.clearln { font-size: 12.5px; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; background: none; border: none; }
+
+/* grid + card — copy 1:1 .grid/.card của /search (>=769px) */
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: start; }
+.card { background: #fff; box-shadow: var(--shadow); overflow-wrap: anywhere; }
+.img { position: relative; aspect-ratio: 16 / 9; border-radius: 0 0 28px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+.g1 { background: linear-gradient(135deg, #f8dfc0, #f0b98a); }
+.g2 { background: linear-gradient(135deg, #e8e3d5, #cfc6ad); }
+.g3 { background: linear-gradient(135deg, #d5e6e9, #a9ccd3); }
+.g4 { background: linear-gradient(135deg, #dcead8, #b3d1ab); }
+.g5 { background: linear-gradient(135deg, #f3dcd8, #e0aea8); }
+.g6 { background: linear-gradient(135deg, #dbe4f0, #aec3dd); }
+.heart { position: absolute; top: 10px; left: 10px; width: 30px; height: 30px; background: rgba(255,255,255,.95); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+.heart svg { width: 16px; height: 16px; color: var(--primary); }
+.cbody { padding: 16px; }
+.roomName { display: block; margin-bottom: 5px; font-weight: 600; color: var(--ink); font-size: 16px; line-height: 1.4; }
+.pr { font-size: 18px; font-weight: 600; color: var(--ink); }
+.pr span { font-size: 11.5px; font-weight: 400; color: var(--gray); }
+.bed { font-size: 12px; color: var(--primary-dark); margin-top: 3px; }
+.addr { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--ink); margin: 5px 0 9px; }
+.addr svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--primary); }
+.hr { height: 1px; background: var(--line-soft); margin: 12px 0; }
+.meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.mi { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--gray); }
+.mi svg { width: 13px; height: 13px; flex-shrink: 0; }
+.house { display: block; margin-top: 12px; font-size: 11px; color: var(--gray); }
+.house b { font-weight: 400; color: var(--ink); }
+
+/* pageNav — kiểu antd Pagination trong /search */
+.pageNav { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 26px 0 10px; }
+.pg { min-width: 36px; height: 36px; padding: 0 8px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid var(--line-soft); border-radius: 8px; font-size: 14px; color: var(--ink); }
+.pg.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.pg-total { font-size: 13px; color: var(--gray); margin-left: 6px; }
+
+/* ===================== MOBILE (<768px) — copy media query của /search ===================== */
+.mb-body { padding: 14px 12px 8px; }
+.mb-toolbar { padding: 0 4px 12px; }
+.mb-toolbar h2 { font-size: 17px; font-weight: 600; color: var(--ink); }
+.mb-toolbar .sub { font-size: 11.5px; color: var(--gray); margin-top: 3px; }
+.mb-sortrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 4px; }
+.mChips { display: flex; gap: 8px; padding: 8px 12px 2px; overflow: hidden; }
+.mChip { flex-shrink: 0; border: 1px solid var(--line); border-radius: 50px; padding: 6px 12px; font-size: 11.5px; color: var(--ink); background: #fff; }
+.mChip.on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.mChip.del { color: var(--err); border-color: #ffd6d6; }
+.mb-grid { display: grid; grid-template-columns: 1fr; gap: 16px; padding-top: 12px; }
+.mb-card .img { aspect-ratio: auto; height: 190px; font-size: 46px; }
+.mb-card .cbody { padding: 11px 13px 4px; }
+.mb-card .roomName { font-size: 15px; }
+.mb-card .pr { font-size: 16px; }
+.mb-card .hr { margin: 8px 0; }
+.mb-card .meta { gap: 6px 8px; }
+.mBottom { padding: 14px 12px 16px; background: linear-gradient(180deg, rgba(251,246,238,0), var(--cream) 40%); }
+.mBottom button { width: 100%; background: var(--primary); color: #fff; border: none; border-radius: 0 0 20px; padding: 15px 0; font-size: 15px; font-weight: 500; box-shadow: 0 8px 22px rgba(91,33,182,.45); font-family: inherit; }
+
+/* ===================== EMPTY STATE (dựa .empty + CTA theo .cta) ===================== */
+.empty-wrap { padding: 64px 8% 72px; text-align: center; }
+.empty-wrap .big { margin-bottom: 18px; }
+.empty-wrap .big svg { width: 64px; height: 64px; color: var(--line); }
+.empty-wrap h3 { font-size: 24px; font-weight: 400; color: var(--ink); font-family: 'Theseasons Regular', sans-serif; margin-bottom: 10px; }
+.empty-wrap p { font-size: 13.5px; color: var(--gray); line-height: 1.6; max-width: 430px; margin: 0 auto 22px; }
+.cta { background: var(--primary); color: #fff; border: none; border-radius: 0 0 20px; font-size: 16px; font-weight: 500; padding: 15px 30px; cursor: pointer; }
+.empty-learn { display: inline-block; margin-top: 16px; font-size: 12.5px; color: var(--primary); text-decoration: underline; text-underline-offset: 3px; }
+
+/* ===================== FOOTER — copy Footer.tsx / Footer.module.scss ===================== */
+.ft { background: var(--cream); padding: 40px 0 32px; overflow: hidden; }
+.ft-c { width: 97%; margin: 0 auto; }
+.ft-content { display: flex; justify-content: space-between; align-items: flex-start; }
+.ft-logo img { width: 13rem; height: auto; display: block; }
+.ft-contactTxt { color: var(--ink); font-family: 'Theseasons Regular', sans-serif; font-size: 14px; font-weight: 700; margin-top: 10px; }
+.ft-text { color: var(--gray); font-size: 12px; margin: 3px 0; }
+.ft-social { display: flex; align-items: center; margin-top: 2rem; }
+.ft-social > div { width: 2em; height: 2em; display: flex; align-items: center; justify-content: center; background: var(--ink); margin-right: 1em; border-radius: 50%; }
+.ft-social svg { width: 1.2em; height: 1.2em; color: var(--cream); }
+.ft-connect { color: var(--ink); margin-top: 20px; font-size: 16px; }
+.ft-right { width: 40%; margin-top: 3rem; }
+.ft-subTxt { color: var(--ink); font-family: 'Theseasons Regular', sans-serif; font-size: 14px; font-weight: 700; }
+.ft-emailForm { border: 1px solid #fff; padding: 10px 24px; border-radius: 9px; display: flex; align-items: center; justify-content: space-between; margin: 10px 0 12px; }
+.ft-emailForm input { background: transparent; border: none; outline: none; font-size: 12px; width: 100%; font-family: inherit; color: var(--ink); }
+.ft-emailForm svg { width: 25px; height: 25px; color: var(--ink); flex-shrink: 0; }
+.ft-submit { text-align: center; cursor: pointer; padding: 20px 40px; font-weight: 400; line-height: 1.111em; background: var(--teal-btn); color: #fff; border: .2px solid var(--teal-btn); border-radius: 0 0 20px; font-family: 'Theseasons Regular', sans-serif; font-size: 14px; }
+.ft-line { background: var(--ink); margin-top: 20px; width: 100%; min-height: 1px; margin-bottom: 10px; }
+.ft-center { text-align: center; }
+.ft-center p { font-family: 'Thicccboi', Arial, sans-serif; font-size: 14px; color: var(--ink); }
+/* footer mobile: xếp dọc, logo + social căn giữa */
+.ft-mb .ft-content { display: block; }
+.ft-mb .ft-logo img { width: 11rem; margin: 0 auto; }
+.ft-mb .ft-logo { text-align: center; }
+.ft-mb .ft-right { width: 100%; margin-top: 2rem; }
+.ft-mb .ft-social { justify-content: center; }
+.ft-mb .ft-connect { text-align: center; }
+
+/* ===================== CANVAS ===================== */
+.row2 { display: flex; gap: 34px; align-items: flex-start; }
+.row2 .col-mb { width: 390px; flex-shrink: 0; }
+.row2 .col-empty { flex: 1; min-width: 0; }
+</style>
+</head>
+<body>
+
+<!-- ════════════════ BOARD 1 · DESKTOP 1440 ════════════════ -->
+<p class="caption">1 · Desktop 1440 — /favorites · header + footer thật của project, card copy từ /search</p>
+<div class="board">
+
+  <!-- Header thật: logo webp + menu Theseasons + LoginBtn -->
+  <div class="hd">
+    <div class="hd-c">
+      <div class="hd-logo"><img src="app/tools/assets/Homefy-logo.webp" alt="homefy logo"></div>
+      <div class="hd-menu">
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Properties</a></li>
+          <li><a href="#">Book an Inspection</a></li>
+          <li><a href="#">FAQs</a></li>
+          <li><a href="#">Our partners</a></li>
+        </ul>
+      </div>
+      <button class="hd-login"><p>Login</p></button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="body">
+
+      <div class="toolbar">
+        <div>
+          <h2 class="ts">Phòng đã thích</h2>
+          <div class="sub">6 chỗ nghỉ đã lưu · Cập nhật 17/11/2026</div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <button class="clearln">Xóa tất cả</button>
+          <div class="sort">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4v16M7 4L4 7M7 4l3 3M17 20V4M17 20l3-3M17 20l-3-3"/></svg>
+            <span class="lb">Sắp xếp</span>
+            <span class="val">Mới lưu nhất <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <!-- Card 1 -->
+        <div class="card">
+          <div class="img g1">🏠
+            <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="roomName">Ocean View Homestay Đà Nẵng</span>
+            <div class="pr">850.000đ <span>/ đêm</span></div>
+            <div class="bed">Giường đôi lớn</div>
+            <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>12 Bạch Đằng, Hải Châu, Đà Nẵng</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 01/12/2026</span>
+              <span class="mi">2 giường ngủ</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Tắm nóng lạnh</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 4 khách</span>
+            </div>
+            <div class="house"><b>Nhà:</b> 2 phòng ngủ · 1 phòng tắm</div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="card">
+          <div class="img g2">🏡
+            <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="roomName">Villa Hồ Tây Nghỉ Dưỡng</span>
+            <div class="pr">2.400.000đ <span>/ đêm</span></div>
+            <div class="bed">Giường king</div>
+            <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>05 Xuân Diệu, Tây Hồ, Hà Nội</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 15/11/2026</span>
+              <span class="mi">3 giường ngủ</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Bồn tắm riêng</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 6 khách</span>
+            </div>
+            <div class="house"><b>Nhà:</b> 3 phòng ngủ · 2 phòng tắm</div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="card">
+          <div class="img g3">🏢
+            <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="roomName">Căn Hộ Trung Tâm Sài Gòn</span>
+            <div class="pr">1.250.000đ <span>/ đêm</span></div>
+            <div class="bed">Giường đôi queen</div>
+            <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>27 Nguyễn Huệ, Quận 1, TP.HCM</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 20/11/2026</span>
+              <span class="mi">1 giường ngủ</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Tắm nóng lạnh</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 2 khách</span>
+            </div>
+            <div class="house"><b>Nhà:</b> 1 phòng ngủ · 1 phòng tắm</div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="card">
+          <div class="img g4">🌴
+            <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="roomName">Bungalow Rừng Dừa Bến Tre</span>
+            <div class="pr">780.000đ <span>/ đêm</span></div>
+            <div class="bed">2 giường đơn</div>
+            <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>Ấp 5, Châu Thành, Bến Tre</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 25/11/2026</span>
+              <span class="mi">1 giường ngủ</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Tắm ngoài trời</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 3 khách</span>
+            </div>
+            <div class="house"><b>Nhà:</b> 1 phòng ngủ · 1 phòng tắm</div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="card">
+          <div class="img g5">🌊
+            <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="roomName">Khách Sạn View Biển Nha Trang</span>
+            <div class="pr">1.600.000đ <span>/ đêm</span></div>
+            <div class="bed">Giường đôi lớn</div>
+            <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>28 Trần Phú, Nha Trang, Khánh Hòa</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 01/12/2026</span>
+              <span class="mi">1 giường ngủ</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Bồn tắm riêng</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 2 khách</span>
+            </div>
+            <div class="house"><b>Nhà:</b> 1 phòng ngủ · 1 phòng tắm</div>
+          </div>
+        </div>
+
+        <!-- Card 6 -->
+        <div class="card">
+          <div class="img g6">⛰️
+            <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+          </div>
+          <div class="cbody">
+            <span class="roomName">Biệt Thự Đồi Sam Sơn</span>
+            <div class="pr">3.200.000đ <span>/ đêm</span></div>
+            <div class="bed">Giường king</div>
+            <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>Hoa Hướng Dương, Sầm Sơn, Thanh Hóa</div>
+            <div class="hr"></div>
+            <div class="meta">
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 05/12/2026</span>
+              <span class="mi">4 giường ngủ</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>3 phòng tắm</span>
+              <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 8 khách</span>
+            </div>
+            <div class="house"><b>Nhà:</b> 4 phòng ngủ · 3 phòng tắm</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="pageNav">
+        <div class="pg">‹</div>
+        <div class="pg on">1</div>
+        <div class="pg">2</div>
+        <div class="pg">3</div>
+        <div class="pg">›</div>
+        <span class="pg-total">Tổng 6 chỗ nghỉ</span>
+      </div>
+    </div>
+
+    <!-- Footer thật -->
+    <div class="ft">
+      <div class="ft-c">
+        <div class="ft-content">
+          <div class="ft-left">
+            <div class="ft-logo"><img src="app/tools/assets/Homefy-logo.webp" alt="homefy logo"></div>
+            <div class="ft-contactTxt" style="margin-top:12px;">contact us</div>
+            <p class="ft-text">Level 1, 1-5 Link Road, Zetland, NSW 2017</p>
+            <p class="ft-text">info@themysahouse.com</p>
+            <p class="ft-text">+61 411 599 018</p>
+            <p class="ft-text">Become an ambassador</p>
+            <div class="ft-social">
+              <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.3-.04-1.3-.12-2.45-.12-2.4 0-4.05 1.46-4.05 4.15v2.27H7.5V13h2.7v8h3.3z"/></svg></div>
+              <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+              <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 3h-3c-.1 2.4-1.4 3.9-3.6 4.3v2.5h2.1v5.6c0 2.7 1.6 4.3 4.3 4.3.9 0 1.7-.2 2.2-.4v-2.6c-.4.2-1 .3-1.5.3-1 0-1.5-.5-1.5-1.6V9.8h3V7.3h-3V3z"/></svg></div>
+              <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.3c-.7.3-1.4.5-2.1.6.8-.5 1.3-1.2 1.6-2-.7.4-1.5.7-2.3.9A3.6 3.6 0 0 0 12 8.1c0 .3 0 .6.1.8-3-.1-5.7-1.6-7.5-3.8-.3.6-.5 1.2-.5 1.9 0 1.3.6 2.4 1.6 3-.6 0-1.1-.2-1.6-.4v.1c0 1.7 1.2 3.2 2.9 3.5-.3.1-.6.1-1 .1l-.7-.1c.5 1.4 1.8 2.5 3.4 2.5a7.3 7.3 0 0 1-5.4 1.5A10.3 10.3 0 0 0 8.9 19c6.7 0 10.3-5.5 10.3-10.3v-.5c.7-.5 1.3-1.2 1.8-1.9z"/></svg></div>
+            </div>
+            <div class="ft-connect"><p>Connect_Grow_Enjoy</p></div>
+          </div>
+          <div class="ft-right">
+            <p class="ft-subTxt">Subscribe to our newsletter</p>
+            <div class="ft-emailForm">
+              <input placeholder="Enter email address">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M3 6.5l9 6.5 9-6.5"/></svg>
+            </div>
+            <div class="ft-submit">Subscrive</div>
+          </div>
+        </div>
+        <div class="ft-line"></div>
+        <div class="ft-center"><p>homefy.com.au is owned and operated by @ Zoette Pty Ltd.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════ ROW 2: MOBILE 390 + EMPTY STATE ════════════════ -->
+<div class="row2">
+
+  <div>
+    <p class="caption">2 · Mobile 390</p>
+    <div class="board" style="width:390px;margin-bottom:0;">
+
+      <!-- Header mobile -->
+      <div class="hd">
+        <div class="hd-mb">
+          <div class="hd-mb-logo"><img src="app/tools/assets/Homefy-logo.webp" alt="homefy logo"></div>
+          <div class="hd-mb-burger"><i></i><i></i><i></i></div>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="mb-body">
+          <div class="mb-toolbar">
+            <div class="mb-sortrow">
+              <h2 class="ts">Phòng đã thích</h2>
+              <button class="clearln">Xóa tất cả</button>
+            </div>
+            <div class="sub">6 chỗ nghỉ đã lưu · 17/11/2026</div>
+          </div>
+        </div>
+
+        <div class="mChips">
+          <span class="mChip on">Mới lưu nhất</span>
+          <span class="mChip">Giá thấp → cao</span>
+          <span class="mChip">Giá cao → thấp</span>
+          <span class="mChip del">Bỏ lưu ✕</span>
+        </div>
+
+        <div class="mb-grid">
+          <div class="card mb-card">
+            <div class="img g1">🏠
+              <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+            </div>
+            <div class="cbody">
+              <span class="roomName">Ocean View Homestay Đà Nẵng</span>
+              <div class="pr">850.000đ <span>/ đêm</span></div>
+              <div class="bed">Giường đôi lớn</div>
+              <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>12 Bạch Đằng, Hải Châu, Đà Nẵng</div>
+              <div class="hr"></div>
+              <div class="meta">
+                <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 01/12/2026</span>
+                <span class="mi">2 giường ngủ</span>
+                <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Tắm nóng lạnh</span>
+                <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 4 khách</span>
+              </div>
+              <div class="hr"></div>
+              <div class="house"><b>Nhà:</b> 2 phòng ngủ · 1 phòng tắm</div>
+            </div>
+          </div>
+
+          <div class="card mb-card">
+            <div class="img g2">🏡
+              <span class="heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg></span>
+            </div>
+            <div class="cbody">
+              <span class="roomName">Villa Hồ Tây Nghỉ Dưỡng</span>
+              <div class="pr">2.400.000đ <span>/ đêm</span></div>
+              <div class="bed">Giường king</div>
+              <div class="addr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s-7-6.6-7-11.5A7 7 0 0 1 19 9.5C19 14.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg>05 Xuân Diệu, Tây Hồ, Hà Nội</div>
+              <div class="hr"></div>
+              <div class="meta">
+                <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="5" width="17" height="15.5" rx="2"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></svg>Có từ 15/11/2026</span>
+                <span class="mi">3 giường ngủ</span>
+                <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3zM6 12V6a2 2 0 0 1 4 0M8 19l-1 2M16 19l1 2"/></svg>Bồn tắm riêng</span>
+                <span class="mi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>Tối đa 6 khách</span>
+              </div>
+              <div class="hr"></div>
+              <div class="house"><b>Nhà:</b> 3 phòng ngủ · 2 phòng tắm</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mBottom"><button>Tải thêm 4 chỗ nghỉ nữa</button></div>
+      </div>
+
+      <!-- Footer mobile -->
+      <div class="ft ft-mb">
+        <div class="ft-c" style="width:90%;">
+          <div class="ft-content">
+            <div class="ft-left">
+              <div class="ft-logo"><img src="app/tools/assets/Homefy-logo.webp" alt="homefy logo"></div>
+              <div class="ft-contactTxt" style="text-align:center;">contact us</div>
+              <p class="ft-text" style="text-align:center;">Level 1, 1-5 Link Road, Zetland, NSW 2017</p>
+              <p class="ft-text" style="text-align:center;">info@themysahouse.com</p>
+              <p class="ft-text" style="text-align:center;">+61 411 599 018</p>
+              <div class="ft-social">
+                <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.3-.04-1.3-.12-2.45-.12-2.4 0-4.05 1.46-4.05 4.15v2.27H7.5V13h2.7v8h3.3z"/></svg></div>
+                <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 3h-3c-.1 2.4-1.4 3.9-3.6 4.3v2.5h2.1v5.6c0 2.7 1.6 4.3 4.3 4.3.9 0 1.7-.2 2.2-.4v-2.6c-.4.2-1 .3-1.5.3-1 0-1.5-.5-1.5-1.6V9.8h3V7.3h-3V3z"/></svg></div>
+                <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.3c-.7.3-1.4.5-2.1.6.8-.5 1.3-1.2 1.6-2-.7.4-1.5.7-2.3.9A3.6 3.6 0 0 0 12 8.1c0 .3 0 .6.1.8-3-.1-5.7-1.6-7.5-3.8-.3.6-.5 1.2-.5 1.9 0 1.3.6 2.4 1.6 3-.6 0-1.1-.2-1.6-.4v.1c0 1.7 1.2 3.2 2.9 3.5-.3.1-.6.1-1 .1l-.7-.1c.5 1.4 1.8 2.5 3.4 2.5a7.3 7.3 0 0 1-5.4 1.5A10.3 10.3 0 0 0 8.9 19c6.7 0 10.3-5.5 10.3-10.3v-.5c.7-.5 1.3-1.2 1.8-1.9z"/></svg></div>
+              </div>
+              <div class="ft-connect"><p>Connect_Grow_Enjoy</p></div>
+            </div>
+            <div class="ft-right">
+              <p class="ft-subTxt" style="text-align:center;">Subscribe to our newsletter</p>
+              <div class="ft-emailForm">
+                <input placeholder="Enter email address">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M3 6.5l9 6.5 9-6.5"/></svg>
+              </div>
+              <div class="ft-submit" style="width:100%;">Subscrive</div>
+            </div>
+          </div>
+          <div class="ft-line"></div>
+          <div class="ft-center"><p style="font-size:12px;">homefy.com.au is owned and operated by @ Zoette Pty Ltd.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-empty">
+    <p class="caption">3 · Desktop — Empty state (chưa lưu phòng nào)</p>
+    <div class="board" style="margin-bottom:0;">
+
+      <div class="hd">
+        <div class="hd-c">
+          <div class="hd-logo"><img src="app/tools/assets/Homefy-logo.webp" alt="homefy logo"></div>
+          <div class="hd-menu">
+            <ul>
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Properties</a></li>
+              <li><a href="#">Book an Inspection</a></li>
+              <li><a href="#">FAQs</a></li>
+              <li><a href="#">Our partners</a></li>
+            </ul>
+          </div>
+          <button class="hd-login"><p>Login</p></button>
+        </div>
+      </div>
+
+      <div class="page">
+        <div class="body" style="padding-bottom:0;">
+          <div class="empty-wrap">
+            <div class="big">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 21s-6.7-4.3-9.3-8.1C.5 9.6 2 5.5 5.6 4.7 7.8 4.2 10 5.2 12 7.4c2-2.2 4.2-3.2 6.4-2.7 3.6.8 5.1 4.9 2.9 8.2C18.7 16.7 12 21 12 21z"/></svg>
+            </div>
+            <h3>Chưa có phòng nào được lưu</h3>
+            <p>Nhấn vào biểu tượng trái tim ở góc ảnh phòng để lưu lại những chỗ nghỉ bạn thích. Danh sách của bạn sẽ xuất hiện tại đây.</p>
+            <button class="cta">Khám phá chỗ nghỉ</button>
+            <br>
+            <span class="empty-learn">Tìm hiểu cách lưu phòng</span>
+          </div>
+        </div>
+
+        <div class="ft">
+          <div class="ft-c">
+            <div class="ft-content">
+              <div class="ft-left">
+                <div class="ft-logo"><img src="app/tools/assets/Homefy-logo.webp" alt="homefy logo"></div>
+                <div class="ft-contactTxt" style="margin-top:12px;">contact us</div>
+                <p class="ft-text">Level 1, 1-5 Link Road, Zetland, NSW 2017</p>
+                <p class="ft-text">info@themysahouse.com</p>
+                <p class="ft-text">+61 411 599 018</p>
+                <p class="ft-text">Become an ambassador</p>
+                <div class="ft-social">
+                  <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21v-8h2.7l.4-3.1h-3.1V7.9c0-.9.25-1.5 1.55-1.5h1.65V3.6c-.3-.04-1.3-.12-2.45-.12-2.4 0-4.05 1.46-4.05 4.15v2.27H7.5V13h2.7v8h3.3z"/></svg></div>
+                  <div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none"/></svg></div>
+                  <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14.5 3h-3c-.1 2.4-1.4 3.9-3.6 4.3v2.5h2.1v5.6c0 2.7 1.6 4.3 4.3 4.3.9 0 1.7-.2 2.2-.4v-2.6c-.4.2-1 .3-1.5.3-1 0-1.5-.5-1.5-1.6V9.8h3V7.3h-3V3z"/></svg></div>
+                  <div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21 6.3c-.7.3-1.4.5-2.1.6.8-.5 1.3-1.2 1.6-2-.7.4-1.5.7-2.3.9A3.6 3.6 0 0 0 12 8.1c0 .3 0 .6.1.8-3-.1-5.7-1.6-7.5-3.8-.3.6-.5 1.2-.5 1.9 0 1.3.6 2.4 1.6 3-.6 0-1.1-.2-1.6-.4v.1c0 1.7 1.2 3.2 2.9 3.5-.3.1-.6.1-1 .1l-.7-.1c.5 1.4 1.8 2.5 3.4 2.5a7.3 7.3 0 0 1-5.4 1.5A10.3 10.3 0 0 0 8.9 19c6.7 0 10.3-5.5 10.3-10.3v-.5c.7-.5 1.3-1.2 1.8-1.9z"/></svg></div>
+                </div>
+                <div class="ft-connect"><p>Connect_Grow_Enjoy</p></div>
+              </div>
+              <div class="ft-right">
+                <p class="ft-subTxt">Subscribe to our newsletter</p>
+                <div class="ft-emailForm">
+                  <input placeholder="Enter email address">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="2.5" y="5" width="19" height="14" rx="2"/><path d="M3 6.5l9 6.5 9-6.5"/></svg>
+                </div>
+                <div class="ft-submit">Subscrive</div>
+              </div>
+            </div>
+            <div class="ft-line"></div>
+            <div class="ft-center"><p>homefy.com.au is owned and operated by @ Zoette Pty Ltd.</p></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
