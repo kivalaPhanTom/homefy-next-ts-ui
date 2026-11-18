@@ -99,7 +99,7 @@ function ListingForm(props: ListingFormProps) {
         <>
             <div className={styles['addItem']}>
                 <div className={styles['addItemContainer']}>
-                    <p className={styles['titlePage']}>{modePage === "edit" ? "Cập nhật tin cho thuê" : "Tạo phòng"}</p>
+                    <p className={styles['titlePage']}>{modePage === "edit" ? "Cập nhật phòng" : "Tạo phòng"}</p>
                     <div>
                         <Form
                             onFinish={onFinish}

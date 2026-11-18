@@ -46,6 +46,7 @@ export interface uploadFileResponseType {
 
 export interface roomObjectToRedux {
     id?: string,
+    version?: number,
     code: string,
     name: string,
     address: string,

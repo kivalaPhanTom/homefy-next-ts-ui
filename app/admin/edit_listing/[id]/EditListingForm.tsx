@@ -15,12 +15,13 @@ import { setOpenPopupSignIn } from '@/Redux/slices/SignInSlice'
 // import { handleCheckValidListHouseMates } from '../../listing_creation/validate'
 import { convertTimeRawValueToTimeStamp, converTimeStampToDayJsDate } from '@/common/FunctionCommon/FunctionCommon'
 import { handleErrorRTKQuery } from '@/common/FunctionCommon/FunctionCommon'
+import { Notification } from '@/common/FunctionCommon/Notification'
 import { useGetListingDetailQuery } from '@/RTK_Query/Listing_Query'
 import { setLoading } from '@/Redux/slices/LoadingSlice'
 import { useLazySearchAddressResultQuery } from '@/RTK_Query/SearchAddressResult'
 // import { convertSearchAddressOption } from '@/utils/SearchAddress_utils'
 import Loading from '@/app/tools/components/Loading/Loading'
-import { roomObjectToRedux, updateRoomToReduxType } from '@/common/types/RoomTypes'
+import type { roomObjectToRedux, roomObjectType, updateRoomToReduxType } from '@/common/types/RoomTypes'
 import { addressOptionObject, searchAddressObjectType, searchAddressResultResponseType } from '@/common/types/RoomTypes'
 
 function checkAddFile(listFile: any[]) {
@@ -36,6 +37,14 @@ function checkAddFile(listFile: any[]) {
 interface EditListingFormProps {
   roomId: string;
 }
+
+interface EditableRoom extends Omit<roomObjectType, 'status' | 'date_available'> {
+  date_available: number | null
+  description: string
+  minimum_stay?: number | null
+  version: number
+}
+
 function EditListingForm(props: EditListingFormProps) {
   const { roomId } = props
   const dispatch = useDispatch()
@@ -56,8 +65,8 @@ function EditListingForm(props: EditListingFormProps) {
   // const { optionAddressSearchResult } = useSelector((state) => state.listingManagementSlice)
   const numberHouseMate = Form.useWatch('number_housemates', form)
   const { isLogin } = useAppSelector((state: RootState) => state.signInSlice)
-  const { data, isFetching, error, refetch } = useGetListingDetailQuery({ roomId })
-  const listingInfo = data ? data.result : null
+  const { currentData: data, isFetching, error, refetch } = useGetListingDetailQuery({ roomId })
+  const listingInfo: EditableRoom | null = data?.result ?? null
   const [trigger, result] = useLazySearchAddressResultQuery()
   const dataSearchResult: searchAddressResultResponseType | undefined = result.data
   let options: searchAddressObjectType[] = data ? (dataSearchResult?.result || []).map((item) => item) : []
@@ -105,6 +114,7 @@ function EditListingForm(props: EditListingFormProps) {
         lon: listingInfo.lon != null ? Number(listingInfo.lon) : null,
       })
       form.setFieldsValue({
+        version: listingInfo.version,
         location: listingInfo.address,
         price: listingInfo.price,
 
@@ -125,7 +135,7 @@ function EditListingForm(props: EditListingFormProps) {
       setCountSubmit(0)
       let document_url: documentObject[] = []
       if (listingInfo.images) {
-        listingInfo.images.forEach((element: any) => {
+        listingInfo.images.forEach((element) => {
           document_url.push({
             uid: uuidv4(),
             name: element.path,
@@ -239,6 +249,12 @@ function EditListingForm(props: EditListingFormProps) {
   }
 
   const onFinish = (values: Record<string, any>): void => {
+    const version: unknown = form.getFieldValue('version')
+    if (typeof version !== 'number' || !Number.isInteger(version)) {
+      Notification.openNotificationError('Không đọc được phiên bản của phòng. Vui lòng tải lại trang.')
+      return
+    }
+
     // let location = ''
     let formDataFile: FormData | null = null
     let oldFile: string[] = []
@@ -275,6 +291,7 @@ function EditListingForm(props: EditListingFormProps) {
       })
       const data: roomObjectToRedux = {
         id: roomId,
+        version,
         code: values.listing_id,
         address: values.location,
         price: values.price,
